@@ -1,43 +1,47 @@
-# Astro Starter Kit: Minimal
+# aoitsukikage-eng.github.io
+
+Minimal Astro bootstrap for the `aoitsukikage-eng.github.io` GitHub Pages user site.
+
+## Local Development
+
+Use the locked Node version before installing dependencies:
 
 ```sh
-npm create astro@latest -- --template minimal
+nvm use
+npm ci
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Start the local dev server:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm run dev
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+The placeholder homepage is served at `http://localhost:4321/`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Build
 
-Any static assets, like images, can be placed in the `public/` directory.
+Create the static output in `dist/`:
 
-## 🧞 Commands
+```sh
+npm run build
+```
 
-All commands are run from the root of the project, from a terminal:
+Preview the built output locally if needed:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```sh
+npm run preview
+```
 
-## 👀 Want to learn more?
+## Deployment
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Deployment is handled by GitHub Actions through `.github/workflows/deploy.yml`.
+
+1. Push `main` to the GitHub repository named `aoitsukikage-eng.github.io`.
+2. In GitHub Pages settings, choose `GitHub Actions` as the source.
+3. The workflow runs `npm ci`, `npm run build`, then deploys the generated `dist/` artifact with `actions/deploy-pages`.
+
+## `site` And `base`
+
+- `site` is set to `https://aoitsukikage-eng.github.io` so Astro generates canonical production URLs for the final user site domain.
+- `base` is set to `/` because this is a GitHub Pages user site, not a project site. Using `/repo-name` here would break asset paths and cause a blank page after deploy.
