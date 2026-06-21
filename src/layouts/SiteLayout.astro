@@ -1,0 +1,108 @@
+---
+import Nav from "../components/Nav.astro";
+import "../styles/tokens.css";
+
+interface Props {
+	title: string;
+	currentPath?: string;
+	description?: string;
+}
+
+const {
+	title,
+	currentPath = "/",
+	description = "Portfolio structure in progress.",
+} = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<div class="page-shell">
+			<header class="site-header">
+				<div class="brand-block">
+					<p class="eyebrow">Aoi Tsukikage Engineering</p>
+					<p class="brand-note">Portfolio information architecture v1</p>
+				</div>
+				<Nav currentPath={currentPath} />
+			</header>
+			<main class="content">
+				<slot />
+			</main>
+		</div>
+	</body>
+</html>
+
+<style>
+	:global(html) {
+		background:
+			radial-gradient(circle at top, rgba(120, 192, 255, 0.14), transparent 36%),
+			var(--bg);
+		color: var(--surface);
+		font-family: var(--font-body);
+		min-height: 100%;
+	}
+
+	:global(body) {
+		margin: 0;
+		min-height: 100vh;
+	}
+
+	:global(*) {
+		box-sizing: border-box;
+	}
+
+	.page-shell {
+		display: grid;
+		gap: 3rem;
+		margin: 0 auto;
+		max-width: 72rem;
+		min-height: 100vh;
+		padding: 2rem 1.5rem 4rem;
+	}
+
+	.site-header {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.brand-block {
+		display: grid;
+		gap: 0.35rem;
+	}
+
+	.eyebrow,
+	.brand-note {
+		margin: 0;
+	}
+
+	.eyebrow {
+		color: var(--accent);
+		font-size: 0.8rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.brand-note {
+		color: rgba(231, 238, 247, 0.78);
+		font-size: 0.98rem;
+	}
+
+	.content {
+		display: grid;
+	}
+
+	@media (max-width: 640px) {
+		.page-shell {
+			padding-top: 1.5rem;
+		}
+	}
+</style>
