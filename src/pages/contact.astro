@@ -4,43 +4,51 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 
 <SiteLayout
 	title="Contact | Aoi Tsukikage Engineering"
-	description="Contact route placeholder for the first portfolio information architecture pass."
+	description="Contact page scaffold with placeholder channels and CTA routing."
 	currentPath={Astro.url.pathname}
 >
-	<section class="placeholder">
-		<p class="eyebrow">Contact</p>
-		<h1>Contact pathways will land here when content is ready.</h1>
-		<p>
-			This placeholder keeps the route live and navigable while calls to action,
-			contact details, and content strategy remain deferred beyond P1.
-		</p>
-	</section>
+	<div class="page-stack">
+		<section class="section-card section-shell" id="contact-hero">
+			<p class="section-kicker">[SYSTEM] contact.hero</p>
+			<p class="section-anchor">section/contact/hero</p>
+			<h1>Contact page placeholder maps the primary outreach CTA and response path.</h1>
+			<p>
+				This route stays generic while the final contact copy and real handles are
+				still pending.
+			</p>
+			<div class="cta-row">
+				<a class="cta-link" href="#contact-methods">Review Contact Methods</a>
+				<a class="cta-link secondary" href="/">Back Home</a>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="contact-methods">
+			<p class="section-kicker">[SYSTEM] contact.methods</p>
+			<p class="section-anchor">section/contact/methods</p>
+			<h2>Contact methods section reserves email and profile channels.</h2>
+			<div class="section-grid">
+				<article class="section-card">
+					<p class="section-tag">[MISSION] email-slot</p>
+					<h3>Email placeholder</h3>
+					<p>Reserved for a future direct contact address and reply expectation note.</p>
+				</article>
+				<article class="section-card">
+					<p class="section-tag">[MISSION] profile-slot</p>
+					<h3>Linked profile placeholders</h3>
+					<p>Reserved for LinkedIn and GitHub route labels without publishing handles yet.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="contact-cta">
+			<p class="section-kicker">[SYSTEM] contact.cta-band</p>
+			<p class="section-anchor">section/contact/cta-band</p>
+			<h2>Final CTA band makes the next step explicit even before real contact data is added.</h2>
+			<p>Placeholder CTA copy remains generic and route-safe for this stage.</p>
+			<div class="cta-row">
+				<a class="cta-link" href="/about">Read About</a>
+				<a class="cta-link secondary" href="/projects">Browse Projects</a>
+			</div>
+		</section>
+	</div>
 </SiteLayout>
-
-<style>
-	.placeholder {
-		display: grid;
-		gap: 1rem;
-		max-width: 44rem;
-	}
-
-	.eyebrow {
-		color: var(--accent);
-		letter-spacing: 0.08em;
-		margin: 0;
-		text-transform: uppercase;
-	}
-
-	h1 {
-		font-family: var(--font-display);
-		font-size: clamp(2.4rem, 7vw, 4.25rem);
-		line-height: 1.05;
-		margin: 0;
-	}
-
-	p {
-		line-height: 1.7;
-		margin: 0;
-		max-width: 38rem;
-	}
-</style>

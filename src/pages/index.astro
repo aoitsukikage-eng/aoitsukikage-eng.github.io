@@ -4,24 +4,90 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 
 <SiteLayout
 	title="Aoi Tsukikage Engineering"
-	description="Portfolio site bootstrap with shared layout and first-pass routing."
+	description="Portfolio section scaffold for the first-pass four-page information architecture."
 	currentPath={Astro.url.pathname}
 >
-	<section class="shell">
-		<div class="hero-copy">
-			<p class="eyebrow">Aoi Tsukikage Engineering</p>
-			<h1>Portfolio site bootstrap is live.</h1>
-			<p class="summary">A minimal Astro foundation for the GitHub Pages user site.</p>
-			<p class="status">Under construction.</p>
-		</div>
-		<div class="hero-panel">
-			<p class="panel-label">Home</p>
+	<div class="page-stack">
+		<section class="shell section-card" id="home-hero">
+			<div class="hero-copy">
+				<p class="section-kicker">[SYSTEM] home.hero</p>
+				<h1>Placeholder hero copy defines the first impression layer for the portfolio.</h1>
+				<p class="summary">
+					This pass only maps section order, CTA hierarchy, and placeholder content
+					for the four-page launch shell.
+				</p>
+				<div class="meta-row">
+					<span class="meta-chip">Hero Tier 01</span>
+					<span class="meta-chip">Primary CTA Map</span>
+					<span class="meta-chip">Placeholder Only</span>
+				</div>
+				<div class="cta-row">
+					<a class="cta-link" href="/projects">View Projects</a>
+					<a class="cta-link secondary" href="/contact">Contact</a>
+				</div>
+			</div>
+			<div class="hero-panel">
+				<p class="section-tag">[MISSION] hero-support</p>
+				<p class="section-anchor">section/home/hero-support</p>
+				<p>
+					Support panel reserved for concise status, working mode, or route context
+					without introducing final biography or project details.
+				</p>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="home-intro">
+			<p class="section-kicker">[SYSTEM] home.intro</p>
+			<p class="section-anchor">section/home/intro</p>
+			<h2>Intro section placeholder frames the site intent in one compact block.</h2>
 			<p>
-				This shared shell now anchors the first four routes while the detailed
-				information architecture remains intentionally deferred.
+				Placeholder copy for the homepage overview. Final narrative, proof points,
+				and resume-level detail remain deferred.
 			</p>
-		</div>
-	</section>
+		</section>
+
+		<section class="section-card section-shell" id="home-focus-areas">
+			<p class="section-kicker">[SYSTEM] home.focus-areas</p>
+			<p class="section-anchor">section/home/focus-areas</p>
+			<h2>Focus areas section marks where three domain signals will be introduced.</h2>
+			<div class="section-grid">
+				<article class="section-card">
+					<p class="section-tag">[MISSION] focus-card-01</p>
+					<h3>Placeholder focus area one</h3>
+					<p>Reserved for short summary text and one future directional cue.</p>
+				</article>
+				<article class="section-card">
+					<p class="section-tag">[MISSION] focus-card-02</p>
+					<h3>Placeholder focus area two</h3>
+					<p>Reserved for short summary text and one future directional cue.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="home-featured-pointer">
+			<p class="section-kicker">[SYSTEM] home.featured-pointer</p>
+			<p class="section-anchor">section/home/featured-pointer</p>
+			<h2>Featured pointer section reserves space for one highlighted route into Projects.</h2>
+			<p>
+				Only the pointer structure exists here. No project taxonomy, content entry,
+				or detail page is introduced in this pass.
+			</p>
+			<div class="cta-row">
+				<a class="cta-link" href="/projects">Open Projects Hub</a>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="home-cta">
+			<p class="section-kicker">[SYSTEM] home.cta-band</p>
+			<p class="section-anchor">section/home/cta-band</p>
+			<h2>Final homepage CTA band keeps the exit routes explicit.</h2>
+			<p>Placeholder CTA copy for the next action layer after the homepage scan.</p>
+			<div class="cta-row">
+				<a class="cta-link" href="/about">Read About</a>
+				<a class="cta-link secondary" href="/contact">Start Contact Route</a>
+			</div>
+		</section>
+	</div>
 </SiteLayout>
 
 <style>
@@ -29,8 +95,7 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 		display: grid;
 		gap: 2rem;
 		grid-template-columns: minmax(0, 1.6fr) minmax(18rem, 0.9fr);
-		min-height: calc(100vh - 14rem);
-		place-items: center start;
+		place-items: start;
 	}
 
 	.hero-copy {
@@ -39,45 +104,23 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 		max-width: 42rem;
 	}
 
-	.eyebrow,
-	.status,
-	.panel-label {
-		color: var(--accent);
-		letter-spacing: 0.08em;
-		margin: 0;
-		text-transform: uppercase;
-	}
-
 	h1 {
-		font-family: var(--font-display);
 		font-size: clamp(2.5rem, 7vw, 4.5rem);
-		line-height: 1.05;
-		margin: 0;
-	}
-
-	p {
-		margin: 0;
-		max-width: 40rem;
 	}
 
 	.hero-panel {
 		background: rgba(120, 192, 255, 0.08);
 		border: 1px solid rgba(120, 192, 255, 0.2);
-		border-radius: 1.5rem;
-		display: grid;
-		gap: 1rem;
-		padding: 1.5rem;
+		min-height: 100%;
 	}
 
 	.summary {
 		font-size: 1.1rem;
-		line-height: 1.7;
 	}
 
 	@media (max-width: 900px) {
 		.shell {
 			grid-template-columns: 1fr;
-			min-height: auto;
 		}
 	}
 </style>

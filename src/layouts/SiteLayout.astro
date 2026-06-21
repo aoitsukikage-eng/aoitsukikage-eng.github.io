@@ -98,11 +98,125 @@ const {
 
 	.content {
 		display: grid;
+		gap: 1.5rem;
+	}
+
+	:global(.page-stack) {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	:global(.section-card) {
+		background: rgba(120, 192, 255, 0.05);
+		border: 1px solid rgba(120, 192, 255, 0.16);
+		border-radius: 1.5rem;
+		display: grid;
+		gap: 1rem;
+		padding: 1.5rem;
+	}
+
+	:global(.section-shell) {
+		display: grid;
+		gap: 1rem;
+	}
+
+	:global(.section-kicker),
+	:global(.section-tag),
+	:global(.section-anchor),
+	:global(.meta-chip) {
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	:global(.section-kicker),
+	:global(.section-tag) {
+		color: var(--accent);
+		margin: 0;
+	}
+
+	:global(.section-anchor) {
+		color: rgba(231, 238, 247, 0.6);
+		font-size: 0.8rem;
+		margin: 0;
+	}
+
+	:global(.section-card h1),
+	:global(.section-card h2),
+	:global(.section-card h3),
+	:global(.section-shell h1),
+	:global(.section-shell h2),
+	:global(.section-shell h3) {
+		font-family: var(--font-display);
+		line-height: 1.05;
+		margin: 0;
+	}
+
+	:global(.section-card p),
+	:global(.section-shell p),
+	:global(.section-card li),
+	:global(.section-shell li) {
+		line-height: 1.7;
+		margin: 0;
+	}
+
+	:global(.section-grid) {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	:global(.meta-row),
+	:global(.cta-row) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	:global(.meta-chip) {
+		border: 1px solid rgba(120, 192, 255, 0.18);
+		border-radius: 999px;
+		color: rgba(231, 238, 247, 0.76);
+		font-size: 0.78rem;
+		padding: 0.45rem 0.8rem;
+	}
+
+	:global(.cta-link) {
+		border: 1px solid rgba(120, 192, 255, 0.24);
+		border-radius: 999px;
+		color: var(--surface);
+		display: inline-flex;
+		padding: 0.75rem 1rem;
+		text-decoration: none;
+	}
+
+	:global(.cta-link:hover),
+	:global(.cta-link:focus-visible) {
+		background: rgba(120, 192, 255, 0.12);
+		border-color: rgba(120, 192, 255, 0.45);
+		color: var(--accent);
+		outline: none;
+	}
+
+	:global(.cta-link.secondary) {
+		background: rgba(120, 192, 255, 0.08);
+	}
+
+	:global(.bullet-list) {
+		display: grid;
+		gap: 0.75rem;
+		margin: 0;
+		padding-left: 1.2rem;
 	}
 
 	@media (max-width: 640px) {
 		.page-shell {
 			padding-top: 1.5rem;
+		}
+	}
+
+	@media (max-width: 900px) {
+		:global(.section-grid) {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>
