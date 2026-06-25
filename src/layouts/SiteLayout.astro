@@ -1,5 +1,6 @@
 ---
 import Nav from "../components/Nav.astro";
+import { siteConfig } from "../config/site";
 import "../styles/tokens.css";
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 const {
 	title,
 	currentPath = "/",
-	description = "Portfolio structure in progress.",
+	description = siteConfig.tagline,
 } = Astro.props;
 ---
 
@@ -29,8 +30,8 @@ const {
 		<div class="page-shell">
 			<header class="site-header">
 				<div class="brand-block">
-					<p class="eyebrow">Aoi Tsukikage Engineering</p>
-					<p class="brand-note">Portfolio information architecture v1</p>
+					<p class="eyebrow">{siteConfig.name}</p>
+					<p class="brand-note">{siteConfig.tagline}</p>
 				</div>
 				<Nav currentPath={currentPath} />
 			</header>
