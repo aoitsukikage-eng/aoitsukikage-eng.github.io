@@ -8,6 +8,10 @@ domain:
   - toolchain
 status: active
 visibility: public
+placeholder: true
+teamRole: Solo builder placeholder for portfolio taxonomy validation.
+background: Public-facing personal tooling slot used to prove collection-driven rendering without publishing final case-study copy.
+disclosure: Public-safe placeholder only. Real implementation notes and evidence stay for a later content pass.
 links:
   repo: https://example.com/personal-tooling-lab
 order: 1

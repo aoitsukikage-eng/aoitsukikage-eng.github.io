@@ -1,21 +1,46 @@
 ---
+import { getCollection } from "astro:content";
 import SiteLayout from "../layouts/SiteLayout.astro";
+import {
+	STATUS_FILTERS,
+	TRACK_FILTERS,
+	getDomainFilters,
+	getStatusLabel,
+	getTrackLabel,
+	getVisibilityLabel,
+	getVisibilityNote,
+	isPlaceholderProject,
+	sortProjects,
+} from "../lib/projects";
+
+const projectEntries = sortProjects(await getCollection("projectCases"));
+const domainFilters = getDomainFilters(projectEntries);
+const totalProjects = projectEntries.length;
+const featuredCount = projectEntries.filter((project) => project.data.featured).length;
+const placeholderCount = projectEntries.filter((project) =>
+	isPlaceholderProject(project),
+).length;
 ---
 
 <SiteLayout
 	title="Projects | Aoi Tsukikage Engineering"
-	description="Projects section scaffold with placeholder CTA and filter placement."
+	description="Data-driven projects hub with taxonomy filters and placeholder-safe visibility handling."
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
 		<section class="section-card section-shell" id="projects-hero">
 			<p class="section-kicker">[SYSTEM] projects.hero</p>
 			<p class="section-anchor">section/projects/hero</p>
-			<h1>Projects page placeholder maps the collection view before content schema exists.</h1>
+			<h1>Projects Hub renders directly from the portfolio collection without hardcoded cards.</h1>
 			<p>
-				This hero only establishes heading hierarchy and CTA location for the
-				first Projects listing page.
+				Track, domain, and status filters refine the collection in-browser while
+				visibility and placeholder rules keep unpublished work on a public-safe layer.
 			</p>
+			<div class="meta-row">
+				<span class="meta-chip">{totalProjects} total entries</span>
+				<span class="meta-chip">{featuredCount} featured flag</span>
+				<span class="meta-chip">{placeholderCount} placeholder-safe</span>
+			</div>
 			<div class="cta-row">
 				<a class="cta-link" href="/contact">Request Details</a>
 				<a class="cta-link secondary" href="/">Back Home</a>
@@ -25,43 +50,473 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 		<section class="section-card section-shell" id="projects-filter-bar">
 			<p class="section-kicker">[SYSTEM] projects.filter-bar</p>
 			<p class="section-anchor">section/projects/filter-bar</p>
-			<h2>Filter bar placement is reserved here without implementing filtering logic.</h2>
-			<div class="meta-row">
-				<span class="meta-chip">Filter UI Placeholder</span>
-				<span class="meta-chip">No Logic</span>
-				<span class="meta-chip">No Taxonomy</span>
-			</div>
+			<h2>Filter the project collection by track, domain, and status.</h2>
+			<form class="filter-shell" data-project-filters>
+				<fieldset class="filter-group">
+					<legend>Track</legend>
+					<div class="filter-row">
+						{
+							TRACK_FILTERS.map((filter) => (
+								<label class="filter-pill">
+									<input
+										checked={filter.value === "all"}
+										name="track"
+										type="radio"
+										value={filter.value}
+									/>
+									<span>{filter.label}</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<fieldset class="filter-group">
+					<legend>Domain</legend>
+					<div class="filter-row">
+						{
+							domainFilters.map((domain) => (
+								<label class="filter-pill">
+									<input name="domain" type="checkbox" value={domain} />
+									<span>{domain.replaceAll("_", " ")}</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<fieldset class="filter-group">
+					<legend>Status</legend>
+					<div class="filter-row">
+						{
+							STATUS_FILTERS.map((filter) => (
+								<label class="filter-pill">
+									<input
+										checked={filter.value === "all"}
+										name="status"
+										type="radio"
+										value={filter.value}
+									/>
+									<span>{filter.label}</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<div class="filter-actions">
+					<button class="cta-link reset-button" type="reset">Reset Filters</button>
+					<p class="filter-summary" data-filter-summary>
+						Showing all {totalProjects} projects.
+					</p>
+				</div>
+			</form>
 		</section>
 
 		<section class="section-card section-shell" id="projects-grid">
 			<p class="section-kicker">[SYSTEM] projects.card-grid</p>
 			<p class="section-anchor">section/projects/card-grid</p>
-			<h2>Project card grid placeholder defines the listing footprint.</h2>
-			<div class="section-grid">
-				<article class="section-card">
-					<p class="section-tag">[MISSION] card-slot-01</p>
-					<h3>Project card placeholder one</h3>
-					<p>Reserved for future summary, stack tag, and route pointer.</p>
-				</article>
-				<article class="section-card">
-					<p class="section-tag">[MISSION] card-slot-02</p>
-					<h3>Project card placeholder two</h3>
-					<p>Reserved for future summary, stack tag, and route pointer.</p>
-				</article>
+			<h2>Collection-backed project cards with placeholder-safe summaries.</h2>
+			<div class="projects-grid" data-project-grid>
+				{
+					projectEntries.map((project) => {
+						const placeholder = isPlaceholderProject(project);
+						const detailHref = `/projects/${project.data.slug}/`;
+						const domainValue = project.data.domain.join("|");
+
+						return (
+							<article
+								class:list={{
+									"project-card": true,
+									"project-card--placeholder": placeholder,
+								}}
+								data-domain={domainValue}
+								data-placeholder={placeholder ? "true" : "false"}
+								data-status={project.data.status}
+								data-track={project.data.track}
+							>
+								<div class="project-card__top">
+									<div class="meta-row">
+										<span class="project-chip">{getTrackLabel(project.data.track)}</span>
+										<span
+											class:list={{
+												"project-chip": true,
+												"project-status": true,
+												"is-active": project.data.status === "active",
+												"is-ongoing": project.data.status === "ongoing",
+											}}
+										>
+											{getStatusLabel(project.data.status)}
+										</span>
+										<span class="project-chip project-chip--visibility">
+											{
+												project.data.visibility === "confidential" && (
+													<svg
+														aria-hidden="true"
+														class="lock-icon"
+														viewBox="0 0 24 24"
+													>
+														<path
+															d="M7 10V7a5 5 0 0 1 10 0v3"
+															fill="none"
+															stroke="currentColor"
+															stroke-linecap="round"
+															stroke-linejoin="round"
+															stroke-width="1.8"
+														></path>
+														<rect
+															fill="none"
+															height="10"
+															rx="2"
+															stroke="currentColor"
+															stroke-width="1.8"
+															width="14"
+															x="5"
+															y="10"
+														></rect>
+													</svg>
+												)
+											}
+											{getVisibilityLabel(project.data.visibility)}
+										</span>
+										{
+											placeholder && (
+												<span class="project-chip project-chip--placeholder">
+													Placeholder
+												</span>
+											)
+										}
+									</div>
+									<h3>
+										<a href={detailHref}>{project.data.title}</a>
+									</h3>
+									<p>{project.data.summary}</p>
+								</div>
+
+								<div class="meta-row">
+									{
+										project.data.domain.map((domain) => (
+											<span class="meta-chip">{domain.replaceAll("_", " ")}</span>
+										))
+									}
+								</div>
+
+								<div class="project-card__body">
+									<p class="project-note">{getVisibilityNote(project)}</p>
+									{
+										placeholder && (
+											<div class="placeholder-block">
+												<p><strong>Team Role:</strong> {project.data.teamRole}</p>
+												<p><strong>Background:</strong> {project.data.background}</p>
+											</div>
+										)
+									}
+								</div>
+
+								<div class="cta-row">
+									<a class="cta-link" href={detailHref}>Open Detail</a>
+									{
+										project.data.links?.repo && project.data.visibility === "public" && (
+											<a
+												class="cta-link secondary"
+												href={project.data.links.repo}
+												rel="noreferrer"
+												target="_blank"
+											>
+												Repo
+											</a>
+										)
+									}
+									{
+										project.data.links?.demo && project.data.visibility !== "confidential" && (
+											<a
+												class="cta-link secondary"
+												href={project.data.links.demo}
+												rel="noreferrer"
+												target="_blank"
+											>
+												Demo
+											</a>
+										)
+									}
+								</div>
+							</article>
+						);
+					})
+				}
 			</div>
 		</section>
 
-		<section class="section-card section-shell" id="projects-empty-state">
+		<section class="section-card section-shell empty-state" hidden id="projects-empty-state">
 			<p class="section-kicker">[SYSTEM] projects.empty-state</p>
 			<p class="section-anchor">section/projects/empty-state</p>
-			<h2>Empty state placeholder documents fallback messaging for the listing surface.</h2>
+			<h2>No projects match the current filter combination.</h2>
 			<p>
-				Placeholder message only. No data model, visibility rule, or slug detail
-				route is attached in this pass.
+				Reset the filter bar to restore the full collection or remove one domain
+				tag to widen the results.
 			</p>
-			<div class="cta-row">
-				<a class="cta-link" href="/contact">Open Contact</a>
-			</div>
 		</section>
 	</div>
 </SiteLayout>
+
+<script is:inline>
+	const filterRoot = document.querySelector("[data-project-filters]");
+	const cards = Array.from(document.querySelectorAll("[data-project-grid] .project-card"));
+	const emptyState = document.getElementById("projects-empty-state");
+	const summary = document.querySelector("[data-filter-summary]");
+
+	if (filterRoot && cards.length && emptyState && summary) {
+		const syncUrl = (track, status, domains) => {
+			const params = new URLSearchParams(window.location.search);
+
+			if (track === "all") {
+				params.delete("track");
+			} else {
+				params.set("track", track);
+			}
+
+			if (status === "all") {
+				params.delete("status");
+			} else {
+				params.set("status", status);
+			}
+
+			if (domains.length === 0) {
+				params.delete("domain");
+			} else {
+				params.set("domain", domains.join(","));
+			}
+
+			const next = params.toString();
+			const nextUrl = next ? `${window.location.pathname}?${next}` : window.location.pathname;
+			window.history.replaceState({}, "", nextUrl);
+		};
+
+		const hydrateFromQuery = () => {
+			const params = new URLSearchParams(window.location.search);
+			const track = params.get("track");
+			const status = params.get("status");
+			const domains = (params.get("domain") || "")
+				.split(",")
+				.map((value) => value.trim())
+				.filter(Boolean);
+
+			if (track) {
+				const input = filterRoot.querySelector(`input[name="track"][value="${track}"]`);
+				if (input) input.checked = true;
+			}
+
+			if (status) {
+				const input = filterRoot.querySelector(`input[name="status"][value="${status}"]`);
+				if (input) input.checked = true;
+			}
+
+			domains.forEach((domain) => {
+				const input = filterRoot.querySelector(`input[name="domain"][value="${domain}"]`);
+				if (input) input.checked = true;
+			});
+		};
+
+		const render = () => {
+			const formData = new FormData(filterRoot);
+			const track = formData.get("track") || "all";
+			const status = formData.get("status") || "all";
+			const domains = formData.getAll("domain");
+
+			let visible = 0;
+
+			cards.forEach((card) => {
+				const cardTrack = card.dataset.track;
+				const cardStatus = card.dataset.status;
+				const cardDomains = (card.dataset.domain || "").split("|").filter(Boolean);
+
+				const matchTrack = track === "all" || cardTrack === track;
+				const matchStatus = status === "all" || cardStatus === status;
+				const matchDomains =
+					domains.length === 0 || domains.every((domain) => cardDomains.includes(domain));
+				const isVisible = matchTrack && matchStatus && matchDomains;
+
+				card.hidden = !isVisible;
+				if (isVisible) visible += 1;
+			});
+
+			summary.textContent =
+				visible === cards.length
+					? `Showing all ${visible} projects.`
+					: `Showing ${visible} of ${cards.length} projects.`;
+			emptyState.hidden = visible !== 0;
+			syncUrl(track, status, domains);
+		};
+
+		hydrateFromQuery();
+		filterRoot.addEventListener("change", render);
+		filterRoot.addEventListener("reset", () => {
+			window.setTimeout(render, 0);
+		});
+		render();
+	}
+</script>
+
+<style>
+	.filter-shell,
+	.filter-group {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.filter-group {
+		border: 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	.filter-group legend {
+		font-family: var(--font-display);
+		margin-bottom: 0.6rem;
+	}
+
+	.filter-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.filter-pill {
+		cursor: pointer;
+	}
+
+	.filter-pill input {
+		left: -9999px;
+		position: absolute;
+	}
+
+	.filter-pill span,
+	.reset-button {
+		background: transparent;
+		border: 1px solid rgba(120, 192, 255, 0.18);
+		border-radius: 999px;
+		color: rgba(231, 238, 247, 0.78);
+		display: inline-flex;
+		font-size: 0.88rem;
+		padding: 0.65rem 0.95rem;
+	}
+
+	.filter-pill input:checked + span {
+		background: rgba(120, 192, 255, 0.12);
+		border-color: rgba(120, 192, 255, 0.45);
+		color: var(--accent);
+	}
+
+	.filter-actions {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 1rem;
+		justify-content: space-between;
+	}
+
+	.reset-button {
+		cursor: pointer;
+		font: inherit;
+	}
+
+	.filter-summary {
+		color: rgba(231, 238, 247, 0.72);
+	}
+
+	.projects-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.project-card {
+		background: rgba(120, 192, 255, 0.05);
+		border: 1px solid rgba(120, 192, 255, 0.18);
+		border-radius: 1.25rem;
+		display: grid;
+		gap: 1rem;
+		padding: 1.25rem;
+	}
+
+	.project-card--placeholder {
+		border-style: dashed;
+	}
+
+	.project-card h3 a {
+		color: var(--surface);
+		text-decoration: none;
+	}
+
+	.project-card h3 a:hover,
+	.project-card h3 a:focus-visible {
+		color: var(--accent);
+		outline: none;
+	}
+
+	.project-card__top,
+	.project-card__body,
+	.placeholder-block {
+		display: grid;
+		gap: 0.8rem;
+	}
+
+	.project-chip {
+		align-items: center;
+		background: rgba(120, 192, 255, 0.08);
+		border: 1px solid rgba(120, 192, 255, 0.2);
+		border-radius: 999px;
+		display: inline-flex;
+		font-size: 0.78rem;
+		gap: 0.35rem;
+		letter-spacing: 0.08em;
+		padding: 0.45rem 0.7rem;
+		text-transform: uppercase;
+	}
+
+	.project-status.is-active {
+		background: rgba(70, 184, 120, 0.18);
+		border-color: rgba(70, 184, 120, 0.45);
+		color: #9ce2bb;
+	}
+
+	.project-status.is-ongoing {
+		background: rgba(255, 164, 79, 0.18);
+		border-color: rgba(255, 164, 79, 0.45);
+		color: #ffc98c;
+	}
+
+	.project-chip--visibility {
+		color: rgba(231, 238, 247, 0.88);
+	}
+
+	.project-chip--placeholder {
+		border-style: dashed;
+	}
+
+	.lock-icon {
+		height: 0.9rem;
+		width: 0.9rem;
+	}
+
+	.project-note {
+		color: rgba(231, 238, 247, 0.72);
+	}
+
+	.placeholder-block {
+		background: rgba(120, 192, 255, 0.05);
+		border: 1px solid rgba(120, 192, 255, 0.12);
+		border-radius: 1rem;
+		padding: 0.9rem;
+	}
+
+	.empty-state[hidden] {
+		display: none;
+	}
+
+	@media (max-width: 900px) {
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

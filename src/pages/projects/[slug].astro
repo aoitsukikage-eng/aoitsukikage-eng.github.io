@@ -1,0 +1,222 @@
+---
+import { getCollection, render } from "astro:content";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import {
+	getStatusLabel,
+	getTrackLabel,
+	getVisibilityLabel,
+	getVisibilityNote,
+	isPlaceholderProject,
+	sortProjects,
+} from "../../lib/projects";
+
+export async function getStaticPaths() {
+	const projectEntries = sortProjects(await getCollection("projectCases"));
+
+	return projectEntries.map((project) => ({
+		params: { slug: project.data.slug },
+		props: { project },
+	}));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const placeholder = isPlaceholderProject(project);
+---
+
+<SiteLayout
+	title={`${project.data.title} | Projects | Aoi Tsukikage Engineering`}
+	description={project.data.summary}
+	currentPath={Astro.url.pathname}
+>
+	<div class="page-stack">
+		<section class="section-card section-shell" id="project-detail-hero">
+			<p class="section-kicker">[SYSTEM] projects.detail.hero</p>
+			<p class="section-anchor">section/projects/detail/hero</p>
+			<div class="meta-row">
+				<span class="project-chip">{getTrackLabel(project.data.track)}</span>
+				<span
+					class:list={{
+						"project-chip": true,
+						"project-status": true,
+						"is-active": project.data.status === "active",
+						"is-ongoing": project.data.status === "ongoing",
+					}}
+				>
+					{getStatusLabel(project.data.status)}
+				</span>
+				<span class="project-chip">
+					{
+						project.data.visibility === "confidential" && (
+							<svg aria-hidden="true" class="lock-icon" viewBox="0 0 24 24">
+								<path
+									d="M7 10V7a5 5 0 0 1 10 0v3"
+									fill="none"
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="1.8"
+								></path>
+								<rect
+									fill="none"
+									height="10"
+									rx="2"
+									stroke="currentColor"
+									stroke-width="1.8"
+									width="14"
+									x="5"
+									y="10"
+								></rect>
+							</svg>
+						)
+					}
+					{getVisibilityLabel(project.data.visibility)}
+				</span>
+				{
+					placeholder && <span class="project-chip project-chip--placeholder">Placeholder</span>
+				}
+			</div>
+			<h1>{project.data.title}</h1>
+			<p>{project.data.summary}</p>
+			<div class="meta-row">
+				{
+					project.data.domain.map((domain) => (
+						<span class="meta-chip">{domain.replaceAll("_", " ")}</span>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="project-detail-safety">
+			<p class="section-kicker">[SYSTEM] projects.detail.safety-layer</p>
+			<p class="section-anchor">section/projects/detail/safety-layer</p>
+			<h2>Public-safe disclosure layer</h2>
+			<p>{getVisibilityNote(project)}</p>
+			<div class="detail-grid">
+				<article class="detail-panel">
+					<p class="section-tag">[MISSION] team-role</p>
+					<h3>Team Role</h3>
+					<p>{project.data.teamRole ?? "Role details are not published for this entry."}</p>
+				</article>
+				<article class="detail-panel">
+					<p class="section-tag">[MISSION] background</p>
+					<h3>Background</h3>
+					<p>{project.data.background ?? "Background context is limited to this safe placeholder layer."}</p>
+				</article>
+				<article class="detail-panel">
+					<p class="section-tag">[MISSION] disclosure</p>
+					<h3>Disclosure Scope</h3>
+					<p>{project.data.disclosure ?? "Only routing and taxonomy validation data is exposed."}</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="project-detail-body">
+			<p class="section-kicker">[SYSTEM] projects.detail.body</p>
+			<p class="section-anchor">section/projects/detail/body</p>
+			<h2>{placeholder ? "Placeholder Detail" : "Project Notes"}</h2>
+			<div class="detail-body prose-shell">
+				<Content />
+			</div>
+		</section>
+
+		<section class="section-card section-shell" id="project-detail-links">
+			<p class="section-kicker">[SYSTEM] projects.detail.links</p>
+			<p class="section-anchor">section/projects/detail/links</p>
+			<h2>Available public routes</h2>
+			<div class="cta-row">
+				<a class="cta-link" href="/projects">Back to Projects</a>
+				{
+					project.data.links?.repo && project.data.visibility === "public" && (
+						<a
+							class="cta-link secondary"
+							href={project.data.links.repo}
+							rel="noreferrer"
+							target="_blank"
+						>
+							Repository
+						</a>
+					)
+				}
+				{
+					project.data.links?.demo && project.data.visibility !== "confidential" && (
+						<a
+							class="cta-link secondary"
+							href={project.data.links.demo}
+							rel="noreferrer"
+							target="_blank"
+						>
+							Demo
+						</a>
+					)
+				}
+				<a class="cta-link secondary" href="/contact">Request Context</a>
+			</div>
+		</section>
+	</div>
+</SiteLayout>
+
+<style>
+	.detail-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.detail-panel {
+		background: rgba(120, 192, 255, 0.05);
+		border: 1px solid rgba(120, 192, 255, 0.14);
+		border-radius: 1rem;
+		display: grid;
+		gap: 0.75rem;
+		padding: 1rem;
+	}
+
+	.detail-body {
+		color: rgba(231, 238, 247, 0.84);
+	}
+
+	.detail-body :global(p) {
+		margin: 0;
+	}
+
+	.project-chip {
+		align-items: center;
+		background: rgba(120, 192, 255, 0.08);
+		border: 1px solid rgba(120, 192, 255, 0.2);
+		border-radius: 999px;
+		display: inline-flex;
+		font-size: 0.78rem;
+		gap: 0.35rem;
+		letter-spacing: 0.08em;
+		padding: 0.45rem 0.7rem;
+		text-transform: uppercase;
+	}
+
+	.project-status.is-active {
+		background: rgba(70, 184, 120, 0.18);
+		border-color: rgba(70, 184, 120, 0.45);
+		color: #9ce2bb;
+	}
+
+	.project-status.is-ongoing {
+		background: rgba(255, 164, 79, 0.18);
+		border-color: rgba(255, 164, 79, 0.45);
+		color: #ffc98c;
+	}
+
+	.project-chip--placeholder {
+		border-style: dashed;
+	}
+
+	.lock-icon {
+		height: 0.9rem;
+		width: 0.9rem;
+	}
+
+	@media (max-width: 900px) {
+		.detail-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

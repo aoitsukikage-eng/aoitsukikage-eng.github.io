@@ -8,6 +8,10 @@ domain:
   - analytics
 status: completed
 visibility: partial
+placeholder: true
+teamRole: Delivery role withheld for NDA-safe placeholder handling.
+background: Client operations case scaffold retained only for taxonomy and routing validation.
+disclosure: Only summary-level signals are public. Process, scale, and client identifiers remain withheld.
 links:
   demo: https://example.com/client-ops-case
 order: 2

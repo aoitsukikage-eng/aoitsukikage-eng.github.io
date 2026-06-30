@@ -34,6 +34,10 @@ const projectCaseCollection = defineCollection({
 		domain: z.array(z.string().min(1)).min(1),
 		status: statusEnum,
 		visibility: visibilityEnum,
+		placeholder: z.boolean().optional(),
+		teamRole: z.string().min(1).optional(),
+		background: z.string().min(1).optional(),
+		disclosure: z.string().min(1).optional(),
 		links: z
 			.object({
 				repo: z.string().url().optional(),
