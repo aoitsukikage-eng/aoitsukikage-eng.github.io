@@ -1,7 +1,67 @@
+@font-face {
+	font-family: "Orbitron";
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url("/fonts/orbitron-500.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Orbitron";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url("/fonts/orbitron-500.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Dancing Script";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url("/fonts/dancing-script-700.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "IBM Plex Sans";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/ibm-plex-sans-400.woff2") format("woff2");
+}
+
 :root {
-	--bg: #11161d;
-	--surface: #e7eef7;
-	--accent: #78c0ff;
-	--font-display: "Avenir Next", "Trebuchet MS", sans-serif;
+	--bg: #050b17;
+	--surface: #f4fbff;
+	--accent: #5be7ff;
+	--font-display: "Orbitron", "Trebuchet MS", sans-serif;
 	--font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+
+	--panel-surface: #081226;
+	--panel-alt: #0c1730;
+	--accent-soft: #7ccfff;
+	--text-bright: #f4fbff;
+	--text-dim: #b7ecff;
+	--text-muted: rgba(183, 236, 255, 0.72);
+	--border-soft: rgba(91, 231, 255, 0.18);
+	--border-strong: rgba(91, 231, 255, 0.36);
+	--glow-soft: 0 0 24px rgba(91, 231, 255, 0.14);
+	--glow-strong: 0 0 42px rgba(91, 231, 255, 0.24);
+	--panel-gradient:
+		linear-gradient(180deg, rgba(12, 23, 48, 0.94), rgba(8, 18, 38, 0.9));
+	--divider-gradient:
+		linear-gradient(90deg, rgba(91, 231, 255, 0), rgba(91, 231, 255, 0.88), rgba(91, 231, 255, 0));
+	--status-active-bg: rgba(95, 214, 148, 0.16);
+	--status-active-border: rgba(95, 214, 148, 0.42);
+	--status-active-text: #c9ffe0;
+	--status-ongoing-bg: rgba(255, 177, 87, 0.18);
+	--status-ongoing-border: rgba(255, 177, 87, 0.46);
+	--status-ongoing-text: #ffd2a8;
+	--status-confidential-bg: rgba(170, 205, 255, 0.11);
+	--status-confidential-border: rgba(170, 205, 255, 0.24);
+	--radius-card: 1.45rem;
+	--radius-pill: 999px;
+	--motion-base: 220ms;
+	--motion-slow: 560ms;
+	--easing-standard: cubic-bezier(0.22, 1, 0.36, 1);
 }

@@ -8,10 +8,11 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
-		<section class="section-card section-shell" id="contact-hero">
+		<section class="section-card section-shell" data-reveal id="contact-hero" style="--reveal-order: 0;">
 			<p class="section-kicker">[SYSTEM] contact.hero</p>
 			<p class="section-anchor">section/contact/hero</p>
 			<h1>Contact page placeholder maps the primary outreach CTA and response path.</h1>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
 				This route stays generic while the final contact copy and real handles are
 				still pending.
@@ -22,17 +23,18 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 			</div>
 		</section>
 
-		<section class="section-card section-shell" id="contact-methods">
+		<section class="section-card section-shell" data-reveal id="contact-methods" style="--reveal-order: 1;">
 			<p class="section-kicker">[SYSTEM] contact.methods</p>
 			<p class="section-anchor">section/contact/methods</p>
 			<h2>Contact methods section reserves email and profile channels.</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="section-grid">
-				<article class="section-card">
+				<article class="section-card" data-reveal style="--reveal-order: 2;">
 					<p class="section-tag">[MISSION] email-slot</p>
 					<h3>Email placeholder</h3>
 					<p>Reserved for a future direct contact address and reply expectation note.</p>
 				</article>
-				<article class="section-card">
+				<article class="section-card" data-reveal style="--reveal-order: 3;">
 					<p class="section-tag">[MISSION] profile-slot</p>
 					<h3>Linked profile placeholders</h3>
 					<p>Reserved for LinkedIn and GitHub route labels without publishing handles yet.</p>
@@ -40,10 +42,11 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 			</div>
 		</section>
 
-		<section class="section-card section-shell" id="contact-cta">
+		<section class="section-card section-shell" data-reveal id="contact-cta" style="--reveal-order: 2;">
 			<p class="section-kicker">[SYSTEM] contact.cta-band</p>
 			<p class="section-anchor">section/contact/cta-band</p>
 			<h2>Final CTA band makes the next step explicit even before real contact data is added.</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<p>Placeholder CTA copy remains generic and route-safe for this stage.</p>
 			<div class="cta-row">
 				<a class="cta-link" href="/about">Read About</a>

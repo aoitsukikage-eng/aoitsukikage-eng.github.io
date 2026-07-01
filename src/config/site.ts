@@ -1,6 +1,6 @@
 export const siteConfig = {
 	name: "Aoi Tsukikage Engineering",
-	tagline: "Portfolio information architecture v1",
+	tagline: "System-grade portfolio shell with placeholder-safe content routing.",
 	email: "hello@placeholder.invalid",
 	socials: {
 		github: "https://github.com/placeholder",

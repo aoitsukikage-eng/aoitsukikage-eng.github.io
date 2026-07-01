@@ -30,7 +30,7 @@ const placeholder = isPlaceholderProject(project);
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
-		<section class="section-card section-shell" id="project-detail-hero">
+		<section class="section-card section-shell" data-reveal id="project-detail-hero" style="--reveal-order: 0;">
 			<p class="section-kicker">[SYSTEM] projects.detail.hero</p>
 			<p class="section-anchor">section/projects/detail/hero</p>
 			<div class="meta-row">
@@ -77,6 +77,7 @@ const placeholder = isPlaceholderProject(project);
 				}
 			</div>
 			<h1>{project.data.title}</h1>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<p>{project.data.summary}</p>
 			<div class="meta-row">
 				{
@@ -87,23 +88,24 @@ const placeholder = isPlaceholderProject(project);
 			</div>
 		</section>
 
-		<section class="section-card section-shell" id="project-detail-safety">
+		<section class="section-card section-shell" data-reveal id="project-detail-safety" style="--reveal-order: 1;">
 			<p class="section-kicker">[SYSTEM] projects.detail.safety-layer</p>
 			<p class="section-anchor">section/projects/detail/safety-layer</p>
 			<h2>Public-safe disclosure layer</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<p>{getVisibilityNote(project)}</p>
 			<div class="detail-grid">
-				<article class="detail-panel">
+				<article class="detail-panel" data-reveal style="--reveal-order: 2;">
 					<p class="section-tag">[MISSION] team-role</p>
 					<h3>Team Role</h3>
 					<p>{project.data.teamRole ?? "Role details are not published for this entry."}</p>
 				</article>
-				<article class="detail-panel">
+				<article class="detail-panel" data-reveal style="--reveal-order: 3;">
 					<p class="section-tag">[MISSION] background</p>
 					<h3>Background</h3>
 					<p>{project.data.background ?? "Background context is limited to this safe placeholder layer."}</p>
 				</article>
-				<article class="detail-panel">
+				<article class="detail-panel" data-reveal style="--reveal-order: 4;">
 					<p class="section-tag">[MISSION] disclosure</p>
 					<h3>Disclosure Scope</h3>
 					<p>{project.data.disclosure ?? "Only routing and taxonomy validation data is exposed."}</p>
@@ -111,19 +113,21 @@ const placeholder = isPlaceholderProject(project);
 			</div>
 		</section>
 
-		<section class="section-card section-shell" id="project-detail-body">
+		<section class="section-card section-shell" data-reveal id="project-detail-body" style="--reveal-order: 2;">
 			<p class="section-kicker">[SYSTEM] projects.detail.body</p>
 			<p class="section-anchor">section/projects/detail/body</p>
 			<h2>{placeholder ? "Placeholder Detail" : "Project Notes"}</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="detail-body prose-shell">
 				<Content />
 			</div>
 		</section>
 
-		<section class="section-card section-shell" id="project-detail-links">
+		<section class="section-card section-shell" data-reveal id="project-detail-links" style="--reveal-order: 3;">
 			<p class="section-kicker">[SYSTEM] projects.detail.links</p>
 			<p class="section-anchor">section/projects/detail/links</p>
 			<h2>Available public routes</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="cta-row">
 				<a class="cta-link" href="/projects">Back to Projects</a>
 				{
@@ -164,16 +168,12 @@ const placeholder = isPlaceholderProject(project);
 	}
 
 	.detail-panel {
-		background: rgba(120, 192, 255, 0.05);
-		border: 1px solid rgba(120, 192, 255, 0.14);
-		border-radius: 1rem;
 		display: grid;
 		gap: 0.75rem;
-		padding: 1rem;
 	}
 
 	.detail-body {
-		color: rgba(231, 238, 247, 0.84);
+		color: rgba(244, 251, 255, 0.84);
 	}
 
 	.detail-body :global(p) {
@@ -181,28 +181,19 @@ const placeholder = isPlaceholderProject(project);
 	}
 
 	.project-chip {
-		align-items: center;
-		background: rgba(120, 192, 255, 0.08);
-		border: 1px solid rgba(120, 192, 255, 0.2);
-		border-radius: 999px;
-		display: inline-flex;
-		font-size: 0.78rem;
-		gap: 0.35rem;
-		letter-spacing: 0.08em;
-		padding: 0.45rem 0.7rem;
-		text-transform: uppercase;
+		backdrop-filter: blur(8px);
 	}
 
 	.project-status.is-active {
-		background: rgba(70, 184, 120, 0.18);
-		border-color: rgba(70, 184, 120, 0.45);
-		color: #9ce2bb;
+		background: var(--status-active-bg);
+		border-color: var(--status-active-border);
+		color: var(--status-active-text);
 	}
 
 	.project-status.is-ongoing {
-		background: rgba(255, 164, 79, 0.18);
-		border-color: rgba(255, 164, 79, 0.45);
-		color: #ffc98c;
+		background: var(--status-ongoing-bg);
+		border-color: var(--status-ongoing-border);
+		color: var(--status-ongoing-text);
 	}
 
 	.project-chip--placeholder {
