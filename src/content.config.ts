@@ -21,6 +21,14 @@ const visibilityEnum = z.enum([
 	"confidential",
 ]);
 
+const activityTypeEnum = z.enum([
+	"volunteer",
+	"talk",
+	"visit",
+	"forum",
+	"community",
+]);
+
 const projectCaseCollection = defineCollection({
 	loader: glob({
 		pattern: "**/*.md",
@@ -68,7 +76,25 @@ const researchItemCollection = defineCollection({
 	}),
 });
 
+const activitiesCollection = defineCollection({
+	loader: glob({
+		pattern: "**/*.md",
+		base: "./src/content/activities",
+	}),
+	schema: z.object({
+		title: z.string().min(1),
+		org: z.string().min(1),
+		date: z.coerce.date(),
+		type: activityTypeEnum,
+		role: z.string().min(1),
+		summary: z.string().min(1),
+		photos: z.array(z.string().min(1)),
+		tags: z.array(z.string().min(1)),
+	}),
+});
+
 export const collections = {
 	projectCases: projectCaseCollection,
 	researchItems: researchItemCollection,
+	activities: activitiesCollection,
 };

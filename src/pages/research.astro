@@ -1,0 +1,350 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import {
+	getStatusLabel,
+	getVisibilityLabel,
+	getVisibilityNote,
+	sortProjects,
+} from "../lib/projects";
+import {
+	getResearchDomainFilters,
+	getResearchEntries,
+	getResearchGroup,
+	RESEARCH_GROUPS,
+} from "../lib/research";
+
+const researchEntries = sortProjects(
+	getResearchEntries(await getCollection("projectCases")),
+);
+const domainFilters = getResearchDomainFilters(researchEntries);
+const groupedEntries = RESEARCH_GROUPS.map((group) => ({
+	...group,
+	entries: researchEntries.filter((entry) => getResearchGroup(entry) === group.key),
+}));
+---
+
+<SiteLayout
+	title="Research | Aoi Tsukikage Engineering"
+	description="Research routing surface grouped by quantitative and discourse domains with placeholder-safe entries."
+	currentPath={Astro.url.pathname}
+>
+	<div class="page-stack">
+		<section class="section-card section-shell" data-reveal id="research-hero" style="--reveal-order: 0;">
+			<p class="section-kicker">[SYSTEM] research.hero</p>
+			<p class="section-anchor">section/research/hero</p>
+			<h1>Research now sits as a first-class route with domain-aware grouping instead of hiding inside the full projects feed.</h1>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p>
+				Only `track=research` entries appear here. Domain tags separate quantitative
+				work from discourse-driven work while the placeholder layer keeps unpublished
+				material out of the public build.
+			</p>
+			<div class="meta-row">
+				<span class="meta-chip">{researchEntries.length} research entries</span>
+				{
+					groupedEntries.map((group) => (
+						<span class="meta-chip">{group.entries.length} {group.label}</span>
+					))
+				}
+			</div>
+			<div class="cta-row">
+				<a class="cta-link" href="/projects">Open Full Projects Hub</a>
+				<a class="cta-link secondary" href="/activities">View Activities</a>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" data-reveal id="research-filter-bar" style="--reveal-order: 1;">
+			<p class="section-kicker">[SYSTEM] research.filter-bar</p>
+			<p class="section-anchor">section/research/filter-bar</p>
+			<h2>Filter the research route by category view and domain tags.</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<form class="filter-shell" data-research-filters>
+				<fieldset class="filter-group">
+					<legend>Research View</legend>
+					<div class="filter-row">
+						<label class="filter-pill">
+							<input checked name="group" type="radio" value="all" />
+							<span>All Research</span>
+						</label>
+						{
+							groupedEntries.map((group) => (
+								<label class="filter-pill">
+									<input name="group" type="radio" value={group.key} />
+									<span>{group.label}</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<fieldset class="filter-group">
+					<legend>Domain Tags</legend>
+					<div class="filter-row">
+						{
+							domainFilters.map((domain) => (
+								<label class="filter-pill">
+									<input name="domain" type="checkbox" value={domain} />
+									<span>{domain.replaceAll("-", " ")}</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<div class="filter-actions">
+					<button class="cta-link reset-button" type="reset">Reset Filters</button>
+					<p class="filter-summary" data-filter-summary>
+						Showing all {researchEntries.length} research entries.
+					</p>
+				</div>
+			</form>
+		</section>
+
+		{
+			groupedEntries.map((group, groupIndex) => (
+				<section
+					class="section-card section-shell research-group"
+					data-group-section={group.key}
+					data-reveal
+					id={`research-group-${group.key}`}
+					style={`--reveal-order: ${groupIndex + 2};`}
+				>
+					<p class="section-kicker">{`[SYSTEM] research.group.${group.key}`}</p>
+					<p class="section-anchor">{`section/research/group/${group.key}`}</p>
+					<h2>{group.label}</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<p>{group.description}</p>
+					<div class="research-grid">
+						{
+							group.entries.map((entry) => {
+								const detailHref = `/projects/${entry.data.slug}/`;
+
+								return (
+									<article
+										class="research-card"
+										data-domains={entry.data.domain.join("|")}
+										data-group={group.key}
+									>
+										<div class="meta-row">
+											<span class="project-chip">{group.label}</span>
+											<span class="project-chip">{getStatusLabel(entry.data.status)}</span>
+											<span class="project-chip">{getVisibilityLabel(entry.data.visibility)}</span>
+										</div>
+										<h3>{entry.data.title}</h3>
+										<p>{entry.data.summary}</p>
+										<div class="meta-row">
+											{
+												entry.data.domain.map((domain) => (
+													<span class="meta-chip">{domain.replaceAll("-", " ")}</span>
+												))
+											}
+										</div>
+										<p class="research-note">{getVisibilityNote(entry)}</p>
+										<div class="cta-row">
+											<a class="cta-link" href={detailHref}>Open Detail</a>
+											<a class="cta-link secondary" href="/contact">Request Context</a>
+										</div>
+									</article>
+								);
+							})
+						}
+					</div>
+				</section>
+			))
+		}
+
+		<section class="section-card section-shell empty-state" data-reveal hidden id="research-empty-state" style="--reveal-order: 4;">
+			<p class="section-kicker">[SYSTEM] research.empty-state</p>
+			<p class="section-anchor">section/research/empty-state</p>
+			<h2>No research entries match the current filter set.</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p>Reset the filters to restore the full placeholder-safe research route.</p>
+		</section>
+	</div>
+
+	<script is:inline>
+		const form = document.querySelector("[data-research-filters]");
+		const cards = Array.from(document.querySelectorAll(".research-card"));
+		const sections = Array.from(document.querySelectorAll("[data-group-section]"));
+		const summary = document.querySelector("[data-filter-summary]");
+		const emptyState = document.querySelector("#research-empty-state");
+
+		if (form && cards.length && summary && emptyState) {
+			const applyFilters = () => {
+				const formData = new FormData(form);
+				const selectedGroup = String(formData.get("group") ?? "all");
+				const selectedDomains = formData.getAll("domain").map(String);
+				let visibleCount = 0;
+
+				cards.forEach((card) => {
+					const cardGroup = card.getAttribute("data-group") ?? "";
+					const cardDomains = (card.getAttribute("data-domains") ?? "").split("|").filter(Boolean);
+					const groupMatch = selectedGroup === "all" || cardGroup === selectedGroup;
+					const domainMatch =
+						selectedDomains.length === 0 ||
+						selectedDomains.every((domain) => cardDomains.includes(domain));
+					const visible = groupMatch && domainMatch;
+
+					card.toggleAttribute("hidden", !visible);
+
+					if (visible) {
+						visibleCount += 1;
+					}
+				});
+
+				sections.forEach((section) => {
+					const group = section.getAttribute("data-group-section");
+					const visibleGroupCards = cards.filter((card) => {
+						if (card.getAttribute("data-group") !== group) {
+							return false;
+						}
+
+						return !card.hasAttribute("hidden");
+					});
+
+					section.toggleAttribute("hidden", visibleGroupCards.length === 0);
+				});
+
+				summary.textContent =
+					visibleCount === cards.length
+						? `Showing all ${cards.length} research entries.`
+						: `Showing ${visibleCount} of ${cards.length} research entries.`;
+				emptyState.toggleAttribute("hidden", visibleCount !== 0);
+			};
+
+			form.addEventListener("change", applyFilters);
+			form.addEventListener("reset", () => window.setTimeout(applyFilters, 0));
+			applyFilters();
+		}
+	</script>
+</SiteLayout>
+
+<style>
+	.filter-shell {
+		display: grid;
+		gap: 1.2rem;
+	}
+
+	.filter-group {
+		border: 1px solid rgba(91, 231, 255, 0.14);
+		border-radius: 1.1rem;
+		display: grid;
+		gap: 0.95rem;
+		margin: 0;
+		padding: 1rem;
+	}
+
+	.filter-group legend {
+		color: var(--text-bright);
+		font-family: var(--font-display);
+		font-size: 0.86rem;
+		letter-spacing: 0.08em;
+		padding: 0 0.3rem;
+		text-transform: uppercase;
+	}
+
+	.filter-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.filter-pill {
+		cursor: pointer;
+	}
+
+	.filter-pill input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.filter-pill span {
+		align-items: center;
+		background: rgba(91, 231, 255, 0.06);
+		border: 1px solid rgba(91, 231, 255, 0.18);
+		border-radius: var(--radius-pill);
+		color: var(--text-dim);
+		display: inline-flex;
+		font-family: var(--font-display);
+		font-size: 0.8rem;
+		letter-spacing: 0.08em;
+		padding: 0.72rem 0.92rem;
+		text-transform: uppercase;
+		transition:
+			background var(--motion-base) var(--easing-standard),
+			border-color var(--motion-base) var(--easing-standard),
+			color var(--motion-base) var(--easing-standard),
+			box-shadow var(--motion-base) var(--easing-standard);
+	}
+
+	.filter-pill input:checked + span,
+	.filter-pill:hover span,
+	.filter-pill:focus-within span {
+		background: rgba(91, 231, 255, 0.14);
+		border-color: rgba(91, 231, 255, 0.42);
+		box-shadow: 0 0 18px rgba(91, 231, 255, 0.12);
+		color: var(--accent);
+	}
+
+	.filter-actions {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.9rem;
+		justify-content: space-between;
+	}
+
+	.reset-button {
+		background: rgba(91, 231, 255, 0.07);
+	}
+
+	.filter-summary {
+		color: var(--text-muted);
+		font-size: 0.92rem;
+	}
+
+	.research-group[hidden],
+	.research-card[hidden],
+	.empty-state[hidden] {
+		display: none;
+	}
+
+	.research-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.research-card {
+		background:
+			linear-gradient(180deg, rgba(11, 24, 49, 0.92), rgba(7, 17, 35, 0.9));
+		border: 1px solid rgba(91, 231, 255, 0.18);
+		border-radius: var(--radius-card);
+		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+		display: grid;
+		gap: 1rem;
+		padding: 1.35rem;
+	}
+
+	.research-card h3 {
+		font-size: 1.2rem;
+	}
+
+	.research-note {
+		color: var(--text-muted);
+		font-size: 0.95rem;
+	}
+
+	@media (max-width: 900px) {
+		.research-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.filter-actions {
+			align-items: start;
+			flex-direction: column;
+		}
+	}
+</style>

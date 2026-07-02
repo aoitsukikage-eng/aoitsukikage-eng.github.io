@@ -4,8 +4,8 @@ slug: research-prototype-archive-placeholder
 summary: Placeholder entry for a confidential archived research-oriented project record.
 track: research
 domain:
-  - experimentation
-  - data_pipeline
+  - quantitative
+  - finance
 status: archived
 visibility: confidential
 placeholder: true

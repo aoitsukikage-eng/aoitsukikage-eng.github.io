@@ -1,0 +1,368 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import {
+	formatActivityDate,
+	getActivityPhotoCaption,
+	getActivityTagFilters,
+	getActivityTypeFilters,
+	getActivityTypeLabel,
+	sortActivities,
+} from "../lib/activities";
+
+const activityEntries = sortActivities(await getCollection("activities"));
+const typeFilters = getActivityTypeFilters(activityEntries);
+const tagFilters = getActivityTagFilters(activityEntries);
+---
+
+<SiteLayout
+	title="Activities | Aoi Tsukikage Engineering"
+	description="Activity route for volunteer, talk, visit, and forum placeholders with structured photo-caption slots."
+	currentPath={Astro.url.pathname}
+>
+	<div class="page-stack">
+		<section class="section-card section-shell" data-reveal id="activities-hero" style="--reveal-order: 0;">
+			<p class="section-kicker">[SYSTEM] activities.hero</p>
+			<p class="section-anchor">section/activities/hero</p>
+			<h1>Activities is a structured experience log, not a photo wall, with room for future image swaps that do not force a redesign.</h1>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p>
+				Each entry keeps the experience framing first: organization, date, role,
+				summary, and only then a small set of placeholder visual slots with one-line
+				captions ready for the later content pass.
+			</p>
+			<div class="meta-row">
+				<span class="meta-chip">{activityEntries.length} placeholder entries</span>
+				<span class="meta-chip">{tagFilters.length} tag filters</span>
+			</div>
+			<div class="cta-row">
+				<a class="cta-link" href="/research">Open Research Route</a>
+				<a class="cta-link secondary" href="/projects">View Projects</a>
+			</div>
+		</section>
+
+		<section class="section-card section-shell" data-reveal id="activities-filter-bar" style="--reveal-order: 1;">
+			<p class="section-kicker">[SYSTEM] activities.filter-bar</p>
+			<p class="section-anchor">section/activities/filter-bar</p>
+			<h2>Filter the activity log by type and tags.</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<form class="filter-shell" data-activity-filters>
+				<fieldset class="filter-group">
+					<legend>Type</legend>
+					<div class="filter-row">
+						<label class="filter-pill">
+							<input checked name="type" type="radio" value="all" />
+							<span>All Types</span>
+						</label>
+						{
+							typeFilters.map((filter) => (
+								<label class="filter-pill">
+									<input name="type" type="radio" value={filter.value} />
+									<span>{filter.label}</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<fieldset class="filter-group">
+					<legend>Tags</legend>
+					<div class="filter-row">
+						{
+							tagFilters.map((tag) => (
+								<label class="filter-pill">
+									<input name="tag" type="checkbox" value={tag} />
+									<span>{tag.replaceAll("-", " ")}</span>
+								</label>
+							))
+						}
+					</div>
+				</fieldset>
+
+				<div class="filter-actions">
+					<button class="cta-link reset-button" type="reset">Reset Filters</button>
+					<p class="filter-summary" data-filter-summary>
+						Showing all {activityEntries.length} activity entries.
+					</p>
+				</div>
+			</form>
+		</section>
+
+		<section class="activity-log" data-reveal id="activities-log" style="--reveal-order: 2;">
+			{
+				activityEntries.map((activity, index) => (
+					<article
+						class="section-card activity-entry"
+						data-tags={activity.data.tags.join("|")}
+						data-type={activity.data.type}
+						style={`--reveal-order: ${index + 2};`}
+					>
+						<div class="activity-entry__header">
+							<div class="meta-row">
+								<span class="project-chip">{getActivityTypeLabel(activity.data.type)}</span>
+								<span class="meta-chip">{activity.data.org}</span>
+								<span class="meta-chip">{formatActivityDate(activity.data.date)}</span>
+							</div>
+							<h2>{activity.data.title}</h2>
+							<p class="section-anchor">{`activity/${activity.id}`}</p>
+						</div>
+
+						<div class="hud-divider" aria-hidden="true"></div>
+
+						<div class="activity-entry__body">
+							<div class="activity-copy">
+								<div class="detail-block">
+									<p class="section-tag">[MISSION] role.summary</p>
+									<p>{activity.data.role}</p>
+								</div>
+								<div class="detail-block">
+									<p class="section-tag">[MISSION] learning.capture</p>
+									<p>{activity.data.summary}</p>
+								</div>
+								<div class="meta-row">
+									{
+										activity.data.tags.map((tag) => (
+											<span class="meta-chip">{tag.replaceAll("-", " ")}</span>
+										))
+									}
+								</div>
+							</div>
+
+							<div class="activity-photos">
+								{
+									activity.data.photos.map((photo, photoIndex) => (
+										<figure class="photo-slot">
+											<div class="photo-frame" aria-hidden="true">
+												<span>[PHOTO SLOT {photoIndex + 1}]</span>
+											</div>
+											<figcaption>
+												{getActivityPhotoCaption(activity, photo, photoIndex)}
+											</figcaption>
+										</figure>
+									))
+								}
+							</div>
+						</div>
+					</article>
+				))
+			}
+		</section>
+
+		<section class="section-card section-shell empty-state" data-reveal hidden id="activities-empty-state" style="--reveal-order: 3;">
+			<p class="section-kicker">[SYSTEM] activities.empty-state</p>
+			<p class="section-anchor">section/activities/empty-state</p>
+			<h2>No activity entries match the current filter set.</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p>Reset the filters to restore the full placeholder activity log.</p>
+		</section>
+	</div>
+
+	<script is:inline>
+		const form = document.querySelector("[data-activity-filters]");
+		const entries = Array.from(document.querySelectorAll(".activity-entry"));
+		const summary = document.querySelector("[data-filter-summary]");
+		const emptyState = document.querySelector("#activities-empty-state");
+
+		if (form && entries.length && summary && emptyState) {
+			const applyFilters = () => {
+				const formData = new FormData(form);
+				const selectedType = String(formData.get("type") ?? "all");
+				const selectedTags = formData.getAll("tag").map(String);
+				let visibleCount = 0;
+
+				entries.forEach((entry) => {
+					const entryType = entry.getAttribute("data-type") ?? "";
+					const entryTags = (entry.getAttribute("data-tags") ?? "").split("|").filter(Boolean);
+					const typeMatch = selectedType === "all" || entryType === selectedType;
+					const tagMatch =
+						selectedTags.length === 0 ||
+						selectedTags.every((tag) => entryTags.includes(tag));
+					const visible = typeMatch && tagMatch;
+
+					entry.toggleAttribute("hidden", !visible);
+
+					if (visible) {
+						visibleCount += 1;
+					}
+				});
+
+				summary.textContent =
+					visibleCount === entries.length
+						? `Showing all ${entries.length} activity entries.`
+						: `Showing ${visibleCount} of ${entries.length} activity entries.`;
+				emptyState.toggleAttribute("hidden", visibleCount !== 0);
+			};
+
+			form.addEventListener("change", applyFilters);
+			form.addEventListener("reset", () => window.setTimeout(applyFilters, 0));
+			applyFilters();
+		}
+	</script>
+</SiteLayout>
+
+<style>
+	.filter-shell,
+	.activity-log {
+		display: grid;
+		gap: 1.2rem;
+	}
+
+	.filter-group {
+		border: 1px solid rgba(91, 231, 255, 0.14);
+		border-radius: 1.1rem;
+		display: grid;
+		gap: 0.95rem;
+		margin: 0;
+		padding: 1rem;
+	}
+
+	.filter-group legend {
+		color: var(--text-bright);
+		font-family: var(--font-display);
+		font-size: 0.86rem;
+		letter-spacing: 0.08em;
+		padding: 0 0.3rem;
+		text-transform: uppercase;
+	}
+
+	.filter-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.filter-pill {
+		cursor: pointer;
+	}
+
+	.filter-pill input {
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+	}
+
+	.filter-pill span {
+		align-items: center;
+		background: rgba(91, 231, 255, 0.06);
+		border: 1px solid rgba(91, 231, 255, 0.18);
+		border-radius: var(--radius-pill);
+		color: var(--text-dim);
+		display: inline-flex;
+		font-family: var(--font-display);
+		font-size: 0.8rem;
+		letter-spacing: 0.08em;
+		padding: 0.72rem 0.92rem;
+		text-transform: uppercase;
+		transition:
+			background var(--motion-base) var(--easing-standard),
+			border-color var(--motion-base) var(--easing-standard),
+			color var(--motion-base) var(--easing-standard),
+			box-shadow var(--motion-base) var(--easing-standard);
+	}
+
+	.filter-pill input:checked + span,
+	.filter-pill:hover span,
+	.filter-pill:focus-within span {
+		background: rgba(91, 231, 255, 0.14);
+		border-color: rgba(91, 231, 255, 0.42);
+		box-shadow: 0 0 18px rgba(91, 231, 255, 0.12);
+		color: var(--accent);
+	}
+
+	.filter-actions {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.9rem;
+		justify-content: space-between;
+	}
+
+	.reset-button {
+		background: rgba(91, 231, 255, 0.07);
+	}
+
+	.filter-summary {
+		color: var(--text-muted);
+		font-size: 0.92rem;
+	}
+
+	.activity-entry[hidden],
+	.empty-state[hidden] {
+		display: none;
+	}
+
+	.activity-entry {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.activity-entry__header,
+	.activity-copy {
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.activity-entry__body {
+		display: grid;
+		gap: 1.25rem;
+		grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+	}
+
+	.detail-block {
+		background: rgba(91, 231, 255, 0.04);
+		border: 1px solid rgba(91, 231, 255, 0.14);
+		border-radius: 1rem;
+		display: grid;
+		gap: 0.75rem;
+		padding: 1rem;
+	}
+
+	.activity-photos {
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.photo-slot {
+		background: rgba(8, 18, 38, 0.62);
+		border: 1px solid rgba(91, 231, 255, 0.14);
+		border-radius: 1.05rem;
+		display: grid;
+		gap: 0.8rem;
+		margin: 0;
+		padding: 0.95rem;
+	}
+
+	.photo-frame {
+		align-items: center;
+		background:
+			linear-gradient(135deg, rgba(91, 231, 255, 0.12), rgba(91, 231, 255, 0.02)),
+			radial-gradient(circle at top right, rgba(124, 207, 255, 0.14), transparent 48%);
+		border: 1px dashed rgba(91, 231, 255, 0.34);
+		border-radius: 0.95rem;
+		color: var(--accent-soft);
+		display: grid;
+		font-family: var(--font-display);
+		letter-spacing: 0.08em;
+		min-height: 8.8rem;
+		place-items: center;
+		text-align: center;
+		text-transform: uppercase;
+	}
+
+	.photo-slot figcaption {
+		color: var(--text-muted);
+		font-size: 0.92rem;
+		line-height: 1.66;
+	}
+
+	@media (max-width: 900px) {
+		.activity-entry__body {
+			grid-template-columns: 1fr;
+		}
+
+		.filter-actions {
+			align-items: start;
+			flex-direction: column;
+		}
+	}
+</style>
