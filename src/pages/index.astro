@@ -29,17 +29,12 @@ const quoteRows = quoteLines.map((line) =>
 	<div class="page-stack">
 		<section class="hero-shell section-card" data-reveal id="home-hero" style="--reveal-order: 0;">
 			<div class="hero-copy">
-				<p class="section-kicker">[SYSTEM] home.hero</p>
-				<p class="section-anchor">section/home/hero</p>
-				<h1 class="hero-title">Portfolio interface redrawn as a system-grade HUD without replacing the placeholder content layer.</h1>
+				<p class="section-kicker">[SYSTEM]</p>
+				<h1 class="hero-title">A placeholder-safe portfolio shell shaped with calm, high-tech precision.</h1>
 				<div class="hud-divider" aria-hidden="true"></div>
-				<p class="summary">
-					This pass upgrades the site shell, motion language, and quote treatment while
-					keeping the current content scope intentionally placeholder-safe.
-				</p>
+				<p class="summary">The content stays intentionally generic while the interface makes room for it to breathe.</p>
 				<div class="meta-row">
 					<span class="meta-chip">Solo UI Pass</span>
-					<span class="meta-chip">Native HTML/CSS</span>
 					<span class="meta-chip">Placeholder Safe</span>
 				</div>
 				<div class="cta-row">
@@ -49,8 +44,7 @@ const quoteRows = quoteLines.map((line) =>
 			</div>
 
 			<div class="hero-stack">
-				<aside class="hero-terminal section-card" data-reveal style="--reveal-order: 1;">
-					<p class="section-tag">[MISSION] boot.sequence</p>
+				<aside class="hero-terminal" data-reveal style="--reveal-order: 1;">
 					<div class="hero-terminal__screen" data-system-typing>
 						{
 							typingLines.map((line) => (
@@ -59,22 +53,11 @@ const quoteRows = quoteLines.map((line) =>
 						}
 					</div>
 				</aside>
-
-				<aside class="hero-panel section-card" data-reveal style="--reveal-order: 2;">
-					<p class="section-tag">[MISSION] hero-support</p>
-					<p class="section-anchor">section/home/hero-support</p>
-					<div class="hud-divider" aria-hidden="true"></div>
-					<p>
-						Support panel keeps room for future stats, route cues, or short system notes
-						without importing the profile-specific status widgets.
-					</p>
-				</aside>
 			</div>
 		</section>
 
 		<section class="quote-shell section-card" data-quote-frame data-reveal id="home-quote" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM] quote.protocol</p>
-			<p class="section-anchor">section/home/quote-protocol</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<div class="quote-surface">
 				<div class="quote-shimmer" aria-hidden="true"></div>
 				<p class="sr-only">
@@ -105,9 +88,8 @@ const quoteRows = quoteLines.map((line) =>
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="home-intro" style="--reveal-order: 2;">
-			<p class="section-kicker">[SYSTEM] home.intro</p>
-			<p class="section-anchor">section/home/intro</p>
+		<section class="section-shell section-plain" data-reveal id="home-intro" style="--reveal-order: 2;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Intro section placeholder now sits inside the same mission HUD language as the rest of the site.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
@@ -116,28 +98,24 @@ const quoteRows = quoteLines.map((line) =>
 			</p>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="home-focus-areas" style="--reveal-order: 3;">
-			<p class="section-kicker">[SYSTEM] home.focus-areas</p>
-			<p class="section-anchor">section/home/focus-areas</p>
+		<section class="section-shell section-plain" data-reveal id="home-focus-areas" style="--reveal-order: 3;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Focus areas remain placeholders while the card treatment upgrades to brighter tactical panels.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="section-grid">
-				<article class="section-card" data-reveal style="--reveal-order: 4;">
-					<p class="section-tag">[MISSION] focus-card-01</p>
+				<article class="focus-card" data-reveal style="--reveal-order: 4;">
 					<h3>Placeholder focus area one</h3>
 					<p>Reserved for short summary text and one future directional cue.</p>
 				</article>
-				<article class="section-card" data-reveal style="--reveal-order: 5;">
-					<p class="section-tag">[MISSION] focus-card-02</p>
+				<article class="focus-card" data-reveal style="--reveal-order: 5;">
 					<h3>Placeholder focus area two</h3>
 					<p>Reserved for short summary text and one future directional cue.</p>
 				</article>
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="home-featured-pointer" style="--reveal-order: 4;">
-			<p class="section-kicker">[SYSTEM] home.featured-pointer</p>
-			<p class="section-anchor">section/home/featured-pointer</p>
+		<section class="section-shell section-plain" data-reveal id="home-featured-pointer" style="--reveal-order: 4;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Featured pointer section keeps a clean route into Projects without changing the P4 data flow.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
@@ -150,8 +128,7 @@ const quoteRows = quoteLines.map((line) =>
 		</section>
 
 		<section class="section-card section-shell" data-reveal id="home-cta" style="--reveal-order: 5;">
-			<p class="section-kicker">[SYSTEM] home.cta-band</p>
-			<p class="section-anchor">section/home/cta-band</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Final CTA band exits the homepage with the same active system framing.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>Placeholder CTA copy stays generic while the visual layer now feels deliberate and fully themed.</p>
@@ -167,50 +144,55 @@ const quoteRows = quoteLines.map((line) =>
 	.hero-shell {
 		align-items: start;
 		display: grid;
-		gap: 1.25rem;
-		grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.95fr);
+		gap: var(--space-6);
+		grid-template-columns: minmax(0, 1.55fr) minmax(16rem, 0.8fr);
+		padding: var(--panel-padding-lg);
 	}
 
 	.hero-copy,
 	.hero-stack {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 	}
 
 	.hero-title {
-		font-size: clamp(2.4rem, 6vw, 4.7rem);
-		max-width: 11ch;
+		font-size: clamp(2.1rem, 5vw, 3.6rem);
+		max-width: 12ch;
 		text-wrap: balance;
 	}
 
 	.summary {
-		font-size: 1.08rem;
-		max-width: 42rem;
+		font-size: 1rem;
+		max-width: 34rem;
 	}
 
-	.hero-terminal,
-	.hero-panel {
-		min-height: 100%;
+	.hero-terminal {
+		align-self: center;
+		background: rgba(8, 18, 38, 0.42);
+		border: 1px solid rgba(91, 231, 255, 0.12);
+		border-radius: 1.25rem;
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+		padding: 1rem;
 	}
 
 	.hero-terminal__screen {
 		background:
-			linear-gradient(180deg, rgba(91, 231, 255, 0.07), rgba(91, 231, 255, 0.02)),
-			rgba(2, 8, 18, 0.7);
-		border: 1px solid rgba(91, 231, 255, 0.14);
+			linear-gradient(180deg, rgba(91, 231, 255, 0.05), rgba(91, 231, 255, 0.015)),
+			rgba(2, 8, 18, 0.56);
+		border: 1px solid rgba(91, 231, 255, 0.1);
 		border-radius: 1rem;
 		display: grid;
-		gap: 0.55rem;
-		min-height: 11rem;
+		gap: 0.65rem;
+		min-height: 9.5rem;
 		padding: 1rem 1rem 1.05rem;
 	}
 
 	.typing-line {
 		color: var(--text-bright);
 		font-family: var(--font-display);
-		font-size: 0.98rem;
-		letter-spacing: 0.1em;
-		line-height: 1.6;
+		font-size: 0.86rem;
+		letter-spacing: 0.08em;
+		line-height: 1.72;
 		margin: 0;
 		text-transform: uppercase;
 	}
@@ -240,9 +222,9 @@ const quoteRows = quoteLines.map((line) =>
 
 	.quote-surface {
 		display: grid;
-		gap: 1.2rem;
+		gap: var(--space-5);
 		overflow: hidden;
-		padding-top: 0.6rem;
+		padding-top: 0.4rem;
 		position: relative;
 	}
 
@@ -260,7 +242,7 @@ const quoteRows = quoteLines.map((line) =>
 
 	.quote-lines {
 		display: grid;
-		gap: 1rem;
+		gap: 1.1rem;
 		justify-items: center;
 		position: relative;
 		z-index: 1;
@@ -299,6 +281,15 @@ const quoteRows = quoteLines.map((line) =>
 		margin: 0 auto;
 		position: relative;
 		width: min(100%, 64rem);
+	}
+
+	.focus-card {
+		background: rgba(8, 18, 38, 0.46);
+		border: 1px solid rgba(91, 231, 255, 0.12);
+		border-radius: 1.2rem;
+		display: grid;
+		gap: 0.9rem;
+		padding: 1.15rem 1.2rem;
 	}
 
 	.quote-underline::after {

@@ -29,8 +29,7 @@ const placeholderCount = projectEntries.filter((project) =>
 >
 	<div class="page-stack">
 		<section class="section-card section-shell" data-reveal id="projects-hero" style="--reveal-order: 0;">
-			<p class="section-kicker">[SYSTEM] projects.hero</p>
-			<p class="section-anchor">section/projects/hero</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h1>Projects Hub renders directly from the portfolio collection without hardcoded cards.</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
@@ -48,9 +47,8 @@ const placeholderCount = projectEntries.filter((project) =>
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="projects-filter-bar" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM] projects.filter-bar</p>
-			<p class="section-anchor">section/projects/filter-bar</p>
+		<section class="section-shell section-plain" data-reveal id="projects-filter-bar" style="--reveal-order: 1;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Filter the project collection by track, domain, and status.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<form class="filter-shell" data-project-filters>
@@ -115,9 +113,8 @@ const placeholderCount = projectEntries.filter((project) =>
 			</form>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="projects-grid" style="--reveal-order: 2;">
-			<p class="section-kicker">[SYSTEM] projects.card-grid</p>
-			<p class="section-anchor">section/projects/card-grid</p>
+		<section class="section-shell section-plain" data-reveal id="projects-grid" style="--reveal-order: 2;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Collection-backed project cards with placeholder-safe summaries.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="projects-grid" data-project-grid>
@@ -253,8 +250,7 @@ const placeholderCount = projectEntries.filter((project) =>
 		</section>
 
 		<section class="section-card section-shell empty-state" data-reveal hidden id="projects-empty-state" style="--reveal-order: 3;">
-			<p class="section-kicker">[SYSTEM] projects.empty-state</p>
-			<p class="section-anchor">section/projects/empty-state</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>No projects match the current filter combination.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
@@ -384,15 +380,17 @@ const placeholderCount = projectEntries.filter((project) =>
 	}
 
 	.filter-group {
-		border: 0;
+		background: rgba(8, 18, 38, 0.38);
+		border: 1px solid rgba(91, 231, 255, 0.12);
+		border-radius: 1.15rem;
 		margin: 0;
-		padding: 0;
+		padding: 1.05rem 1.15rem 1.15rem;
 	}
 
 	.filter-group legend {
 		font-family: var(--font-display);
 		letter-spacing: 0.06em;
-		margin-bottom: 0.6rem;
+		margin-bottom: 0.2rem;
 		text-transform: uppercase;
 	}
 
@@ -413,15 +411,15 @@ const placeholderCount = projectEntries.filter((project) =>
 
 	.filter-pill span,
 	.reset-button {
-		background: rgba(91, 231, 255, 0.05);
-		border: 1px solid rgba(91, 231, 255, 0.18);
+		background: rgba(91, 231, 255, 0.04);
+		border: 1px solid rgba(91, 231, 255, 0.14);
 		border-radius: 999px;
 		color: rgba(244, 251, 255, 0.78);
 		display: inline-flex;
 		font-family: var(--font-display);
 		font-size: 0.82rem;
 		letter-spacing: 0.08em;
-		padding: 0.65rem 0.95rem;
+		padding: 0.68rem 0.98rem;
 		text-transform: uppercase;
 		transition:
 			border-color var(--motion-base) var(--easing-standard),
@@ -434,9 +432,9 @@ const placeholderCount = projectEntries.filter((project) =>
 	.filter-pill:hover span,
 	.filter-pill:focus-within span,
 	.filter-pill input:checked + span {
-		background: rgba(91, 231, 255, 0.12);
-		border-color: rgba(91, 231, 255, 0.45);
-		box-shadow: 0 0 18px rgba(91, 231, 255, 0.14);
+		background: rgba(91, 231, 255, 0.1);
+		border-color: rgba(91, 231, 255, 0.32);
+		box-shadow: 0 12px 24px rgba(91, 231, 255, 0.08);
 		color: var(--accent);
 		transform: translateY(-1px);
 	}
@@ -460,7 +458,7 @@ const placeholderCount = projectEntries.filter((project) =>
 
 	.projects-grid {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
@@ -493,7 +491,7 @@ const placeholderCount = projectEntries.filter((project) =>
 	.project-card__body,
 	.placeholder-block {
 		display: grid;
-		gap: 0.8rem;
+		gap: 0.95rem;
 	}
 
 	.project-chip {
@@ -533,9 +531,9 @@ const placeholderCount = projectEntries.filter((project) =>
 
 	.placeholder-block {
 		background: rgba(91, 231, 255, 0.04);
-		border: 1px solid rgba(91, 231, 255, 0.12);
+		border: 1px solid rgba(91, 231, 255, 0.1);
 		border-radius: 1rem;
-		padding: 0.9rem;
+		padding: 1rem;
 	}
 
 	.empty-state[hidden] {

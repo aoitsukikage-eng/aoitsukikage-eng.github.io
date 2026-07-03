@@ -31,8 +31,7 @@ const placeholder = isPlaceholderProject(project);
 >
 	<div class="page-stack">
 		<section class="section-card section-shell" data-reveal id="project-detail-hero" style="--reveal-order: 0;">
-			<p class="section-kicker">[SYSTEM] projects.detail.hero</p>
-			<p class="section-anchor">section/projects/detail/hero</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<div class="meta-row">
 				<span class="project-chip">{getTrackLabel(project.data.track)}</span>
 				<span
@@ -88,25 +87,21 @@ const placeholder = isPlaceholderProject(project);
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="project-detail-safety" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM] projects.detail.safety-layer</p>
-			<p class="section-anchor">section/projects/detail/safety-layer</p>
+		<section class="section-shell section-plain" data-reveal id="project-detail-safety" style="--reveal-order: 1;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Public-safe disclosure layer</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>{getVisibilityNote(project)}</p>
 			<div class="detail-grid">
-				<article class="detail-panel" data-reveal style="--reveal-order: 2;">
-					<p class="section-tag">[MISSION] team-role</p>
+				<article class="detail-item" data-reveal style="--reveal-order: 2;">
 					<h3>Team Role</h3>
 					<p>{project.data.teamRole ?? "Role details are not published for this entry."}</p>
 				</article>
-				<article class="detail-panel" data-reveal style="--reveal-order: 3;">
-					<p class="section-tag">[MISSION] background</p>
+				<article class="detail-item" data-reveal style="--reveal-order: 3;">
 					<h3>Background</h3>
 					<p>{project.data.background ?? "Background context is limited to this safe placeholder layer."}</p>
 				</article>
-				<article class="detail-panel" data-reveal style="--reveal-order: 4;">
-					<p class="section-tag">[MISSION] disclosure</p>
+				<article class="detail-item" data-reveal style="--reveal-order: 4;">
 					<h3>Disclosure Scope</h3>
 					<p>{project.data.disclosure ?? "Only routing and taxonomy validation data is exposed."}</p>
 				</article>
@@ -114,8 +109,7 @@ const placeholder = isPlaceholderProject(project);
 		</section>
 
 		<section class="section-card section-shell" data-reveal id="project-detail-body" style="--reveal-order: 2;">
-			<p class="section-kicker">[SYSTEM] projects.detail.body</p>
-			<p class="section-anchor">section/projects/detail/body</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>{placeholder ? "Placeholder Detail" : "Project Notes"}</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="detail-body prose-shell">
@@ -123,9 +117,8 @@ const placeholder = isPlaceholderProject(project);
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="project-detail-links" style="--reveal-order: 3;">
-			<p class="section-kicker">[SYSTEM] projects.detail.links</p>
-			<p class="section-anchor">section/projects/detail/links</p>
+		<section class="section-shell section-plain" data-reveal id="project-detail-links" style="--reveal-order: 3;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Available public routes</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="cta-row">
@@ -163,13 +156,17 @@ const placeholder = isPlaceholderProject(project);
 <style>
 	.detail-grid {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 
-	.detail-panel {
+	.detail-item {
+		background: rgba(8, 18, 38, 0.46);
+		border: 1px solid rgba(91, 231, 255, 0.12);
+		border-radius: 1.2rem;
 		display: grid;
 		gap: 0.75rem;
+		padding: 1.15rem 1.2rem;
 	}
 
 	.detail-body {

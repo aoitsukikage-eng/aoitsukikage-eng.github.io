@@ -51,7 +51,7 @@ const {
 		<div class="page-shell">
 			<header class="site-header">
 				<div class="brand-block">
-					<p class="eyebrow">[SYSTEM] navigation.core</p>
+					<p class="eyebrow">[SYSTEM]</p>
 					<div class="brand-copy">
 						<p class="brand-title">{siteConfig.name}</p>
 						<p class="brand-note">{siteConfig.tagline}</p>
@@ -269,23 +269,26 @@ const {
 
 	.page-shell {
 		display: grid;
-		gap: 2rem;
+		gap: var(--space-6);
 		margin: 0 auto;
-		max-width: 78rem;
+		max-width: var(--shell-max);
 		min-height: 100vh;
-		padding: 1.75rem 1.2rem 4rem;
+		padding: 1.8rem 1.4rem 5rem;
 		position: relative;
 	}
 
 	.site-header {
-		background: linear-gradient(180deg, rgba(12, 23, 48, 0.92), rgba(8, 18, 38, 0.9));
+		background: linear-gradient(180deg, rgba(12, 23, 48, 0.86), rgba(8, 18, 38, 0.8));
 		border: 1px solid var(--border-soft);
 		border-radius: calc(var(--radius-card) + 0.2rem);
 		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
-		display: grid;
-		gap: 1.4rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-4);
+		justify-content: space-between;
+		align-items: end;
 		overflow: hidden;
-		padding: 1.25rem 1.25rem 1.15rem;
+		padding: 1.15rem 1.25rem 1.2rem;
 		position: sticky;
 		top: 1rem;
 		z-index: 20;
@@ -305,36 +308,21 @@ const {
 	:global(.section-card)::before {
 		background: var(--divider-gradient);
 		height: 1px;
-		left: 1.25rem;
-		opacity: 0.92;
-		right: 1.25rem;
-		top: 1rem;
+		left: 1.5rem;
+		opacity: 0.7;
+		right: 1.5rem;
+		top: 0.95rem;
 		animation: divider-pulse 4.8s ease-in-out infinite;
-	}
-
-	.site-header::after,
-	:global(.section-card)::after {
-		background:
-			linear-gradient(var(--accent), var(--accent)) left 1rem top 1rem / 1.25rem 1px no-repeat,
-			linear-gradient(var(--accent), var(--accent)) left 1rem top 1rem / 1px 1.25rem no-repeat,
-			linear-gradient(var(--accent), var(--accent)) right 1rem top 1rem / 1.25rem 1px no-repeat,
-			linear-gradient(var(--accent), var(--accent)) right 1rem top 1rem / 1px 1.25rem no-repeat,
-			linear-gradient(var(--accent), var(--accent)) left 1rem bottom 1rem / 1.25rem 1px no-repeat,
-			linear-gradient(var(--accent), var(--accent)) left 1rem bottom 1rem / 1px 1.25rem no-repeat,
-			linear-gradient(var(--accent), var(--accent)) right 1rem bottom 1rem / 1.25rem 1px no-repeat,
-			linear-gradient(var(--accent), var(--accent)) right 1rem bottom 1rem / 1px 1.25rem no-repeat;
-		inset: 0;
-		opacity: 0.48;
 	}
 
 	.brand-block {
 		display: grid;
-		gap: 0.7rem;
+		gap: 0.55rem;
 	}
 
 	.brand-copy {
 		display: grid;
-		gap: 0.35rem;
+		gap: 0.45rem;
 	}
 
 	.eyebrow,
@@ -345,15 +333,15 @@ const {
 
 	.eyebrow {
 		align-items: center;
-		background: rgba(91, 231, 255, 0.08);
-		border: 1px solid rgba(91, 231, 255, 0.22);
+		background: rgba(91, 231, 255, 0.05);
+		border: 1px solid rgba(91, 231, 255, 0.14);
 		border-radius: var(--radius-pill);
 		color: var(--accent);
 		display: inline-flex;
 		font-family: var(--font-display);
-		font-size: 0.76rem;
+		font-size: 0.72rem;
 		letter-spacing: 0.18em;
-		padding: 0.42rem 0.8rem;
+		padding: 0.36rem 0.72rem;
 		text-transform: uppercase;
 		width: fit-content;
 	}
@@ -368,31 +356,33 @@ const {
 
 	.brand-note {
 		color: var(--text-muted);
-		font-size: 0.96rem;
+		font-size: 0.92rem;
 		max-width: 44rem;
 	}
 
 	.content {
 		display: grid;
-		gap: 1.5rem;
+		gap: var(--space-8);
+		margin: 0 auto;
+		max-width: var(--content-max);
+		width: 100%;
 	}
 
 	:global(.page-stack) {
 		display: grid;
-		gap: 1.5rem;
+		gap: var(--space-8);
 	}
 
 	:global(.section-card),
-	:global(.detail-panel),
 	:global(.project-card) {
 		background: var(--panel-gradient);
 		border: 1px solid var(--border-soft);
 		border-radius: var(--radius-card);
 		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 		overflow: hidden;
-		padding: 1.5rem;
+		padding: var(--panel-padding);
 		position: relative;
 		backdrop-filter: blur(18px);
 		transition:
@@ -404,23 +394,32 @@ const {
 
 	:global(.section-card:hover),
 	:global(.section-card:focus-within),
-	:global(.detail-panel:hover),
-	:global(.detail-panel:focus-within),
 	:global(.project-card:hover),
 	:global(.project-card:focus-within) {
 		border-color: var(--border-strong);
 		box-shadow: var(--glow-strong), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-		transform: translateY(-2px);
+		transform: translateY(-1px);
 	}
 
 	:global(.section-shell) {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
+	}
+
+	:global(.section-plain) {
+		background: transparent;
+		border: 0;
+		box-shadow: none;
+		padding: 0;
+	}
+
+	:global(.section-plain::before),
+	:global(.section-plain::after) {
+		display: none;
 	}
 
 	:global(.section-kicker),
 	:global(.section-tag),
-	:global(.section-anchor),
 	:global(.meta-chip) {
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -429,24 +428,17 @@ const {
 	:global(.section-kicker),
 	:global(.section-tag) {
 		align-items: center;
-		background: rgba(91, 231, 255, 0.08);
-		border: 1px solid rgba(91, 231, 255, 0.18);
+		background: rgba(91, 231, 255, 0.05);
+		border: 1px solid rgba(91, 231, 255, 0.14);
 		border-radius: var(--radius-pill);
 		color: var(--accent);
 		display: inline-flex;
 		font-family: var(--font-display);
-		font-size: 0.76rem;
+		font-size: 0.72rem;
 		gap: 0.45rem;
 		margin: 0;
-		padding: 0.38rem 0.76rem;
+		padding: 0.34rem 0.72rem;
 		width: fit-content;
-	}
-
-	:global(.section-anchor) {
-		color: rgba(183, 236, 255, 0.52);
-		font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
-		font-size: 0.76rem;
-		margin: 0;
 	}
 
 	:global(.section-card h1),
@@ -457,7 +449,7 @@ const {
 	:global(.section-shell h3) {
 		font-family: var(--font-display);
 		letter-spacing: 0.04em;
-		line-height: 1.08;
+		line-height: var(--heading-line-height);
 		margin: 0;
 		text-transform: uppercase;
 	}
@@ -467,13 +459,13 @@ const {
 	:global(.section-card li),
 	:global(.section-shell li) {
 		color: var(--text-dim);
-		line-height: 1.74;
+		line-height: var(--body-line-height);
 		margin: 0;
 	}
 
 	:global(.section-grid) {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
@@ -481,35 +473,35 @@ const {
 	:global(.cta-row) {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem;
+		gap: 0.8rem;
 	}
 
 	:global(.meta-chip),
 	:global(.project-chip) {
 		align-items: center;
-		background: rgba(91, 231, 255, 0.08);
-		border: 1px solid rgba(91, 231, 255, 0.18);
+		background: rgba(91, 231, 255, 0.05);
+		border: 1px solid rgba(91, 231, 255, 0.14);
 		border-radius: var(--radius-pill);
 		color: rgba(244, 251, 255, 0.82);
 		display: inline-flex;
-		font-size: 0.78rem;
+		font-size: 0.76rem;
 		gap: 0.4rem;
-		padding: 0.45rem 0.78rem;
+		padding: 0.42rem 0.74rem;
 	}
 
 	:global(.cta-link) {
 		align-items: center;
 		background:
 			linear-gradient(180deg, rgba(14, 29, 58, 0.88), rgba(8, 18, 38, 0.96));
-		border: 1px solid rgba(91, 231, 255, 0.24);
+		border: 1px solid rgba(91, 231, 255, 0.18);
 		border-radius: var(--radius-pill);
 		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 		color: var(--text-bright);
 		display: inline-flex;
 		font-family: var(--font-display);
-		font-size: 0.85rem;
+		font-size: 0.8rem;
 		letter-spacing: 0.08em;
-		padding: 0.8rem 1.1rem;
+		padding: 0.74rem 1rem;
 		text-decoration: none;
 		text-transform: uppercase;
 		transition:
@@ -523,8 +515,8 @@ const {
 	:global(.cta-link:hover),
 	:global(.cta-link:focus-visible) {
 		background: linear-gradient(180deg, rgba(20, 43, 82, 0.94), rgba(10, 24, 49, 0.98));
-		border-color: rgba(91, 231, 255, 0.52);
-		box-shadow: 0 0 22px rgba(91, 231, 255, 0.16);
+		border-color: rgba(91, 231, 255, 0.36);
+		box-shadow: 0 14px 30px rgba(91, 231, 255, 0.12);
 		color: var(--accent);
 		outline: none;
 		transform: translateY(-1px);
@@ -537,21 +529,21 @@ const {
 
 	:global(.bullet-list) {
 		display: grid;
-		gap: 0.75rem;
+		gap: 0.85rem;
 		margin: 0;
-		padding-left: 1.2rem;
+		padding-left: 1.4rem;
 	}
 
 	:global(.hud-divider) {
 		background: var(--divider-gradient);
 		border-radius: 999px;
 		box-shadow:
-			0 0 18px rgba(91, 231, 255, 0.26),
-			0 0 34px rgba(91, 231, 255, 0.08);
-		height: 2px;
+			0 0 12px rgba(91, 231, 255, 0.18),
+			0 0 24px rgba(91, 231, 255, 0.06);
+		height: 1px;
 		overflow: hidden;
 		position: relative;
-		width: min(100%, 22rem);
+		width: min(100%, 16rem);
 	}
 
 	:global(.hud-divider::after) {
@@ -566,7 +558,7 @@ const {
 
 	:global(.prose-shell) {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 	}
 
 	:global(.prose-shell ul),
@@ -628,7 +620,12 @@ const {
 
 	@media (max-width: 900px) {
 		.page-shell {
-			padding-inline: 0.9rem;
+			padding-inline: 1rem;
+		}
+
+		.site-header {
+			align-items: start;
+			flex-direction: column;
 		}
 
 		:global(.section-grid) {
@@ -648,7 +645,6 @@ const {
 		}
 
 		:global(.section-card),
-		:global(.detail-panel),
 		:global(.project-card),
 		:global(.cta-link),
 		:global(html[data-js="ready"] [data-reveal]) {

@@ -31,8 +31,7 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 >
 	<div class="page-stack">
 		<section class="section-card section-shell" data-reveal id="research-hero" style="--reveal-order: 0;">
-			<p class="section-kicker">[SYSTEM] research.hero</p>
-			<p class="section-anchor">section/research/hero</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h1>Research now sits as a first-class route with domain-aware grouping instead of hiding inside the full projects feed.</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
@@ -54,9 +53,8 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="research-filter-bar" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM] research.filter-bar</p>
-			<p class="section-anchor">section/research/filter-bar</p>
+		<section class="section-shell section-plain" data-reveal id="research-filter-bar" style="--reveal-order: 1;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Filter the research route by category view and domain tags.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<form class="filter-shell" data-research-filters>
@@ -104,14 +102,13 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 		{
 			groupedEntries.map((group, groupIndex) => (
 				<section
-					class="section-card section-shell research-group"
+					class="section-shell section-plain research-group"
 					data-group-section={group.key}
 					data-reveal
 					id={`research-group-${group.key}`}
 					style={`--reveal-order: ${groupIndex + 2};`}
 				>
-					<p class="section-kicker">{`[SYSTEM] research.group.${group.key}`}</p>
-					<p class="section-anchor">{`section/research/group/${group.key}`}</p>
+					<p class="section-kicker">[SYSTEM]</p>
 					<h2>{group.label}</h2>
 					<div class="hud-divider" aria-hidden="true"></div>
 					<p>{group.description}</p>
@@ -155,8 +152,7 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 		}
 
 		<section class="section-card section-shell empty-state" data-reveal hidden id="research-empty-state" style="--reveal-order: 4;">
-			<p class="section-kicker">[SYSTEM] research.empty-state</p>
-			<p class="section-anchor">section/research/empty-state</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>No research entries match the current filter set.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>Reset the filters to restore the full placeholder-safe research route.</p>
@@ -223,16 +219,17 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 <style>
 	.filter-shell {
 		display: grid;
-		gap: 1.2rem;
+		gap: var(--space-5);
 	}
 
 	.filter-group {
-		border: 1px solid rgba(91, 231, 255, 0.14);
-		border-radius: 1.1rem;
+		background: rgba(8, 18, 38, 0.38);
+		border: 1px solid rgba(91, 231, 255, 0.12);
+		border-radius: 1.15rem;
 		display: grid;
-		gap: 0.95rem;
+		gap: 1rem;
 		margin: 0;
-		padding: 1rem;
+		padding: 1.15rem 1.2rem;
 	}
 
 	.filter-group legend {
@@ -247,7 +244,7 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 	.filter-row {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem;
+		gap: 0.8rem;
 	}
 
 	.filter-pill {
@@ -262,8 +259,8 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 
 	.filter-pill span {
 		align-items: center;
-		background: rgba(91, 231, 255, 0.06);
-		border: 1px solid rgba(91, 231, 255, 0.18);
+		background: rgba(91, 231, 255, 0.04);
+		border: 1px solid rgba(91, 231, 255, 0.14);
 		border-radius: var(--radius-pill);
 		color: var(--text-dim);
 		display: inline-flex;
@@ -282,9 +279,9 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 	.filter-pill input:checked + span,
 	.filter-pill:hover span,
 	.filter-pill:focus-within span {
-		background: rgba(91, 231, 255, 0.14);
-		border-color: rgba(91, 231, 255, 0.42);
-		box-shadow: 0 0 18px rgba(91, 231, 255, 0.12);
+		background: rgba(91, 231, 255, 0.1);
+		border-color: rgba(91, 231, 255, 0.3);
+		box-shadow: 0 12px 24px rgba(91, 231, 255, 0.08);
 		color: var(--accent);
 	}
 
@@ -313,19 +310,18 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 
 	.research-grid {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	.research-card {
-		background:
-			linear-gradient(180deg, rgba(11, 24, 49, 0.92), rgba(7, 17, 35, 0.9));
-		border: 1px solid rgba(91, 231, 255, 0.18);
+		background: rgba(8, 18, 38, 0.48);
+		border: 1px solid rgba(91, 231, 255, 0.12);
 		border-radius: var(--radius-card);
-		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 		display: grid;
 		gap: 1rem;
-		padding: 1.35rem;
+		padding: 1.35rem 1.4rem;
 	}
 
 	.research-card h3 {

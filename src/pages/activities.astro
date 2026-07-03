@@ -22,8 +22,7 @@ const tagFilters = getActivityTagFilters(activityEntries);
 >
 	<div class="page-stack">
 		<section class="section-card section-shell" data-reveal id="activities-hero" style="--reveal-order: 0;">
-			<p class="section-kicker">[SYSTEM] activities.hero</p>
-			<p class="section-anchor">section/activities/hero</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h1>Activities is a structured experience log, not a photo wall, with room for future image swaps that do not force a redesign.</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
@@ -41,9 +40,8 @@ const tagFilters = getActivityTagFilters(activityEntries);
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="activities-filter-bar" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM] activities.filter-bar</p>
-			<p class="section-anchor">section/activities/filter-bar</p>
+		<section class="section-shell section-plain" data-reveal id="activities-filter-bar" style="--reveal-order: 1;">
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Filter the activity log by type and tags.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<form class="filter-shell" data-activity-filters>
@@ -104,7 +102,6 @@ const tagFilters = getActivityTagFilters(activityEntries);
 								<span class="meta-chip">{formatActivityDate(activity.data.date)}</span>
 							</div>
 							<h2>{activity.data.title}</h2>
-							<p class="section-anchor">{`activity/${activity.id}`}</p>
 						</div>
 
 						<div class="hud-divider" aria-hidden="true"></div>
@@ -112,11 +109,11 @@ const tagFilters = getActivityTagFilters(activityEntries);
 						<div class="activity-entry__body">
 							<div class="activity-copy">
 								<div class="detail-block">
-									<p class="section-tag">[MISSION] role.summary</p>
+									<h3 class="detail-title">Role Summary</h3>
 									<p>{activity.data.role}</p>
 								</div>
 								<div class="detail-block">
-									<p class="section-tag">[MISSION] learning.capture</p>
+									<h3 class="detail-title">Learning Capture</h3>
 									<p>{activity.data.summary}</p>
 								</div>
 								<div class="meta-row">
@@ -149,8 +146,7 @@ const tagFilters = getActivityTagFilters(activityEntries);
 		</section>
 
 		<section class="section-card section-shell empty-state" data-reveal hidden id="activities-empty-state" style="--reveal-order: 3;">
-			<p class="section-kicker">[SYSTEM] activities.empty-state</p>
-			<p class="section-anchor">section/activities/empty-state</p>
+			<p class="section-kicker">[SYSTEM]</p>
 			<h2>No activity entries match the current filter set.</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>Reset the filters to restore the full placeholder activity log.</p>
@@ -204,16 +200,17 @@ const tagFilters = getActivityTagFilters(activityEntries);
 	.filter-shell,
 	.activity-log {
 		display: grid;
-		gap: 1.2rem;
+		gap: var(--space-5);
 	}
 
 	.filter-group {
-		border: 1px solid rgba(91, 231, 255, 0.14);
+		background: rgba(8, 18, 38, 0.38);
+		border: 1px solid rgba(91, 231, 255, 0.12);
 		border-radius: 1.1rem;
 		display: grid;
 		gap: 0.95rem;
 		margin: 0;
-		padding: 1rem;
+		padding: 1.1rem 1.2rem;
 	}
 
 	.filter-group legend {
@@ -243,8 +240,8 @@ const tagFilters = getActivityTagFilters(activityEntries);
 
 	.filter-pill span {
 		align-items: center;
-		background: rgba(91, 231, 255, 0.06);
-		border: 1px solid rgba(91, 231, 255, 0.18);
+		background: rgba(91, 231, 255, 0.04);
+		border: 1px solid rgba(91, 231, 255, 0.14);
 		border-radius: var(--radius-pill);
 		color: var(--text-dim);
 		display: inline-flex;
@@ -263,9 +260,9 @@ const tagFilters = getActivityTagFilters(activityEntries);
 	.filter-pill input:checked + span,
 	.filter-pill:hover span,
 	.filter-pill:focus-within span {
-		background: rgba(91, 231, 255, 0.14);
-		border-color: rgba(91, 231, 255, 0.42);
-		box-shadow: 0 0 18px rgba(91, 231, 255, 0.12);
+		background: rgba(91, 231, 255, 0.1);
+		border-color: rgba(91, 231, 255, 0.3);
+		box-shadow: 0 12px 24px rgba(91, 231, 255, 0.08);
 		color: var(--accent);
 	}
 
@@ -293,7 +290,7 @@ const tagFilters = getActivityTagFilters(activityEntries);
 
 	.activity-entry {
 		display: grid;
-		gap: 1rem;
+		gap: var(--space-4);
 	}
 
 	.activity-entry__header,
@@ -310,11 +307,15 @@ const tagFilters = getActivityTagFilters(activityEntries);
 
 	.detail-block {
 		background: rgba(91, 231, 255, 0.04);
-		border: 1px solid rgba(91, 231, 255, 0.14);
+		border: 1px solid rgba(91, 231, 255, 0.1);
 		border-radius: 1rem;
 		display: grid;
-		gap: 0.75rem;
-		padding: 1rem;
+		gap: 0.7rem;
+		padding: 1rem 1.05rem;
+	}
+
+	.detail-title {
+		font-size: 0.9rem;
 	}
 
 	.activity-photos {
@@ -324,7 +325,7 @@ const tagFilters = getActivityTagFilters(activityEntries);
 
 	.photo-slot {
 		background: rgba(8, 18, 38, 0.62);
-		border: 1px solid rgba(91, 231, 255, 0.14);
+		border: 1px solid rgba(91, 231, 255, 0.1);
 		border-radius: 1.05rem;
 		display: grid;
 		gap: 0.8rem;
