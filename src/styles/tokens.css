@@ -15,11 +15,11 @@
 }
 
 @font-face {
-	font-family: "Dancing Script";
+	font-family: "Pinyon Script";
 	font-style: normal;
-	font-weight: 700;
+	font-weight: 400;
 	font-display: swap;
-	src: url("/fonts/dancing-script-700.woff2") format("woff2");
+	src: url("/fonts/pinyon-script-400.woff2") format("woff2");
 }
 
 @font-face {
@@ -36,6 +36,7 @@
 	--accent: #5be7ff;
 	--font-display: "Orbitron", "Trebuchet MS", sans-serif;
 	--font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+	--font-script: "Pinyon Script", cursive;
 	--space-1: 0.4rem;
 	--space-2: 0.7rem;
 	--space-3: 1rem;
