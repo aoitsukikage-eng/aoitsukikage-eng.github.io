@@ -31,13 +31,6 @@ const {
 		<link
 			as="font"
 			crossorigin="anonymous"
-			href="/fonts/pinyon-script-400.woff2"
-			rel="preload"
-			type="font/woff2"
-		/>
-		<link
-			as="font"
-			crossorigin="anonymous"
 			href="/fonts/ibm-plex-sans-400.woff2"
 			rel="preload"
 			type="font/woff2"
@@ -149,83 +142,9 @@ const {
 				window.setTimeout(step, 260);
 			};
 
-			const initQuote = () => {
-				const quoteFrame = document.querySelector("[data-quote-frame]");
-				if (!quoteFrame || prefersReducedMotion.matches) return;
-
-				const reset = () => {
-					quoteFrame.style.setProperty("--quote-x", "50%");
-					quoteFrame.style.setProperty("--quote-y", "50%");
-					quoteFrame.style.setProperty("--quote-rotate-x", "0deg");
-					quoteFrame.style.setProperty("--quote-rotate-y", "0deg");
-					quoteFrame.style.setProperty("--quote-shift-x", "0px");
-					quoteFrame.style.setProperty("--quote-shift-y", "0px");
-					quoteFrame.style.setProperty("--quote-halo-opacity", "0.28");
-				};
-
-				let frame = 0;
-				let nextState = null;
-
-				const applyState = () => {
-					if (!nextState) return;
-
-					quoteFrame.style.setProperty("--quote-x", `${nextState.xPercent}%`);
-					quoteFrame.style.setProperty("--quote-y", `${nextState.yPercent}%`);
-					quoteFrame.style.setProperty("--quote-rotate-x", `${nextState.rotateX}deg`);
-					quoteFrame.style.setProperty("--quote-rotate-y", `${nextState.rotateY}deg`);
-					quoteFrame.style.setProperty("--quote-shift-x", `${nextState.shiftX}px`);
-					quoteFrame.style.setProperty("--quote-shift-y", `${nextState.shiftY}px`);
-					quoteFrame.style.setProperty("--quote-halo-opacity", `${nextState.haloOpacity}`);
-
-					frame = 0;
-				};
-
-				reset();
-
-				quoteFrame.addEventListener("pointermove", (event) => {
-					const bounds = quoteFrame.getBoundingClientRect();
-					const x = event.clientX - bounds.left;
-					const y = event.clientY - bounds.top;
-					const xPercent = (x / bounds.width) * 100;
-					const yPercent = (y / bounds.height) * 100;
-					const rotateX = ((yPercent - 50) / -18).toFixed(2);
-					const rotateY = ((xPercent - 50) / 16).toFixed(2);
-					const shiftX = (((xPercent - 50) / 50) * 14).toFixed(2);
-					const shiftY = (((yPercent - 50) / 50) * 10).toFixed(2);
-					const haloOpacity = (
-						0.24 +
-						Math.max(Math.abs((xPercent - 50) / 50), Math.abs((yPercent - 50) / 50)) * 0.14
-					).toFixed(3);
-
-					nextState = {
-						xPercent: xPercent.toFixed(2),
-						yPercent: yPercent.toFixed(2),
-						rotateX,
-						rotateY,
-						shiftX,
-						shiftY,
-						haloOpacity,
-					};
-
-					if (frame) return;
-					frame = window.requestAnimationFrame(applyState);
-				});
-
-				quoteFrame.addEventListener("pointerleave", () => {
-					if (frame) {
-						window.cancelAnimationFrame(frame);
-						frame = 0;
-					}
-
-					nextState = null;
-					reset();
-				});
-			};
-
 			const init = () => {
 				initReveal();
 				initTyping();
-				initQuote();
 			};
 
 			if (document.readyState === "loading") {

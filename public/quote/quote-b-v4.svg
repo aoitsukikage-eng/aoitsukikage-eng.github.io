@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 226" width="1400" height="226" role="img" aria-label="Quote banner style B">
+  <defs>
+    <linearGradient id="qLineB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0c1730"/>
+      <stop offset="50%" stop-color="#5be7ff"/>
+      <stop offset="100%" stop-color="#0c1730"/>
+    </linearGradient>
+
+    <linearGradient id="qTextTopB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b7ecff">
+        <animate attributeName="stop-color" values="#b7ecff;#f8feff;#b7ecff" dur="8.8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" stop-color="#f4fbff">
+        <animate attributeName="stop-color" values="#f4fbff;#ffffff;#f4fbff" dur="8.8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#7ccfff">
+        <animate attributeName="stop-color" values="#7ccfff;#d7f4ff;#7ccfff" dur="8.8s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <linearGradient id="qTextBottomB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9fddff">
+        <animate attributeName="stop-color" values="#9fddff;#e8faff;#9fddff" dur="9.4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#68bfff">
+        <animate attributeName="stop-color" values="#68bfff;#cbeeff;#68bfff" dur="9.4s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <linearGradient id="qShimmerB" x1="0%" y1="0%" x2="32%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-1.15 0;2.15 0" dur="8.6s" repeatCount="indefinite"/>
+    </linearGradient>
+
+    <filter id="qGlowSoftB" x="-40%" y="-45%" width="180%" height="190%">
+      <feGaussianBlur stdDeviation="4.2" result="blur1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="40" y="180" width="1320" height="2" fill="url(#qLineB)"/>
+  <rect x="40" y="180" width="1320" height="2" fill="url(#qLineB)" opacity="0.72" filter="url(#qGlowSoftB)">
+    <animate attributeName="opacity" values="0.12;0.72;0.12" dur="7.2s" repeatCount="indefinite"/>
+  </rect>
+
+  <text
+    x="700"
+    y="38"
+    text-anchor="middle"
+    font-family="'Segoe Script', 'Apple Chancery', 'URW Chancery L', 'Lucida Handwriting', 'Brush Script MT', cursive"
+    font-size="52"
+    font-style="italic"
+    letter-spacing="0.18"
+    fill="url(#qTextTopB)"
+    filter="url(#qGlowSoftB)"
+  >
+    <tspan x="700" dy="0">Yesterday is history, tomorrow is a mystery,</tspan>
+  </text>
+
+  <text
+    x="700"
+    y="124"
+    text-anchor="middle"
+    font-family="'Segoe Script', 'Apple Chancery', 'URW Chancery L', 'Lucida Handwriting', 'Brush Script MT', cursive"
+    font-size="50"
+    font-style="italic"
+    letter-spacing="0.16"
+    fill="url(#qTextBottomB)"
+    filter="url(#qGlowSoftB)"
+    opacity="0.94"
+  >
+    <tspan x="700" dy="0">but today is a gift. That is why it is called the present.</tspan>
+  </text>
+
+  <text
+    x="700"
+    y="38"
+    text-anchor="middle"
+    font-family="'Segoe Script', 'Apple Chancery', 'URW Chancery L', 'Lucida Handwriting', 'Brush Script MT', cursive"
+    font-size="52"
+    font-style="italic"
+    letter-spacing="0.18"
+    fill="url(#qShimmerB)"
+    opacity="0.86"
+  >
+    <tspan x="700" dy="0">Yesterday is history, tomorrow is a mystery,</tspan>
+  </text>
+
+  <text
+    x="700"
+    y="124"
+    text-anchor="middle"
+    font-family="'Segoe Script', 'Apple Chancery', 'URW Chancery L', 'Lucida Handwriting', 'Brush Script MT', cursive"
+    font-size="50"
+    font-style="italic"
+    letter-spacing="0.16"
+    fill="url(#qShimmerB)"
+    opacity="0.72"
+  >
+    <tspan x="700" dy="0">but today is a gift. That is why it is called the present.</tspan>
+  </text>
+</svg>

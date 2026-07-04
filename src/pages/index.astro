@@ -6,21 +6,6 @@ const typingLines = [
 	"[CLASS] PLACEHOLDER CONTENT LAYER",
 	"[MISSION] SOLO UI VISUAL PASS ONLINE",
 ];
-
-const quoteLines = [
-	"Yesterday is history, tomorrow is a mystery,",
-	"but today is a gift. That is why it is called the present.",
-];
-
-let quoteCharIndex = 0;
-const quoteRows = quoteLines.map((line, lineIndex) => ({
-	lineIndex,
-	characters: Array.from(line).map((character) => ({
-		character,
-		index: quoteCharIndex++,
-	})),
-}),
-);
 ---
 
 <SiteLayout
@@ -29,36 +14,17 @@ const quoteRows = quoteLines.map((line, lineIndex) => ({
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
-		<section class="quote-shell section-card" data-quote-frame data-reveal id="home-quote" style="--reveal-order: 0;">
+		<section class="quote-shell section-card" data-reveal id="home-quote" style="--reveal-order: 0;">
 			<p class="section-kicker quote-kicker">[SYSTEM]</p>
-			<div class="quote-surface">
-				<div class="quote-halo" aria-hidden="true"></div>
-				<div class="quote-shimmer" aria-hidden="true"></div>
-				<p class="sr-only">
-					Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present.
-				</p>
-				<div aria-hidden="true" class="quote-lines">
-					{
-						quoteRows.map(({ lineIndex, characters }) => (
-							<p class="quote-line" style={`--line-index: ${lineIndex};`}>
-								{
-									characters.map(({ character, index }) => (
-										<span
-											class:list={{
-												"quote-char": true,
-												"is-space": character === " ",
-											}}
-											style={`--char-index: ${index};`}
-										>
-											{character === " " ? "\u00A0" : character}
-										</span>
-									))
-								}
-							</p>
-						))
-					}
-				</div>
-				<div class="quote-underline" aria-hidden="true"></div>
+			<div class="quote-frame">
+				<img
+					alt="Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present."
+					class="quote-image"
+					height="226"
+					loading="eager"
+					src="/quote/quote-b-v4.svg"
+					width="1400"
+				/>
 			</div>
 		</section>
 
@@ -153,24 +119,8 @@ const quoteRows = quoteLines.map((line, lineIndex) => ({
 	}
 
 	.quote-shell {
-		isolation: isolate;
-		overflow: visible;
-		padding: clamp(2.2rem, 4vw, 3.35rem);
+		padding: clamp(1.3rem, 2vw, 1.7rem) clamp(1rem, 2vw, 1.45rem);
 		text-align: center;
-		transform:
-			perspective(1400px) rotateX(var(--quote-rotate-x, 0deg))
-			rotateY(var(--quote-rotate-y, 0deg))
-			translate3d(0, 0, 0);
-		transform-style: preserve-3d;
-		transition: transform var(--motion-base) var(--easing-standard);
-	}
-
-	.quote-shell:hover,
-	.quote-shell:focus-within {
-		transform:
-			perspective(1400px) rotateX(var(--quote-rotate-x, 0deg))
-			rotateY(var(--quote-rotate-y, 0deg))
-			translate3d(0, -1px, 0);
 	}
 
 	.hero-copy,
@@ -228,123 +178,22 @@ const quoteRows = quoteLines.map((line, lineIndex) => ({
 		margin-left: 0.18rem;
 	}
 
-	.quote-shell::before {
-		background:
-			radial-gradient(
-				circle at var(--quote-x, 50%) var(--quote-y, 50%),
-				rgba(91, 231, 255, var(--quote-halo-opacity, 0.28)),
-				transparent 24%
-			);
-		content: "";
-		filter: blur(16px);
-		inset: 3% 6%;
-		position: absolute;
-		z-index: 0;
-	}
-
 	.quote-kicker {
 		justify-self: center;
 	}
 
-	.quote-surface {
-		display: grid;
-		gap: var(--space-6);
-		min-height: clamp(16rem, 42vh, 23rem);
-		place-items: center;
-		overflow: hidden;
-		padding: 1rem 0.2rem 0.4rem;
-		position: relative;
-		transform:
-			translate3d(calc(var(--quote-shift-x, 0px) * 0.18), calc(var(--quote-shift-y, 0px) * 0.18), 0)
-			scale(1.002);
-		transition: transform var(--motion-base) var(--easing-standard);
-		z-index: 1;
-	}
-
-	.quote-halo {
-		background:
-			radial-gradient(circle, rgba(244, 251, 255, 0.44), rgba(91, 231, 255, 0.1) 38%, transparent 72%);
-		border-radius: 50%;
-		filter: blur(22px);
-		height: clamp(8rem, 20vw, 12rem);
-		left: 50%;
-		opacity: calc(var(--quote-halo-opacity, 0.28) + 0.08);
-		position: absolute;
-		top: 50%;
-		transform:
-			translate3d(
-				calc(-50% + (var(--quote-shift-x, 0px) * 0.8)),
-				calc(-50% + (var(--quote-shift-y, 0px) * 0.72)),
-				0
-			);
-		transition:
-			transform var(--motion-base) var(--easing-standard),
-			opacity var(--motion-base) var(--easing-standard);
-		width: clamp(8rem, 20vw, 12rem);
-		z-index: 0;
-	}
-
-	.quote-shimmer {
-		background:
-			linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0));
-		filter: blur(6px);
-		inset: 0 auto 0 -28%;
-		opacity: 0.24;
-		position: absolute;
-		transform: skewX(-20deg);
-		width: 18%;
-		animation: quote-shimmer-pass 8.6s linear infinite;
-		z-index: 1;
-	}
-
-	.quote-lines {
-		display: grid;
-		gap: 1.35rem;
-		justify-items: center;
-		position: relative;
-		transform:
-			translate3d(calc(var(--quote-shift-x, 0px) * -0.1), calc(var(--quote-shift-y, 0px) * -0.08), 0);
-		transition: transform var(--motion-base) var(--easing-standard);
-		z-index: 1;
-	}
-
-	.quote-line {
-		font-family: var(--font-script);
-		font-size: clamp(2.6rem, 5vw, 4.5rem);
-		font-weight: 400;
-		letter-spacing: 0.015em;
-		line-height: 1.08;
-		margin: 0;
-		opacity: 0;
-		text-align: center;
-		text-wrap: balance;
-		transform:
-			translate3d(calc(var(--quote-shift-x, 0px) * 0.06), calc(var(--quote-shift-y, 0px) * 0.05), 0);
-	}
-
-	.quote-char {
-		background:
-			linear-gradient(90deg, #9fddff 0%, #f8feff 48%, #7ccfff 100%);
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
-		display: inline-block;
-		filter: drop-shadow(0 0 10px rgba(91, 231, 255, 0.16));
-		text-shadow:
-			0 0 10px rgba(91, 231, 255, 0.28),
-			0 0 22px rgba(255, 255, 255, 0.14);
-	}
-
-	.quote-underline {
-		background: var(--divider-gradient);
-		border-radius: 999px;
-		box-shadow:
-			0 0 16px rgba(91, 231, 255, 0.3),
-			0 0 30px rgba(91, 231, 255, 0.12);
-		height: 2px;
+	.quote-frame {
 		margin: 0 auto;
-		position: relative;
-		width: min(100%, 64rem);
+		max-width: min(100%, 70rem);
+		width: 100%;
+	}
+
+	.quote-image {
+		display: block;
+		height: auto;
+		margin: 0 auto;
+		max-width: 100%;
+		width: 100%;
 	}
 
 	.focus-card {
@@ -354,28 +203,6 @@ const quoteRows = quoteLines.map((line, lineIndex) => ({
 		display: grid;
 		gap: 0.9rem;
 		padding: 1.15rem 1.2rem;
-	}
-
-	.quote-underline::after {
-		background:
-			linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0));
-		content: "";
-		inset: 0;
-		position: absolute;
-		transform: translateX(-130%);
-		animation: divider-shimmer 6.2s linear infinite;
-	}
-
-	:global(html[data-js="ready"]) .quote-char {
-		animation: quote-reveal 0.72s var(--easing-standard) both;
-		animation-delay: calc(520ms + (var(--char-index) * 18ms));
-		opacity: 0;
-		transform: translateY(1rem) scale(0.98);
-	}
-
-	:global(html[data-js="ready"]) .quote-line {
-		animation: quote-line-reveal 1s var(--easing-standard) both;
-		animation-delay: calc(120ms + (var(--line-index) * 240ms));
 	}
 
 	@keyframes caret-blink {
@@ -390,52 +217,6 @@ const quoteRows = quoteLines.map((line, lineIndex) => ({
 		}
 	}
 
-	@keyframes quote-shimmer-pass {
-		0% {
-			transform: translateX(-15%) skewX(-20deg);
-		}
-
-		100% {
-			transform: translateX(730%) skewX(-20deg);
-		}
-	}
-
-	@keyframes quote-reveal {
-		0% {
-			opacity: 0;
-			transform: translateY(1rem) scale(0.98);
-		}
-
-		100% {
-			opacity: 1;
-			transform: translateY(0) scale(1);
-		}
-	}
-
-	@keyframes quote-line-reveal {
-		0% {
-			clip-path: inset(0 0 100% 0);
-			opacity: 0;
-			transform:
-				translate3d(
-					calc(var(--quote-shift-x, 0px) * 0.06),
-					calc(1rem + (var(--quote-shift-y, 0px) * 0.05)),
-					0
-				);
-		}
-
-		100% {
-			clip-path: inset(0 0 0 0);
-			opacity: 1;
-			transform:
-				translate3d(
-					calc(var(--quote-shift-x, 0px) * 0.06),
-					calc(var(--quote-shift-y, 0px) * 0.05),
-					0
-				);
-		}
-	}
-
 	@media (max-width: 900px) {
 		.hero-shell {
 			grid-template-columns: 1fr;
@@ -445,38 +226,12 @@ const quoteRows = quoteLines.map((line, lineIndex) => ({
 			max-width: 100%;
 		}
 
-		.quote-surface {
-			min-height: clamp(14rem, 46vh, 20rem);
+		.quote-shell {
+			padding-inline: clamp(0.9rem, 3vw, 1.2rem);
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.quote-shell,
-		.quote-shell::before,
-		.quote-halo,
-		.quote-surface,
-		.quote-lines,
-		.quote-line,
-		.quote-shimmer,
-		.quote-underline::after {
-			animation: none;
-			clip-path: none;
-			transform: none;
-			transition: none;
-		}
-
-		.quote-line {
-			opacity: 1;
-		}
-
-		:global(html[data-js="ready"]) .quote-line,
-		:global(html[data-js="ready"]) .quote-char,
-		.quote-char {
-			animation: none;
-			opacity: 1;
-			transform: none;
-		}
-
 		.typing-line.is-active::after {
 			animation: none;
 			content: "";
