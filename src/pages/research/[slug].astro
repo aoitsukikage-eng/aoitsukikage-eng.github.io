@@ -1,0 +1,104 @@
+---
+import { getCollection, render } from "astro:content";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
+
+export async function getStaticPaths() {
+	const entries = sortResearch(getResearchEntries(await getCollection("researchItems")));
+	return entries.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const group = RESEARCH_GROUPS.find((item) => item.key === getResearchGroup(entry));
+const isEsgStudy = entry.data.slug === "executive-compensation-esg-disclosure";
+const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
+---
+
+<SiteLayout title={`${entry.data.title} | Research`} description={entry.data.summary} currentPath={Astro.url.pathname}>
+	<article class="page-stack research-detail">
+		<header class="section-card section-shell" data-reveal style="--reveal-order: 0;">
+			<p class="section-kicker">[RESEARCH / {group?.label ?? "Brief"}]</p>
+			<h1>{entry.data.title}</h1>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p class="lede">{entry.data.summary}</p>
+			<div class="meta-row" aria-label="Research metadata">
+				<span class="meta-chip">{entry.data.year}</span>
+				{entry.data.tags.map((tag) => <span class="meta-chip">{tag}</span>)}
+			</div>
+		</header>
+
+		<section class="section-shell section-plain" aria-labelledby="highlights-heading" data-reveal style="--reveal-order: 1;">
+			<p class="section-kicker">[HIGHLIGHTS]</p>
+			<h2 id="highlights-heading">At a glance</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<dl class="highlights-grid">
+				{entry.data.highlights.map((highlight) => (
+					<div><dt>{highlight.label}</dt><dd>{highlight.value}</dd>{highlight.detail && <p>{highlight.detail}</p>}</div>
+				))}
+			</dl>
+		</section>
+
+		<section class="section-shell section-plain" aria-labelledby="method-heading" data-reveal style="--reveal-order: 2;">
+			<p class="section-kicker">[METHOD]</p>
+			<h2 id="method-heading">How the brief was constructed</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<ol class="method-list">{entry.data.methods.map((method) => <li>{method}</li>)}</ol>
+		</section>
+
+		<section class="section-shell section-plain" aria-labelledby="findings-heading" data-reveal style="--reveal-order: 3;">
+			<p class="section-kicker">[FINDINGS]</p>
+			<h2 id="findings-heading">What the source-supported analysis indicates</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<ul class="finding-list">{entry.data.findings.map((finding) => <li>{finding}</li>)}</ul>
+		</section>
+
+		{isEsgStudy && <section class="section-card section-shell distinction" aria-labelledby="assignment-boundary-heading" data-reveal style="--reveal-order: 4;">
+			<p class="section-kicker">[SCOPE BOUNDARY]</p>
+			<h2 id="assignment-boundary-heading">Teacher requirements and author extension</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p><strong>Teacher requirements:</strong> identify the ESG performance indicators used and their weighting in executive compensation evaluation.</p>
+			<p><strong>Author extension:</strong> the four-company cross-industry sample, annual-report/sustainability-report cross-reading, disclosure-consistency comparison, clawback, and governance observations.</p>
+		</section>}
+
+		<section class="section-shell section-plain" aria-labelledby="reflection-heading" data-reveal style={`--reveal-order: ${isEsgStudy ? 5 : 4};`}>
+			<p class="section-kicker">[REFLECTION & LIMITS]</p>
+			<h2 id="reflection-heading">Public-version boundary</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p>{entry.data.reflection}</p>
+			{isLegalStudy && <p class="legal-note"><strong>Research-time notice:</strong> This page reflects publicly available material at the report-writing time, is not legal advice, and does not claim the latest or final judicial outcome.</p>}
+		</section>
+
+		{entry.data.downloads.length > 0 && <section class="section-shell section-plain" aria-labelledby="downloads-heading" data-reveal style={`--reveal-order: ${isEsgStudy ? 6 : 5};`}>
+			<p class="section-kicker">[DOWNLOADS]</p>
+			<h2 id="downloads-heading">Author-created visual material</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<ul class="download-list">{entry.data.downloads.map((download) => <li><a class="cta-link" href={download.href} download>{download.label}</a><span>{download.description}</span></li>)}</ul>
+		</section>}
+
+		<section class="section-shell section-plain source-brief" aria-label="Source-traceable research brief" data-reveal style="--reveal-order: 7;">
+			<Content />
+		</section>
+		<p class="back-link"><a class="cta-link secondary" href="/research/">Back to Research Hub</a></p>
+	</article>
+</SiteLayout>
+
+<style>
+	.lede { color: var(--text-dim); font-size: clamp(1.05rem, 2vw, 1.2rem); }
+	.highlights-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin: 0; }
+	.highlights-grid div { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; padding: 1rem; }
+	.highlights-grid dt { color: var(--accent); font-family: var(--font-display); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+	.highlights-grid dd { color: var(--text-bright); font-size: 1.05rem; margin: .55rem 0 0; }
+	.highlights-grid p { color: var(--text-muted); margin-bottom: 0; }
+	.method-list, .finding-list { display: grid; gap: 1rem; margin: 0; padding-left: 1.4rem; }
+	.method-list li, .finding-list li { padding-left: .35rem; }
+	.distinction { border-color: rgba(91, 231, 255, .3); }
+	.legal-note { border-left: 3px solid var(--accent); color: var(--text-dim); padding-left: 1rem; }
+	.download-list { display: grid; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+	.download-list li { align-items: center; background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; padding: 1rem; }
+	.download-list span { color: var(--text-muted); flex: 1 1 18rem; }
+	.source-brief :global(h2) { font-size: 1.25rem; }
+	.source-brief :global(h3) { font-size: 1.08rem; }
+	.source-brief :global(li) { margin: .5rem 0; }
+	.back-link { margin: 0; }
+</style>
