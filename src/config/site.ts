@@ -1,10 +1,11 @@
 export const siteConfig = {
-	name: "Aoi Tsukikage Engineering",
-	tagline: "Placeholder-safe portfolio shell with calm system framing.",
-	email: "hello@placeholder.invalid",
+	name: "Yuhung Shih",
+	tagline: "NTPU Finance Student | Quantitative Finance | Python Automation | FinTech",
+	email: "aoitsukikage@gmail.com",
+	avatar: "/profile/yuhung-shih-avatar.jpg",
 	socials: {
-		github: "https://github.com/placeholder",
-		linkedin: "https://www.linkedin.com/in/placeholder/",
+		github: "https://github.com/aoitsukikage-eng",
+		linkedin: "https://www.linkedin.com/in/yuhungshih",
 	},
 } as const;
 
