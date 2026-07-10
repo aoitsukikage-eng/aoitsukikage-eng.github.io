@@ -13,6 +13,28 @@ tags:
   - mean-variance
   - Sharpe-ratio
   - efficient-frontier
+type: quantitative
+highlights:
+  - label: 比較組合
+    value: 等權重、GMV、最大夏普
+  - label: 分析框架
+    value: 均值—變異數與效率前緣
+methods:
+  - 以來源工作簿的基金基本資料與五年報酬工作表整理比較條件。
+  - 依來源已列的期望報酬、共變異數與權重，閱讀風險、預期報酬與夏普比率。
+findings:
+  - 組合選擇需要同時檢視風險與預期報酬，不能只以單一指標判斷。
+  - 效率前緣提供比較取捨的框架，不代表對未來績效的保證。
+reflection: 公開版本保留可追溯的比較架構，未重算、補填或延伸來源未提供的數字。
+downloads:
+  - label: 查看研究框架圖
+    href: /research/portfolio-optimization-framework.svg
+    description: 作者製作的原生 SVG，說明資料、比較組合與輸出關係。
+visuals:
+  - kind: framework
+    src: /research/portfolio-optimization-framework.svg
+    alt: 投資組合研究框架圖，從基金資料、報酬與共變異數輸入，連到等權重、GMV、最大夏普與效率前緣比較。
+    caption: 原生框架圖僅呈現研究流程，不重製來源工作簿數值。
 ---
 
 ## 研究定位

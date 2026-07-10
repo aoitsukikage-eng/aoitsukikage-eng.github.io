@@ -14,6 +14,20 @@ tags:
   - executive-compensation
   - sustainability-disclosure
   - cross-industry
+type: comparative
+highlights:
+  - label: 樣本
+    value: 四家臺灣上市公司
+  - label: 課程要求
+    value: 指標與薪酬權重
+methods:
+  - 交叉閱讀各公司 113 年度永續報告書與年報。
+  - 比較 ESG 指標、薪酬評核權重與跨文件揭露的一致性。
+findings:
+  - 四個個案的揭露層級與權重呈現方式並不相同，須回到文件脈絡閱讀。
+  - 年報與永續報告書的交叉比對可辨識細節差異與未來時態描述。
+reflection: 老師要求僅為 ESG 績效指標及其薪酬評核權重；跨產業樣本、雙文件比對、揭露一致性、Clawback 與治理觀察皆為作者自主延伸。
+downloads: []
 ---
 
 ## 研究問題與樣本

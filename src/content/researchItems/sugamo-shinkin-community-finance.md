@@ -14,6 +14,20 @@ tags:
   - Japan
   - aging-society
   - community-banking
+type: narrative
+highlights:
+  - label: 個案
+    value: 巢鴨信用金庫
+  - label: 觀察主題
+    value: 高齡社會與金融可近性
+methods:
+  - 依原報告的個案敘事，整理在地社群、長者客群與服務情境。
+  - 以文字方式呈現社區金融與可近性的案例觀察。
+findings:
+  - 社區金融服務需要放回高齡客群與在地關係的脈絡理解。
+  - 公開版本以文字摘要保留研究主題，避免重發第三方視覺素材。
+reflection: 原始 PDF 與其中建築照片、商品海報等第三方圖片均不公開；此頁是安全的公開摘要版本。
+downloads: []
 ---
 
 ## 研究定位

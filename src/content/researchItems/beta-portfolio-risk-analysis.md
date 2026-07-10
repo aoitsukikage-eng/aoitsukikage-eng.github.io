@@ -13,6 +13,35 @@ tags:
   - beta
   - CAPM
   - SML
+type: quantitative
+highlights:
+  - label: 核心概念
+    value: Beta、CAPM、SML
+  - label: 風險界線
+    value: 系統性與非系統性風險
+methods:
+  - 依來源報告比較個別資產的 Beta 與相對市場敏感度。
+  - 用證券市場線整理 Beta 與 CAPM 所要求報酬率的關係。
+findings:
+  - Beta 描述相對市場變動的敏感度，並非所有投資風險的總和。
+  - 分散化可處理部分非系統性風險，系統性風險仍需另行辨識。
+reflection: 兩張公開圖表均為作者圖表；文字僅概述原報告的分析架構，不另行主張新的估計結果。
+downloads:
+  - label: 下載 Beta 風險比較圖
+    href: /research/beta-risk-comparison.png
+    description: 作者圖表，呈現 Beta 與投資組合風險比較。
+  - label: 下載 SML 分析圖
+    href: /research/beta-sml-analysis.png
+    description: 作者圖表，呈現證券市場線分析。
+visuals:
+  - kind: chart
+    src: /research/beta-risk-comparison.png
+    alt: 作者製作的 Beta 與投資組合風險比較圖。
+    caption: 作者圖表：Beta 與投資組合風險比較。
+  - kind: chart
+    src: /research/beta-sml-analysis.png
+    alt: 作者製作的證券市場線與 Beta 分析圖。
+    caption: 作者圖表：證券市場線分析。
 ---
 
 ## 研究定位

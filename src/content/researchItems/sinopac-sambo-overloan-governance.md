@@ -14,6 +14,20 @@ tags:
   - banking-law
   - financial-holding-company
   - governance
+type: narrative
+highlights:
+  - label: 研究時點
+    value: 報告撰寫時點的公開資料
+  - label: 分析層次
+    value: 行政、刑事、內控
+methods:
+  - 重建來源報告所列的集團關係、1788 大樓投資與超貸案件脈絡。
+  - 對照金融與公司法規範，分層閱讀行政處分、刑事程序及內部控制。
+findings:
+  - 個案顯示實質控制、授信決策與內部控制需要在不同制度層次檢視。
+  - 本研究只整理來源載明的程序與框架，不推定後續訴訟狀態。
+reflection: 資料為報告撰寫時點的公開資料，不構成法律意見，亦不聲稱任何判決為最新或終局結論。
+downloads: []
 ---
 
 ## 研究範圍
