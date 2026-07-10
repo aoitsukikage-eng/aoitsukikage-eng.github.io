@@ -93,7 +93,10 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 			<ul class="download-list">{entry.data.downloads.map((download) => <li><a class="cta-link" href={download.href} download>{download.label}</a><span>{download.description}</span></li>)}</ul>
 		</section>}
 
-		<section class="section-shell section-plain source-brief" aria-label="Source-traceable research brief" data-reveal style="--reveal-order: 7;">
+		<section class="section-shell section-plain source-brief" aria-labelledby="source-brief-heading" data-reveal style="--reveal-order: 7;">
+			<p class="section-kicker">[SOURCE-TRACEABLE BRIEF]</p>
+			<h2 id="source-brief-heading">Research context and publication boundary</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
 			<Content />
 		</section>
 		<p class="back-link"><a class="cta-link secondary" href="/research/">Back to Research Hub</a></p>
