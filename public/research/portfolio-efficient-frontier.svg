@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 580" role="img" aria-labelledby="title desc">
+  <title id="title">Efficient frontier and capital market line</title>
+  <desc id="desc">Source-workbook coordinates for GMV, seven frontier points, Max Sharpe, the risk-free rate, and the capital market line.</desc>
+  <rect width="900" height="580" fill="#071225"/>
+  <g stroke="#5be7ff" stroke-opacity=".16" stroke-width="1">
+    <path d="M95 530H850M95 452H850M95 373H850M95 295H850M95 217H850M95 139H850M95 60H850"/>
+    <path d="M95 60V530M273 60V530M450 60V530M628 60V530M806 60V530"/>
+  </g>
+  <g stroke="#9eb5d7" stroke-width="2"><path d="M95 60V530H850"/></g>
+  <g fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="18">
+    <text x="78" y="535" text-anchor="end">1.5%</text><text x="78" y="457" text-anchor="end">2.5%</text><text x="78" y="378" text-anchor="end">3.5%</text><text x="78" y="300" text-anchor="end">4.5%</text><text x="78" y="222" text-anchor="end">5.5%</text><text x="78" y="144" text-anchor="end">6.5%</text><text x="78" y="65" text-anchor="end">7.5%</text>
+    <text x="95" y="558" text-anchor="middle">0%</text><text x="273" y="558" text-anchor="middle">4%</text><text x="450" y="558" text-anchor="middle">8%</text><text x="628" y="558" text-anchor="middle">12%</text><text x="806" y="558" text-anchor="middle">16%</text>
+    <text x="473" y="576" text-anchor="middle">Annualised standard deviation</text><text x="20" y="295" transform="rotate(-90 20 295)" text-anchor="middle">Expected annual return</text>
+  </g>
+  <path d="M95 514 L833 68" fill="none" stroke="#f6c85f" stroke-width="4" stroke-dasharray="10 7"/>
+  <path d="M402 373 L473 303 L539 256 L575 225 L628 194 L672 186 L717 178 L761 163 L833 147" fill="none" stroke="#5be7ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#071225" stroke="#5be7ff" stroke-width="4">
+    <circle cx="402" cy="373" r="8"/><circle cx="473" cy="303" r="6"/><circle cx="539" cy="256" r="6"/><circle cx="575" cy="225" r="9"/><circle cx="628" cy="194" r="6"/><circle cx="672" cy="186" r="6"/><circle cx="717" cy="178" r="6"/><circle cx="761" cy="163" r="6"/><circle cx="833" cy="147" r="6"/>
+  </g>
+  <circle cx="95" cy="514" r="9" fill="#f6c85f" stroke="#fff3c7" stroke-width="2"/>
+  <g font-family="IBM Plex Sans, sans-serif" font-size="18" font-weight="700">
+    <text x="110" y="499" fill="#fff3c7">Risk-free rate 1.70%</text><text x="416" y="400" fill="#d9f9ff">GMV · 6.9% / 3.5%</text><text x="589" y="214" fill="#d9f9ff">Max Sharpe · 10.8% / 5.4%</text><text x="690" y="92" fill="#fff3c7">CML · slope = 0.3448</text>
+  </g>
+  <text x="95" y="34" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">SOURCE-WORKBOOK EFFICIENT FRONTIER / CML</text>
+</svg>
