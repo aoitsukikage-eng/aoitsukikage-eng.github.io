@@ -1,8 +1,8 @@
 # P5A asset inventory
 
 This inventory records the review of the five source groups supplied in
-`/tmp/portfolio-p5a-raw`. That directory is a local review input only and is
-intentionally not part of this repository.
+a dedicated non-repository review directory. That material is intentionally
+not part of this repository.
 
 | Research item | Reviewed source material | Public treatment |
 | --- | --- | --- |

@@ -26,7 +26,10 @@ findings:
   - 組合選擇需要同時檢視風險與預期報酬，不能只以單一指標判斷。
   - 效率前緣提供比較取捨的框架，不代表對未來績效的保證。
 reflection: 公開版本忠實重繪來源工作簿已列的結果；未重算、補填或延伸未提供的數字，歷史資料亦不保證未來績效。
-downloads: []
+downloads:
+  - label: 下載去識別化公開版 PDF
+    href: /research/portfolio-optimization-public-edition.pdf
+    description: 作者重製的 Public Edition，含核心數據、效率前緣、方法、限制與來源說明；非原始掃描檔。
 visuals:
   - kind: chart
     src: /research/portfolio-efficient-frontier.svg
