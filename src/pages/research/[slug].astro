@@ -93,6 +93,15 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 			<div class="hud-divider" aria-hidden="true"></div>
 			<Content />
 		</section>
+
+		<section class="section-shell section-plain publication-rights" aria-labelledby="publication-rights-heading" data-reveal style="--reveal-order: 8;">
+			<p class="section-kicker">[PUBLICATION RIGHTS]</p>
+			<h2 id="publication-rights-heading">Citation and rights</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<p><strong>{siteConfig.name}</strong> · © 2026 · All Rights Reserved</p>
+			<p>Fixed page URL: <a href={Astro.url.href}>{Astro.url.href}</a></p>
+			<p>Reasonable quotation is welcome when it clearly identifies the author and this source page.</p>
+		</section>
 		<p class="back-link"><a class="cta-link secondary" href="/research/">Back to Research Hub</a></p>
 	</article>
 </SiteLayout>
@@ -121,6 +130,10 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 	.visual-grid figcaption { color: var(--text-muted); display: grid; font-size: .9rem; gap: .5rem; padding: .85rem 1rem; }
 	.visual-rights { color: var(--accent); font-size: .78rem; letter-spacing: .03em; }
 	.visual-rights a { color: inherit; overflow-wrap: anywhere; }
+	.publication-rights { border-left: 3px solid rgba(91, 231, 255, .45); }
+	.publication-rights p { color: var(--text-muted); margin-bottom: .65rem; }
+	.publication-rights p:last-child { margin-bottom: 0; }
+	.publication-rights a { overflow-wrap: anywhere; }
 	.comparison-model { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 	.comparison-model div, .narrative-timeline li { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; padding: 1rem; }
 	.comparison-model span, .narrative-timeline span { color: var(--accent); font-family: var(--font-display); font-size: .8rem; letter-spacing: .1em; }
