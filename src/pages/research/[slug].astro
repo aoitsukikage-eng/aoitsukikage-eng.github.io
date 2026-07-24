@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import { siteConfig } from "../../config/site";
 import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
 
 export async function getStaticPaths() {
@@ -58,7 +59,7 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 			<h2 id="visuals-heading">{entry.data.type === "quantitative" ? "Author-created charts and framework" : "Native reading framework"}</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			{entry.data.visuals?.length ? <div class="visual-grid">
-				{entry.data.visuals.map((visual) => <figure><img src={visual.src} alt={visual.alt} loading="lazy" /><figcaption>{visual.caption}</figcaption></figure>)}
+				{entry.data.visuals.map((visual) => <figure><img src={visual.src} alt={visual.alt} loading="lazy" /><figcaption><span>{visual.caption}</span><span class="visual-rights">© 2026 {siteConfig.name} · <a href={Astro.url.href}>{Astro.url.href}</a></span></figcaption></figure>)}
 			</div> : entry.data.type === "comparative" ? <div class="comparison-model" aria-label="Four-company disclosure comparison framework">
 				<div><span>01</span><strong>Company disclosures</strong><p>Annual reports and sustainability reports</p></div>
 				<div><span>02</span><strong>Course questions</strong><p>ESG indicators and compensation weighting</p></div>
@@ -117,7 +118,9 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 	.visual-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
 	.visual-grid figure { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; margin: 0; overflow: hidden; }
 	.visual-grid img { display: block; height: auto; max-width: 100%; width: 100%; }
-	.visual-grid figcaption { color: var(--text-muted); font-size: .9rem; padding: .85rem 1rem; }
+	.visual-grid figcaption { color: var(--text-muted); display: grid; font-size: .9rem; gap: .5rem; padding: .85rem 1rem; }
+	.visual-rights { color: var(--accent); font-size: .78rem; letter-spacing: .03em; }
+	.visual-rights a { color: inherit; overflow-wrap: anywhere; }
 	.comparison-model { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 	.comparison-model div, .narrative-timeline li { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; padding: 1rem; }
 	.comparison-model span, .narrative-timeline span { color: var(--accent); font-family: var(--font-display); font-size: .8rem; letter-spacing: .1em; }

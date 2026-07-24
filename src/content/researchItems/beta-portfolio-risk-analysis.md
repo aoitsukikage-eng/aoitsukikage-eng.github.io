@@ -32,11 +32,11 @@ visuals:
   - kind: chart
     src: /research/beta-risk-comparison.png
     alt: 作者製作的 Beta 與投資組合風險比較圖。
-    caption: 作者圖表：Beta 與投資組合風險比較。
+    caption: 作者圖表：Beta 與投資組合風險比較。圖表為頁內閱讀資產，不提供下載。
   - kind: chart
     src: /research/beta-sml-analysis.png
     alt: 作者製作的證券市場線與 Beta 分析圖。
-    caption: 作者圖表：證券市場線分析。
+    caption: 作者圖表：證券市場線分析。圖表為頁內閱讀資產，不提供下載。
 ---
 
 ## 研究定位

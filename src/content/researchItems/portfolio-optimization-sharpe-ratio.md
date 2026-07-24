@@ -30,7 +30,7 @@ visuals:
   - kind: chart
     src: /research/portfolio-efficient-frontier.svg
     alt: 以年化標準差為橫軸、預期年化報酬為縱軸的效率前緣，標示 GMV、最大夏普組合、1.70% 無風險利率與 CML。
-    caption: 作者依來源工作簿提供的實際座標忠實重繪；GMV、Max Sharpe 與 CML 均可在頁面直接閱讀。
+    caption: 作者依來源工作簿提供的實際座標忠實重繪；GMV、Max Sharpe 與 CML 均可在頁面直接閱讀。圖表為頁內閱讀資產，不提供下載。
 ---
 
 ## 研究定位
