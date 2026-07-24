@@ -86,13 +86,6 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 			{isLegalStudy && <p class="legal-note"><strong>Research-time notice:</strong> This page reflects publicly available material at the report-writing time, is not legal advice, and does not claim the latest or final judicial outcome.</p>}
 		</section>
 
-		{entry.data.downloads.length > 0 && <section class="section-shell section-plain" aria-labelledby="downloads-heading" data-reveal style={`--reveal-order: ${isEsgStudy ? 7 : 6};`}>
-			<p class="section-kicker">[DOWNLOADS]</p>
-			<h2 id="downloads-heading">Author-created visual material</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<ul class="download-list">{entry.data.downloads.map((download) => <li><a class="cta-link" href={download.href} download>{download.label}</a><span>{download.description}</span></li>)}</ul>
-		</section>}
-
 		<section class="section-shell section-plain source-brief" aria-labelledby="source-brief-heading" data-reveal style="--reveal-order: 7;">
 			<p class="section-kicker">[SOURCE-TRACEABLE BRIEF]</p>
 			<h2 id="source-brief-heading">Research context and publication boundary</h2>
@@ -114,9 +107,6 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 	.method-list li, .finding-list li { padding-left: .35rem; }
 	.distinction { border-color: rgba(91, 231, 255, .3); }
 	.legal-note { border-left: 3px solid var(--accent); color: var(--text-dim); padding-left: 1rem; }
-	.download-list { display: grid; gap: 1rem; list-style: none; margin: 0; padding: 0; }
-	.download-list li { align-items: center; background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; padding: 1rem; }
-	.download-list span { color: var(--text-muted); flex: 1 1 18rem; }
 	.source-brief :global(h2) { font-size: 1.25rem; }
 	.source-brief :global(h3) { font-size: 1.08rem; }
 	.source-brief :global(li) { margin: .5rem 0; }

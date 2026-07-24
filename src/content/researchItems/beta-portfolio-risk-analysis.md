@@ -28,16 +28,6 @@ findings:
   - 五檔加權投組的 Beta 為 0.8586，低於 1，反映該樣本中的市場敏感度低於 S&P 500。
   - 投組變異數為 0.000096871，約為 S&P 500 變異數的 195.85%；相較多數單一股票，分散化降低了波動，但不消除系統性風險。
 reflection: 兩張公開圖表均為作者圖表。原始作業使用日資料、Beta 與分散化比較；SML/CAPM/Alpha 工作表是在繳交後加入的作者延伸。歷史樣本不構成投資建議。
-downloads:
-  - label: 下載去識別化公開版 PDF
-    href: /research/beta-portfolio-risk-public-edition.pdf
-    description: 作者重製的 Public Edition，含五檔投組、Beta、圖表、方法、限制與作業／延伸界線；非原始掃描檔。
-  - label: 下載 Beta 風險比較圖
-    href: /research/beta-risk-comparison.png
-    description: 作者圖表，呈現 Beta 與投資組合風險比較。
-  - label: 下載 SML 分析圖
-    href: /research/beta-sml-analysis.png
-    description: 作者圖表，呈現證券市場線分析。
 visuals:
   - kind: chart
     src: /research/beta-risk-comparison.png

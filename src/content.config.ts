@@ -85,15 +85,6 @@ const researchItemCollection = defineCollection({
 		methods: z.array(z.string().min(1)).min(1),
 		findings: z.array(z.string().min(1)).min(1),
 		reflection: z.string().min(1),
-		downloads: z
-			.array(
-				z.object({
-					label: z.string().min(1),
-					href: z.string().startsWith("/"),
-					description: z.string().min(1),
-				}),
-			)
-			.default([]),
 		visuals: z
 			.array(
 				z.object({
