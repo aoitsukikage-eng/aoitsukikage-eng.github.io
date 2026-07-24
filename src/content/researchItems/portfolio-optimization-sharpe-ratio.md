@@ -74,4 +74,4 @@ visuals:
 
 ## 可追溯來源與公開方式
 
-來源為作者的課程報告與分析工作簿。原始 DOCX 與 XLSX 含有文件中繼資料，因此不公開重發；公開值的工作表範圍記於 `document/quant-research-source-map.md`，並在頁面與去識別化公開版 PDF 中直接呈現核心結果。
+來源為作者的課程報告與分析工作簿。原始 DOCX 與 XLSX 含有文件中繼資料，因此不公開重發；公開值的工作表範圍記於 `document/quant-research-source-map.md`，並在本頁直接呈現核心結果。完整報告檔案不提供下載。
