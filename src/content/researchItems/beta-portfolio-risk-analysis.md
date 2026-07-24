@@ -72,6 +72,6 @@ visuals:
 | TM | 20.606% | 27.915% | 7.309% | Above SML |
 | UA | 32.369% | −6.958% | −39.327% | Below SML |
 
-## 可追溯來源與公開下載
+## 可追溯來源與頁內閱讀
 
-公開資產為兩張作者圖表：`/research/beta-risk-comparison.png`（原始作業的 Beta／風險比較）與 `/research/beta-sml-analysis.png`（繳交後作者延伸）。原始 PDF 與 XLSX 不公開重發，因其保留文件屬性；公開數值可回溯至 `document/quant-research-source-map.md`。
+兩張作者圖表保留於本頁供直接閱讀：`/research/beta-risk-comparison.png`（原始作業的 Beta／風險比較）與 `/research/beta-sml-analysis.png`（繳交後作者延伸）。完整報告檔案與原始 PDF、XLSX 均不提供下載；公開數值可回溯至 `document/quant-research-source-map.md`。
