@@ -69,7 +69,11 @@ export const getVisibilityNote = (project: ProjectEntry) => {
 		return "Partial visibility. Delivery specifics and sensitive context stay withheld.";
 	}
 
-	return "Public placeholder. Structure is visible while full portfolio content remains deferred.";
+	if (isPlaceholderProject(project)) {
+		return "Public placeholder. Structure is visible while full portfolio content remains deferred.";
+	}
+
+	return "Public project. Source code and documentation are openly available.";
 };
 
 export const getTrackLabel = (track: ProjectEntry["data"]["track"]) => TRACK_LABELS[track];
