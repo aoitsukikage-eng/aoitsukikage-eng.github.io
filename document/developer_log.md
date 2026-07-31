@@ -1,5 +1,9 @@
 # Developer log
 
+## Feature logs
+
+- [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
+
 ## 2026-07-31 — Trip Weather Planner flagship integration preparation
 
 Trip Weather Planner is being prepared as the portfolio's first flagship
