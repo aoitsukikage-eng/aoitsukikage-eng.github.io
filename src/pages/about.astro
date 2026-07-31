@@ -1,58 +1,184 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
+import { siteConfig } from "../config/site";
+
+const contactCards = [
+	{
+		label: "Email",
+		purpose: "Start a direct conversation.",
+		href: `mailto:${siteConfig.email}`,
+	},
+	{
+		label: "GitHub",
+		purpose: "Explore public work and code.",
+		href: siteConfig.socials.github,
+		external: true,
+	},
+	{
+		label: "LinkedIn",
+		purpose: "Connect professionally.",
+		href: siteConfig.socials.linkedin,
+		external: true,
+	},
+] as const;
 ---
 
 <SiteLayout
-	title="About | Aoi Tsukikage Engineering"
-	description="About page scaffold with placeholder sections for introduction, background, and opportunity fit."
+	title={`About | ${siteConfig.name}`}
+	description={`${siteConfig.name} is an NTPU Finance Student interested in quantitative finance, Python automation, and FinTech.`}
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
-		<section class="section-card section-shell" data-reveal id="about-hero" style="--reveal-order: 0;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h1>About page placeholder defines the top-level self-introduction band.</h1>
+		<section class="section-card section-shell" data-reveal id="about" style="--reveal-order: 0;">
+			<p class="section-kicker">[PROFILE]</p>
+			<h1>{siteConfig.name}</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
-			<p>
-				The structure is ready for future narrative content, but this pass keeps
-				every line intentionally generic.
+			<p class="summary">
+				NTPU Finance Student exploring quantitative finance, Python automation, and
+				FinTech.
 			</p>
 			<div class="cta-row">
-				<a class="cta-link" href="/contact">Contact</a>
+				<a class="cta-link" href="#contact">Get in touch</a>
 				<a class="cta-link secondary" href="/projects">View Projects</a>
 			</div>
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="about-intro" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Self-introduction section holds the narrative summary placeholder.</h2>
+		<section class="section-shell section-plain" data-reveal id="focus" style="--reveal-order: 1;">
+			<p class="section-kicker">[FOCUS]</p>
+			<h2>Current areas of interest</h2>
+			<div class="hud-divider" aria-hidden="true"></div>
+			<div class="section-grid focus-grid">
+				<article class="focus-card">
+					<h3>Quantitative finance</h3>
+					<p>Exploring finance through quantitative perspectives.</p>
+				</article>
+				<article class="focus-card">
+					<h3>Python automation</h3>
+					<p>Using Python to automate repeatable work.</p>
+				</article>
+				<article class="focus-card">
+					<h3>FinTech</h3>
+					<p>Following the intersection of finance and technology.</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section-shell section-plain" data-reveal id="context" style="--reveal-order: 2;">
+			<p class="section-kicker">[CONTEXT]</p>
+			<h2>Working context</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
-				Reserved for a concise introduction paragraph, current focus, and working
-				context once real copy is approved.
+				This portfolio is a space to connect interests in finance, automation, and
+				financial technology with work that can be shared publicly.
 			</p>
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="about-education" style="--reveal-order: 2;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Education background section reserves a compact chronology slot.</h2>
+		<section class="section-card section-shell" data-reveal id="contact" style="--reveal-order: 3;">
+			<p class="section-kicker">[CONTACT]</p>
+			<h2>Contact</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
-			<ul class="bullet-list">
-				<li>Placeholder line for education summary item one.</li>
-				<li>Placeholder line for education summary item two.</li>
-			</ul>
-		</section>
-
-		<section class="section-card section-shell" data-reveal id="about-opportunities" style="--reveal-order: 3;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Opportunity section marks what roles or collaborations will be described.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>
-				Reserved for future opportunity fit notes, collaboration scope, and a
-				clear next-step CTA.
-			</p>
-			<div class="cta-row">
-				<a class="cta-link" href="/contact">Start Contact Route</a>
+			<p>Choose a channel to get in touch or learn more.</p>
+			<div class="section-grid contact-grid">
+				{
+					contactCards.map((card) => (
+						<a
+							class="contact-card"
+							href={card.href}
+							rel={card.external ? "noopener noreferrer" : undefined}
+							target={card.external ? "_blank" : undefined}
+						>
+							<span class="contact-card__label">{card.label}</span>
+							<span class="contact-card__purpose">{card.purpose}</span>
+							<span class="contact-card__action">
+								{card.external ? `Open ${card.label}` : "Compose email"}
+							</span>
+						</a>
+					))
+				}
 			</div>
 		</section>
 	</div>
 </SiteLayout>
+
+<style>
+	.summary {
+		font-size: clamp(1.08rem, 2vw, 1.3rem);
+		max-width: 42rem;
+	}
+
+	.focus-grid,
+	.contact-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.focus-card,
+	.contact-card {
+		background: rgba(8, 18, 38, 0.46);
+		border: 1px solid rgba(91, 231, 255, 0.12);
+		border-radius: 1.2rem;
+		display: grid;
+		gap: 0.75rem;
+		padding: 1.15rem 1.2rem;
+	}
+
+	.focus-card h3 {
+		margin: 0;
+	}
+
+	.contact-card {
+		color: inherit;
+		min-height: 10.5rem;
+		text-decoration: none;
+		transition:
+			border-color var(--motion-base) var(--easing-standard),
+			box-shadow var(--motion-base) var(--easing-standard),
+			transform var(--motion-base) var(--easing-standard);
+	}
+
+	.contact-card:hover,
+	.contact-card:focus-visible {
+		border-color: rgba(91, 231, 255, 0.42);
+		box-shadow: 0 12px 30px rgba(91, 231, 255, 0.12);
+		transform: translateY(-2px);
+	}
+
+	.contact-card__label,
+	.contact-card__action {
+		font-family: var(--font-display);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	.contact-card__label {
+		color: var(--text-bright);
+		font-size: 1.05rem;
+	}
+
+	.contact-card__purpose {
+		color: var(--text-dim);
+	}
+
+	.contact-card__action {
+		color: var(--accent);
+		font-size: 0.78rem;
+		margin-top: auto;
+	}
+
+	@media (max-width: 760px) {
+		.focus-grid,
+		.contact-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact-card {
+			transition: none;
+		}
+
+		.contact-card:hover,
+		.contact-card:focus-visible {
+			transform: none;
+		}
+	}
+</style>
