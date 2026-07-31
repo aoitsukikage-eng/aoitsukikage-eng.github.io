@@ -4,6 +4,47 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-07-31 — Discord Multi-Bot Showcase publication
+
+Commits `3fcd929` (feat: add Discord Bot Showcase project entry) and `dd127a0`
+(fix: correct Discord portfolio wording per management pre-review) were
+independently accepted by the acceptance layer. PR #1 was merged to main as
+`2586b007870317770550287f9d357cbdc034f9fb`. GitHub Pages workflow run
+`30635875268` completed successfully.
+
+Live verification of `https://aoitsukikage-eng.github.io/projects/` and
+`https://aoitsukikage-eng.github.io/projects/discord-bot-showcase/` confirmed:
+the Projects collection remains five entries; Personal Tooling Lab was removed;
+the Discord Multi-Bot Showcase card and detail page are visible; the public
+repository link resolves correctly; and no fake demo link is present.
+
+The published project demonstrates a shared installable core that drives three
+data-driven bot personas. Core concurrency design uses a bounded asyncio.Queue
+with worker-pool backpressure and per-step independent timeouts. Conversation
+state is isolated by namespaced memory keyed as
+`bot_namespace:guild_id:channel_id:user_id`. Each persona instance registers
+seven slash commands plus one @mention interaction entry point. The opt-in
+`/roulette_kick` command applies safeguards that exclude the guild owner, all
+bots, and members whose top role is at or above the bot role. A provider
+boundary separates MockProvider, GeminiProvider, and ExternalProvider stub,
+allowing user-supplied keys without exposing private engine internals. The
+release is backed by 102 accepted tests across Python 3.11 and 3.12 CI.
+
+Public/private boundary: credentials, private multi-key Engine pool,
+key-rotation logic, bot tokens, and production service configuration are
+excluded from the public repository. No live hosted bot, uptime, user count,
+traffic, or production deployment claims are made.
+
+Two non-blocking follow-ups were observed and do not indicate broken behavior:
+
+- **Non-blocking:** A browser console SyntaxError for a duplicate
+  `prefersReducedMotion` declaration was observed on the `/projects/` page.
+  This is a pre-existing issue unrelated to the Discord Showcase addition and
+  does not affect page function or the Discord entries.
+- **Non-blocking:** GitHub Actions logged a Node.js 20 deprecation annotation
+  during the workflow run. The deployment completed successfully; this
+  annotation reflects an upcoming runner image change and is not a failure.
+
 ## 2026-07-31 — Trip Weather Planner flagship integration preparation
 
 Trip Weather Planner is being prepared as the portfolio's first flagship
