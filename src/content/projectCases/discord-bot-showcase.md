@@ -13,7 +13,7 @@ visibility: public
 featured: false
 order: 2
 teamRole: Solo builder
-background: Built to learn production-caliber concurrency patterns for a Discord application with multiple AI persona bots running in the same guild.
+background: Built to learn bounded-concurrency and failure-handling patterns for a Discord application with multiple AI persona bots running in the same guild.
 disclosure: Source code is published at the linked repository. Credentials, the private multi-key Engine pool and key-rotation logic, and production service configuration are excluded from the public release. Users may configure their own supported provider key (mock or single-key Gemini).
 links:
   repo: https://github.com/aoitsukikage-eng/discordbot-showcase-public
@@ -29,7 +29,7 @@ Incoming slash commands and @mention events are handled by deferring the Discord
 
 ## Commands
 
-Eight commands are registered per persona instance:
+Seven slash commands plus one @mention interaction entry point are registered per persona instance:
 
 | Command | Description |
 |---|---|
@@ -42,7 +42,7 @@ Eight commands are registered per persona instance:
 | `/perm_check` | Show bot permission and intent status |
 | `/debug_context` | Inspect the assembled AI prompt context |
 
-`/roulette_kick` is disabled by default and requires `ROULETTE_KICK_ENABLED=true` at startup. Guild owner, all bots, and privileged members are never selectable targets regardless of configuration.
+`/roulette_kick` is disabled by default and requires `ROULETTE_KICK_ENABLED=true` at startup. Guild owner, all bots, and members whose top role is at or above the bot role are never selectable targets regardless of configuration.
 
 ## Namespaced Memory
 

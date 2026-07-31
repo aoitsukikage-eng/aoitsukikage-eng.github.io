@@ -73,7 +73,7 @@ export const getVisibilityNote = (project: ProjectEntry) => {
 		return "Public placeholder. Structure is visible while full portfolio content remains deferred.";
 	}
 
-	return "Public project. Source code and documentation are openly available.";
+	return "Public project. The published project page and linked materials are available for review.";
 };
 
 export const getTrackLabel = (track: ProjectEntry["data"]["track"]) => TRACK_LABELS[track];
