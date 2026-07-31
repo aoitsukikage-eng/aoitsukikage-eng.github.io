@@ -1,63 +1,19 @@
 ---
-import SiteLayout from "../layouts/SiteLayout.astro";
+const destination = "/about#contact";
 ---
 
-<SiteLayout
-	title="Contact | Aoi Tsukikage Engineering"
-	description="Contact page scaffold with placeholder channels and CTA routing."
-	currentPath={Astro.url.pathname}
->
-	<div class="page-stack">
-		<section class="section-card section-shell" data-reveal id="contact-hero" style="--reveal-order: 0;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h1>Contact page placeholder maps the primary outreach CTA and response path.</h1>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>
-				This route stays generic while the final contact copy and real handles are
-				still pending.
-			</p>
-			<div class="cta-row">
-				<a class="cta-link" href="#contact-methods">Review Contact Methods</a>
-				<a class="cta-link secondary" href="/">Back Home</a>
-			</div>
-		</section>
-
-		<section class="section-shell section-plain" data-reveal id="contact-methods" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Contact methods section reserves email and profile channels.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<div class="section-grid">
-				<article class="contact-card" data-reveal style="--reveal-order: 2;">
-					<h3>Email placeholder</h3>
-					<p>Reserved for a future direct contact address and reply expectation note.</p>
-				</article>
-				<article class="contact-card" data-reveal style="--reveal-order: 3;">
-					<h3>Linked profile placeholders</h3>
-					<p>Reserved for LinkedIn and GitHub route labels without publishing handles yet.</p>
-				</article>
-			</div>
-		</section>
-
-		<section class="section-card section-shell" data-reveal id="contact-cta" style="--reveal-order: 2;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Final CTA band makes the next step explicit even before real contact data is added.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>Placeholder CTA copy remains generic and route-safe for this stage.</p>
-			<div class="cta-row">
-				<a class="cta-link" href="/about">Read About</a>
-				<a class="cta-link secondary" href="/projects">Browse Projects</a>
-			</div>
-		</section>
-	</div>
-</SiteLayout>
-
-<style>
-	.contact-card {
-		background: rgba(8, 18, 38, 0.46);
-		border: 1px solid rgba(91, 231, 255, 0.12);
-		border-radius: 1.2rem;
-		display: grid;
-		gap: 0.85rem;
-		padding: 1.15rem 1.2rem;
-	}
-</style>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="refresh" content={`0; url=${destination}`} />
+		<meta name="viewport" content="width=device-width" />
+		<title>Contact moved</title>
+	</head>
+	<body>
+		<main>
+			<h1>Contact has moved</h1>
+			<p><a href={destination}>Continue to the Contact section</a>.</p>
+		</main>
+	</body>
+</html>
