@@ -35,15 +35,18 @@ key-rotation logic, bot tokens, and production service configuration are
 excluded from the public repository. No live hosted bot, uptime, user count,
 traffic, or production deployment claims are made.
 
-Two non-blocking follow-ups were observed and do not indicate broken behavior:
+Two non-blocking follow-ups were observed but did not block the successful
+publication and deployment verification:
 
 - **Non-blocking:** A browser console SyntaxError for a duplicate
   `prefersReducedMotion` declaration was observed on the `/projects/` page.
-  This is a pre-existing issue unrelated to the Discord Showcase addition and
-  does not affect page function or the Discord entries.
+  This is a pre-existing issue unrelated to the Discord Showcase addition.
+  The Discord content rendered and live URL checks passed; the effect on
+  filters or other interactions was not assessed in this publication
+  verification.
 - **Non-blocking:** GitHub Actions logged a Node.js 20 deprecation annotation
-  during the workflow run. The deployment completed successfully; this
-  annotation reflects an upcoming runner image change and is not a failure.
+  during the workflow run. Affected actions were forced to Node.js 24 and the
+  workflow completed successfully.
 
 ## 2026-07-31 — Trip Weather Planner flagship integration preparation
 
