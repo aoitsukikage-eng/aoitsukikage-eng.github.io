@@ -138,3 +138,51 @@ the long-running `astro dev` process had accumulated a stale scoped-style
 hash after many hot-reloads in one session; restarting the dev server
 resolved it and matched the production build. Worktree:
 `task-20260731-portfolio-research-sharpe-narrative`.
+
+## 2026-08-02 — Discord Multi-Bot Showcase: content rewrite for a general audience
+
+The `discord-bot-showcase` case page was rewritten after direct review of the
+rendered page against its intended readers: recruiters, academic reviewers,
+and prospective collaborators, rather than engineers evaluating the source
+directly (they were assessed as more likely to read the linked GitHub
+repository than the case page prose).
+
+The prior copy led with implementation vocabulary in the summary and
+Architecture section (`asyncio.Queue`, worker-pool backpressure, namespaced
+memory keys) with no plain-language framing of what the project does or why
+it exists. It was rewritten around what the three bots actually do (memory,
+reading images/PDFs/YouTube links, daily fortunes, an opt-in kick-roulette
+game) and how the project grew from a single-turn, no-memory prototype to its
+current feature set, with implementation detail condensed into one short
+"How It's Built" section instead of a full architecture/command/module
+reference.
+
+The page's "Public-safe disclosure layer" section (Team Role / Background /
+Disclosure Scope) was disabled for this entry via the `showDisclosureLayer`
+flag added to the shared project template on `main` during the concurrent
+Trip Weather Planner work — for a fully public, no-NDA hobby project the
+section carried no information beyond what the rewritten Overview already
+states, and its formal register sat awkwardly ahead of the page's new
+plain-language opening. Confidential and partial-visibility entries are
+unaffected; the flag is opt-in per project.
+
+Three real screenshots from the author's own Discord server were added,
+embedded directly beneath the specific feature bullets they demonstrate
+(media understanding via a YouTube-link reply, a `/fortune` result, and a
+`/roulette_kick` round) rather than in a separate gallery section — an
+earlier static-grid gallery layout was built, previewed, and rejected in
+favor of this in-context placement. Five other candidate screenshots were
+reviewed and left unused to keep the page scannable.
+
+Because independent work on the Trip Weather Planner entry had already
+modified the same shared template and schema files (`[slug].astro`,
+`content.config.ts`) to add the same disclosure-toggle and hero repo-link
+behavior, the original working branch was superseded rather than merged
+as-is: its content changes were reapplied on top of the post-merge `main`
+(commit `cdb94e3`) on a fresh branch, verified there was no duplication or
+conflict, and merged clean (`d2953aa`). All work was verified with
+`npm run build` (17 pages) both before and after the merge. This merge is
+local to `main` on the Ubuntu working copy; it has not been pushed to
+`origin` or deployed, so nothing in this entry is a live-site claim.
+Worktrees: `task-20260731-portfolio-discordbot-copy-rewrite` (superseded),
+`task-20260802-portfolio-discordbot-copy-final`.
