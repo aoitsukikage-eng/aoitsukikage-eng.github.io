@@ -82,3 +82,59 @@ merge, push, or deployment decision.
 
 The project originated from an internship take-home prompt and was
 independently extended. This record does not imply employer endorsement.
+
+## 2026-08-02 — Portfolio optimisation research brief: narrative rewrite and reveal-animation fix
+
+The `portfolio-optimization-sharpe-ratio` research page was rewritten after
+direct review against the original course deliverables
+(`investment-report.docx`, `investment-analysis.xlsx`), across four commits
+on `research/portfolio-narrative-rewrite`.
+
+The public brief had dropped the source report's full decision chain: the
+retirement-savings goal (40-year, NT$15M target) that produced the 4.93%
+required annual return, the fund-selection rationale (similar Sharpe ratios,
+low correlation, to avoid the optimiser collapsing to a corner solution), and
+the final two-fund-separation allocation (86.98% risk asset / 13.02%
+risk-free) that ties the analysis back to the 4.93% target. All three were
+restored from the source documents; `document/quant-research-source-map.md`
+already listed the retirement-target context as approved for publication, it
+had simply never been written into the page. A plain-language pass then
+rewrote the summary, highlights, and body prose for a general-audience reader,
+adding a term glossary on first use of finance jargon (GMV, Max Sharpe,
+efficient frontier, CML, two-fund separation) and plain-language readouts
+after each data table.
+
+Two defects were found and fixed during live review of the rendered page:
+
+- A markdown typo (two single tildes used as range separators in the same
+  sentence — `4.9%~6.6%` and `4~5萬元`) was being parsed as GFM strikethrough,
+  silently deleting the text between them.
+- The page's scroll-reveal `IntersectionObserver` requires 18% of a
+  `[data-reveal]` element's own height to enter the viewport before it fades
+  in. The rewritten source-brief section became 3751px tall against an 813px
+  viewport, so a reader could scroll to the very bottom of the page and still
+  never have 18% of it in view at once — the section stayed permanently
+  invisible (`opacity: 0`), independent of scroll speed or path. Fixed by
+  dropping `data-reveal` from that section in the shared `[slug].astro`
+  template, since it is reference content rather than a hero reveal moment.
+  Root cause was confirmed via direct CDP measurement
+  (`getBoundingClientRect`, `classList`) rather than visual inspection alone,
+  since the failure mode is scroll-path-dependent and did not reproduce in
+  every screenshot method tried.
+
+The efficient-frontier chart was also moved out of the standalone Visual
+Model section and embedded beside its coordinate table inside the "Efficient
+Frontier and Capital Market Line" section (new `.frontier-figure` two-column
+layout, single column below 760px), since that section already explains the
+chart and a separate caption was redundant. The shared template gained a
+guard so the Visual Model section is skipped only for quantitative items with
+no `visuals` entries; the other 4 research pages were spot-checked and are
+unaffected.
+
+All commits were verified with `npm run build` (all 16 pages) and a fresh
+`astro preview` render, which was necessary to rule out dev-server HMR
+staleness — the two-column chart layout briefly appeared broken only because
+the long-running `astro dev` process had accumulated a stale scoped-style
+hash after many hot-reloads in one session; restarting the dev server
+resolved it and matched the production build. Worktree:
+`task-20260731-portfolio-research-sharpe-narrative`.
