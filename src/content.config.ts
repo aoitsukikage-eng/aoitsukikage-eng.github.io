@@ -46,6 +46,7 @@ const projectCaseCollection = defineCollection({
 		teamRole: z.string().min(1).optional(),
 		background: z.string().min(1).optional(),
 		disclosure: z.string().min(1).optional(),
+		showDisclosureLayer: z.boolean().optional(),
 		links: z
 			.object({
 				repo: z.string().url().optional(),

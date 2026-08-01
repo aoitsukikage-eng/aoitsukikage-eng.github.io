@@ -54,6 +54,7 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 			<ul class="finding-list">{entry.data.findings.map((finding) => <li>{finding}</li>)}</ul>
 		</section>
 
+		{(entry.data.visuals?.length || entry.data.type !== "quantitative") && (
 		<section class="section-shell section-plain" aria-labelledby="visuals-heading" data-reveal style="--reveal-order: 4;">
 			<p class="section-kicker">[VISUAL MODEL]</p>
 			<h2 id="visuals-heading">{entry.data.type === "quantitative" ? "Author-created charts and framework" : "Native reading framework"}</h2>
@@ -70,6 +71,7 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 				<li><span>03</span><div><strong>Boundary</strong><p>Publish a text-based, source-traceable brief without redistributing protected source material.</p></div></li>
 			</ol>}
 		</section>
+		)}
 
 		{isEsgStudy && <section class="section-card section-shell distinction" aria-labelledby="assignment-boundary-heading" data-reveal style="--reveal-order: 5;">
 			<p class="section-kicker">[SCOPE BOUNDARY]</p>
@@ -87,7 +89,7 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 			{isLegalStudy && <p class="legal-note"><strong>Research-time notice:</strong> This page reflects publicly available material at the report-writing time, is not legal advice, and does not claim the latest or final judicial outcome.</p>}
 		</section>
 
-		<section class="section-shell section-plain source-brief" aria-labelledby="source-brief-heading" data-reveal style="--reveal-order: 7;">
+		<section class="section-shell section-plain source-brief" aria-labelledby="source-brief-heading">
 			<p class="section-kicker">[SOURCE-TRACEABLE BRIEF]</p>
 			<h2 id="source-brief-heading">Research context and publication boundary</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
@@ -124,6 +126,10 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 	.source-brief :global(th), .source-brief :global(td) { border: 1px solid rgba(91, 231, 255, .18); padding: .65rem .75rem; text-align: left; white-space: nowrap; }
 	.source-brief :global(th) { background: rgba(91, 231, 255, .1); color: var(--text-bright); font-family: var(--font-display); font-size: .76rem; letter-spacing: .04em; }
 	.source-brief :global(td) { color: var(--text-dim); }
+	.source-brief :global(.frontier-figure) { align-items: center; display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); margin: 1.25rem 0; }
+	.source-brief :global(.frontier-figure table) { margin: 0; }
+	.source-brief :global(.frontier-figure img) { border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: block; height: auto; width: 100%; }
+	@media (max-width: 760px) { .source-brief :global(.frontier-figure) { grid-template-columns: 1fr; } }
 	.visual-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
 	.visual-grid figure { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; margin: 0; overflow: hidden; }
 	.visual-grid img { display: block; height: auto; max-width: 100%; width: 100%; }
