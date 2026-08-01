@@ -7,6 +7,7 @@ const links = [
 	{ href: "/projects", label: "Projects" },
 	{ href: "/activities", label: "Activities" },
 	{ href: "/about", label: "About" },
+	{ href: "/about#contact", label: "Contact" },
 ];
 
 const isActive = (href: string) => {
@@ -93,8 +94,13 @@ const isActive = (href: string) => {
 			justify-content: flex-start;
 		}
 
+		.nav-list {
+			gap: 0.55rem 0.65rem;
+		}
+
 		a {
-			padding: 0.66rem 0.84rem;
+			padding: 0.54rem 0.78rem;
+			font-size: 0.76rem;
 		}
 	}
 
