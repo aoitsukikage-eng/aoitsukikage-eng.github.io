@@ -23,13 +23,19 @@ links:
 
 ## What it does
 
-Trip Weather Planner helps with the "what should I pack and when should I go" part of planning a trip in Taiwan. Pick a town and a date, and it brings together in one page:
+Trip Weather Planner helps with the "what should I pack and when should I go" part of planning a trip in Taiwan.
 
-- The week's forecast and an hour-by-hour view for the next few days
-- Sunrise/sunset and moonrise/moonset with moon phase
-- UV level and air quality, both current and forecast
-- Active weather warnings for that area
-- A plain-language summary of what to expect
+Pick a town and a date, and see the week's forecast alongside a plain-language trip note for that day, plus any active weather warnings for the area. (Screenshots below are from the in-development build described above, not the older public demo.)
+
+![Town search form with a 7-day forecast strip and a plain-language trip note for the selected day](/projects/trip-weather-planner-week-forecast.png)
+
+Planning around the next few days specifically? A 72-hour, hour-by-hour view shows temperature, feels-like temperature, and rain chance in 3-hour steps.
+
+![Line chart of temperature and feels-like temperature over the next 72 hours in 3-hour steps, with rain chance bars underneath](/projects/trip-weather-planner-72h-forecast.png)
+
+A row of quick-glance cards rounds it out with sunrise/sunset, current UV, current air quality, and moon phase for the same town and date.
+
+![Four feature cards showing sunrise and sunset, current UV index, current air quality, and moon phase for the selected town and date](/projects/trip-weather-planner-feature-cards.png)
 
 You can also save a handful of favorite towns so the places you check often are one tap away.
 
