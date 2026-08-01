@@ -23,3 +23,14 @@ The single-line `external: false` remediation for the Email card configuration w
 Technical validation confirmed that type checking (`npm run astro -- check`) passes with zero errors, static site generation (`npm run build`) successfully builds 16 pages, navigation and redirect routes (`/about#contact` and `/contact`) behave as intended, and public boundary safety checks are clean.
 
 Final integration acceptance remains pending. The combined About and Contact user interface is not merged to main, pushed, or deployed.
+
+## 2026-08-02 — About and Contact discoverability refinement
+
+The unified page architecture at `/about` is retained, with user discoverability enhanced across navigation and content sections.
+
+The primary navigation menu restores a direct `Contact` link pointing to `/about#contact`. The hero section on `/about` incorporates a direct call-to-action anchor and visual hint pointing users to the contact section. Within the contact section, Email is elevated as the primary action channel with featured layout treatment, while GitHub and LinkedIn are presented in a secondary profile grid.
+
+Technical validation confirmed that type checking (`npm run astro -- check`) passes with zero errors and static site generation (`npm run build`) successfully builds 16 pages.
+
+Final integration acceptance, merge to main, push, and deployment remain pending.
+
