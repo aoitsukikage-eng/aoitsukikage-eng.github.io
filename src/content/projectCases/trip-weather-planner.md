@@ -15,6 +15,7 @@ order: 1
 teamRole: Solo builder.
 background: Started as an internship take-home assignment, then continued afterward as an independent side project with ongoing updates.
 disclosure: The public demo below is running an earlier version of the project. A newer version has already been built and tested, and will replace the demo build in a future release.
+showDisclosureLayer: false
 links:
   repo: https://github.com/aoitsukikage-eng/trip-weather-planner
   demo: https://twpfe5ce0.z23.web.core.windows.net/

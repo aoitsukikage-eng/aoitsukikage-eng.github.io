@@ -22,6 +22,7 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const placeholder = isPlaceholderProject(project);
+const showDisclosureLayer = project.data.showDisclosureLayer !== false;
 ---
 
 <SiteLayout
@@ -85,28 +86,46 @@ const placeholder = isPlaceholderProject(project);
 					))
 				}
 			</div>
+			{
+				project.data.links?.repo && project.data.visibility === "public" && (
+					<div class="cta-row">
+						<a
+							class="cta-link secondary"
+							href={project.data.links.repo}
+							rel="noreferrer"
+							target="_blank"
+						>
+							View Source on GitHub
+						</a>
+					</div>
+				)
+			}
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="project-detail-safety" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Public-safe disclosure layer</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>{getVisibilityNote(project)}</p>
-			<div class="detail-grid">
-				<article class="detail-item" data-reveal style="--reveal-order: 2;">
-					<h3>Team Role</h3>
-					<p>{project.data.teamRole ?? "Role details are not published for this entry."}</p>
-				</article>
-				<article class="detail-item" data-reveal style="--reveal-order: 3;">
-					<h3>Background</h3>
-					<p>{project.data.background ?? "Background context is limited to this safe placeholder layer."}</p>
-				</article>
-				<article class="detail-item" data-reveal style="--reveal-order: 4;">
-					<h3>Disclosure Scope</h3>
-					<p>{project.data.disclosure ?? "Only routing and taxonomy validation data is exposed."}</p>
-				</article>
-			</div>
-		</section>
+		{
+			showDisclosureLayer && (
+				<section class="section-shell section-plain" data-reveal id="project-detail-safety" style="--reveal-order: 1;">
+					<p class="section-kicker">[SYSTEM]</p>
+					<h2>Public-safe disclosure layer</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<p>{getVisibilityNote(project)}</p>
+					<div class="detail-grid">
+						<article class="detail-item" data-reveal style="--reveal-order: 2;">
+							<h3>Team Role</h3>
+							<p>{project.data.teamRole ?? "Role details are not published for this entry."}</p>
+						</article>
+						<article class="detail-item" data-reveal style="--reveal-order: 3;">
+							<h3>Background</h3>
+							<p>{project.data.background ?? "Background context is limited to this safe placeholder layer."}</p>
+						</article>
+						<article class="detail-item" data-reveal style="--reveal-order: 4;">
+							<h3>Disclosure Scope</h3>
+							<p>{project.data.disclosure ?? "Only routing and taxonomy validation data is exposed."}</p>
+						</article>
+					</div>
+				</section>
+			)
+		}
 
 		<section class="section-card section-shell" data-reveal id="project-detail-body" style="--reveal-order: 2;">
 			<p class="section-kicker">[SYSTEM]</p>
