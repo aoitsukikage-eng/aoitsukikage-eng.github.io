@@ -138,3 +138,51 @@ the long-running `astro dev` process had accumulated a stale scoped-style
 hash after many hot-reloads in one session; restarting the dev server
 resolved it and matched the production build. Worktree:
 `task-20260731-portfolio-research-sharpe-narrative`.
+
+## 2026-08-01 — Trip Weather Planner project page publication
+
+Commits `47c3888` (feat: add Trip Weather Planner project entry), `99a997f`
+(feat: add per-project disclosure toggle and hero repo button), and `0a827ea`
+(feat: embed Trip Weather Planner screenshots inline with feature copy) were
+merged via PR #3 to main as `cdb94e3`. GitHub Pages workflow run
+`30709894321` completed successfully
+(https://github.com/aoitsukikage-eng/aoitsukikage-eng.github.io/actions/runs/30709894321).
+
+Live verification of `https://aoitsukikage-eng.github.io/projects/` and
+`https://aoitsukikage-eng.github.io/projects/trip-weather-planner/` confirmed:
+the Projects collection now has six entries; the Trip Weather Planner card
+and detail page are visible; the repository link resolves; and all three
+screenshot assets return HTTP 200.
+
+The published case page is written in plain, non-engineer-facing language
+(What it does / Built with / About the demo / Scope Note) rather than an
+implementation-level writeup. It reuses the `showDisclosureLayer` flag and
+hero "View Source on GitHub" button pattern first prototyped on the
+unmerged `task/20260731-portfolio-discordbot-copy-rewrite` branch — applied
+here independently, on this project's own branch, without pulling in that
+branch's Discord Bot content changes. The Public-safe disclosure layer
+section is hidden for this entry via that flag.
+
+Three screenshots from the current in-development build are embedded inline,
+each directly under the paragraph it illustrates: town search with the
+7-day forecast and a plain-language trip note; the 72-hour hourly chart; and
+the sunrise/sunset, UV, air quality, and moon-phase feature cards. The page
+text explicitly notes these are from the in-development build, not the
+linked public demo, since the Phase 2 enrichments visible in them (moon
+phase, UV, AQI) predate that demo's Azure v1.0.0 Phase 1 build.
+
+Public/private boundary and version disclosure: this entry covers the
+v1.1.0 Phase 2 Git release plus post-release Asia/Taipei date and cache
+fixes that have acceptance evidence but are not merged, pushed, or
+deployed. The linked public demo remains the earlier Azure v1.0.0 Phase 1
+build. This publication covers only the engineering case page; the
+screenshot-first homepage feature and the future `/labs/trip-weather/`
+interactive mini route described in the 2026-07-31 flagship-preparation
+entry above remain not implemented.
+
+A non-blocking Node.js 20 deprecation annotation was logged during the
+workflow run, matching prior publication runs; affected actions were forced
+to Node.js 24 and the workflow completed successfully.
+
+The project originated from an internship take-home prompt and was
+independently extended. This record does not imply employer endorsement.
