@@ -33,4 +33,3 @@ The primary navigation menu restores a direct `Contact` link pointing to `/about
 Technical validation confirmed that type checking (`npm run astro -- check`) passes with zero errors and static site generation (`npm run build`) successfully builds 16 pages.
 
 Final integration acceptance, merge to main, push, and deployment remain pending.
-
