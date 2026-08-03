@@ -2,9 +2,6 @@
 import { getCollection } from "astro:content";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import {
-	STATUS_FILTERS,
-	TRACK_FILTERS,
-	getDomainFilters,
 	getStatusLabel,
 	getTrackLabel,
 	getVisibilityLabel,
@@ -14,7 +11,6 @@ import {
 } from "../lib/projects";
 
 const projectEntries = sortProjects(await getCollection("projectCases"));
-const domainFilters = getDomainFilters(projectEntries);
 const totalProjects = projectEntries.length;
 const featuredCount = projectEntries.filter((project) => project.data.featured).length;
 const placeholderCount = projectEntries.filter((project) =>
@@ -24,7 +20,7 @@ const placeholderCount = projectEntries.filter((project) =>
 
 <SiteLayout
 	title="Projects | Aoi Tsukikage Engineering"
-	description="Data-driven projects hub with taxonomy filters and placeholder-safe visibility handling."
+	description="Data-driven projects hub with placeholder-safe visibility handling."
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
@@ -33,8 +29,8 @@ const placeholderCount = projectEntries.filter((project) =>
 			<h1>Projects Hub renders directly from the portfolio collection without hardcoded cards.</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
-				Track, domain, and status filters refine the collection in-browser while
-				visibility and placeholder rules keep unpublished work on a public-safe layer.
+				Visibility and placeholder rules keep unpublished work on a public-safe layer
+				as every entry renders directly from the collection.
 			</p>
 			<div class="meta-row">
 				<span class="meta-chip">{totalProjects} total entries</span>
@@ -47,72 +43,6 @@ const placeholderCount = projectEntries.filter((project) =>
 			</div>
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="projects-filter-bar" style="--reveal-order: 1;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Filter the project collection by track, domain, and status.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<form class="filter-shell" data-project-filters>
-				<fieldset class="filter-group">
-					<legend>Track</legend>
-					<div class="filter-row">
-						{
-							TRACK_FILTERS.map((filter) => (
-								<label class="filter-pill">
-									<input
-										checked={filter.value === "all"}
-										name="track"
-										type="radio"
-										value={filter.value}
-									/>
-									<span>{filter.label}</span>
-								</label>
-							))
-						}
-					</div>
-				</fieldset>
-
-				<fieldset class="filter-group">
-					<legend>Domain</legend>
-					<div class="filter-row">
-						{
-							domainFilters.map((domain) => (
-								<label class="filter-pill">
-									<input name="domain" type="checkbox" value={domain} />
-									<span>{domain.replaceAll("_", " ")}</span>
-								</label>
-							))
-						}
-					</div>
-				</fieldset>
-
-				<fieldset class="filter-group">
-					<legend>Status</legend>
-					<div class="filter-row">
-						{
-							STATUS_FILTERS.map((filter) => (
-								<label class="filter-pill">
-									<input
-										checked={filter.value === "all"}
-										name="status"
-										type="radio"
-										value={filter.value}
-									/>
-									<span>{filter.label}</span>
-								</label>
-							))
-						}
-					</div>
-				</fieldset>
-
-				<div class="filter-actions">
-					<button class="cta-link reset-button" type="reset">Reset Filters</button>
-					<p class="filter-summary" data-filter-summary>
-						Showing all {totalProjects} projects.
-					</p>
-				</div>
-			</form>
-		</section>
-
 		<section class="section-shell section-plain" data-reveal id="projects-grid" style="--reveal-order: 2;">
 			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Collection-backed project cards with placeholder-safe summaries.</h2>
@@ -122,7 +52,6 @@ const placeholderCount = projectEntries.filter((project) =>
 					projectEntries.map((project) => {
 						const placeholder = isPlaceholderProject(project);
 						const detailHref = `/projects/${project.data.slug}/`;
-						const domainValue = project.data.domain.join("|");
 
 						return (
 							<article
@@ -130,11 +59,8 @@ const placeholderCount = projectEntries.filter((project) =>
 									"project-card": true,
 									"project-card--placeholder": placeholder,
 								}}
-								data-domain={domainValue}
 								data-reveal
 								data-placeholder={placeholder ? "true" : "false"}
-								data-status={project.data.status}
-								data-track={project.data.track}
 								style="--reveal-order: 3;"
 							>
 								<div class="project-card__top">
@@ -248,214 +174,10 @@ const placeholderCount = projectEntries.filter((project) =>
 				}
 			</div>
 		</section>
-
-		<section class="section-card section-shell empty-state" data-reveal hidden id="projects-empty-state" style="--reveal-order: 3;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>No projects match the current filter combination.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>
-				Reset the filter bar to restore the full collection or remove one domain
-				tag to widen the results.
-			</p>
-		</section>
 	</div>
 </SiteLayout>
 
-<script is:inline>
-	const filterRoot = document.querySelector("[data-project-filters]");
-	const cards = Array.from(document.querySelectorAll("[data-project-grid] .project-card"));
-	const emptyState = document.getElementById("projects-empty-state");
-	const summary = document.querySelector("[data-filter-summary]");
-	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-	if (filterRoot && cards.length && emptyState && summary) {
-		const syncUrl = (track, status, domains) => {
-			const params = new URLSearchParams(window.location.search);
-
-			if (track === "all") {
-				params.delete("track");
-			} else {
-				params.set("track", track);
-			}
-
-			if (status === "all") {
-				params.delete("status");
-			} else {
-				params.set("status", status);
-			}
-
-			if (domains.length === 0) {
-				params.delete("domain");
-			} else {
-				params.set("domain", domains.join(","));
-			}
-
-			const next = params.toString();
-			const nextUrl = next ? `${window.location.pathname}?${next}` : window.location.pathname;
-			window.history.replaceState({}, "", nextUrl);
-		};
-
-		const hydrateFromQuery = () => {
-			const params = new URLSearchParams(window.location.search);
-			const track = params.get("track");
-			const status = params.get("status");
-			const domains = (params.get("domain") || "")
-				.split(",")
-				.map((value) => value.trim())
-				.filter(Boolean);
-
-			if (track) {
-				const input = filterRoot.querySelector(`input[name="track"][value="${track}"]`);
-				if (input) input.checked = true;
-			}
-
-			if (status) {
-				const input = filterRoot.querySelector(`input[name="status"][value="${status}"]`);
-				if (input) input.checked = true;
-			}
-
-			domains.forEach((domain) => {
-				const input = filterRoot.querySelector(`input[name="domain"][value="${domain}"]`);
-				if (input) input.checked = true;
-			});
-		};
-
-		const render = () => {
-			const formData = new FormData(filterRoot);
-			const track = formData.get("track") || "all";
-			const status = formData.get("status") || "all";
-			const domains = formData.getAll("domain");
-
-			let visible = 0;
-
-			cards.forEach((card) => {
-				const cardTrack = card.dataset.track;
-				const cardStatus = card.dataset.status;
-				const cardDomains = (card.dataset.domain || "").split("|").filter(Boolean);
-
-				const matchTrack = track === "all" || cardTrack === track;
-				const matchStatus = status === "all" || cardStatus === status;
-				const matchDomains =
-					domains.length === 0 || domains.every((domain) => cardDomains.includes(domain));
-				const isVisible = matchTrack && matchStatus && matchDomains;
-
-				card.hidden = !isVisible;
-				card.classList.toggle("is-filtered-in", isVisible);
-				card.classList.toggle("is-filtered-out", !isVisible);
-
-				if (isVisible) {
-					card.style.setProperty("--filter-order", String(visible));
-					if (!prefersReducedMotion.matches) {
-						card.classList.remove("is-refreshed");
-						window.requestAnimationFrame(() => card.classList.add("is-refreshed"));
-					}
-					visible += 1;
-				} else {
-					card.classList.remove("is-refreshed");
-				}
-			});
-
-			summary.textContent =
-				visible === cards.length
-					? `Showing all ${visible} projects.`
-					: `Showing ${visible} of ${cards.length} projects.`;
-			emptyState.hidden = visible !== 0;
-			syncUrl(track, status, domains);
-		};
-
-		hydrateFromQuery();
-		filterRoot.addEventListener("change", render);
-		filterRoot.addEventListener("reset", () => {
-			window.setTimeout(render, 0);
-		});
-		render();
-	}
-</script>
-
 <style>
-	.filter-shell,
-	.filter-group {
-		display: grid;
-		gap: 1rem;
-	}
-
-	.filter-group {
-		background: rgba(8, 18, 38, 0.38);
-		border: 1px solid rgba(91, 231, 255, 0.12);
-		border-radius: 1.15rem;
-		margin: 0;
-		padding: 1.05rem 1.15rem 1.15rem;
-	}
-
-	.filter-group legend {
-		font-family: var(--font-display);
-		letter-spacing: 0.06em;
-		margin-bottom: 0.2rem;
-		text-transform: uppercase;
-	}
-
-	.filter-row {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-	}
-
-	.filter-pill {
-		cursor: pointer;
-	}
-
-	.filter-pill input {
-		left: -9999px;
-		position: absolute;
-	}
-
-	.filter-pill span,
-	.reset-button {
-		background: rgba(91, 231, 255, 0.04);
-		border: 1px solid rgba(91, 231, 255, 0.14);
-		border-radius: 999px;
-		color: rgba(244, 251, 255, 0.78);
-		display: inline-flex;
-		font-family: var(--font-display);
-		font-size: 0.82rem;
-		letter-spacing: 0.08em;
-		padding: 0.68rem 0.98rem;
-		text-transform: uppercase;
-		transition:
-			border-color var(--motion-base) var(--easing-standard),
-			box-shadow var(--motion-base) var(--easing-standard),
-			background var(--motion-base) var(--easing-standard),
-			color var(--motion-base) var(--easing-standard),
-			transform var(--motion-base) var(--easing-standard);
-	}
-
-	.filter-pill:hover span,
-	.filter-pill:focus-within span,
-	.filter-pill input:checked + span {
-		background: rgba(91, 231, 255, 0.1);
-		border-color: rgba(91, 231, 255, 0.32);
-		box-shadow: 0 12px 24px rgba(91, 231, 255, 0.08);
-		color: var(--accent);
-		transform: translateY(-1px);
-	}
-
-	.filter-actions {
-		align-items: center;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem 1rem;
-		justify-content: space-between;
-	}
-
-	.reset-button {
-		cursor: pointer;
-		font: inherit;
-	}
-
-	.filter-summary {
-		color: var(--text-muted);
-	}
-
 	.projects-grid {
 		display: grid;
 		gap: var(--space-4);
@@ -464,16 +186,6 @@ const placeholderCount = projectEntries.filter((project) =>
 
 	.project-card--placeholder {
 		border-style: dashed;
-	}
-
-	.project-card.is-filtered-out {
-		opacity: 0;
-		transform: translateY(10px) scale(0.985);
-	}
-
-	.project-card.is-filtered-in.is-refreshed {
-		animation: project-card-in 420ms var(--easing-standard) both;
-		animation-delay: calc(var(--filter-order, 0) * 55ms);
 	}
 
 	.project-card h3 a {
@@ -536,40 +248,9 @@ const placeholderCount = projectEntries.filter((project) =>
 		padding: 1rem;
 	}
 
-	.empty-state[hidden] {
-		display: none;
-	}
-
-	@keyframes project-card-in {
-		from {
-			opacity: 0;
-			transform: translateY(12px) scale(0.985);
-		}
-
-		to {
-			opacity: 1;
-			transform: translateY(0) scale(1);
-		}
-	}
-
 	@media (max-width: 900px) {
 		.projects-grid {
 			grid-template-columns: 1fr;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.filter-pill span,
-		.reset-button,
-		.project-card {
-			transition: none;
-		}
-
-		.project-card.is-filtered-out,
-		.project-card.is-filtered-in.is-refreshed {
-			animation: none;
-			opacity: 1;
-			transform: none;
 		}
 	}
 </style>
