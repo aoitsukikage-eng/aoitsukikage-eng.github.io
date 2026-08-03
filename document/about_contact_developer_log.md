@@ -33,3 +33,11 @@ The primary navigation menu restores a direct `Contact` link pointing to `/about
 Technical validation confirmed that type checking (`npm run astro -- check`) passes with zero errors and static site generation (`npm run build`) successfully builds 16 pages.
 
 Final integration acceptance, merge to main, push, and deployment remain pending.
+
+## 2026-08-03 — Independent acceptance approval
+
+Following the one-line trailing-blank-line documentation remediation, the high-discoverability About and Contact candidate passed independent acceptance approval with all user interface files remaining unchanged.
+
+Technical validation confirmed that type checking (`npm run astro -- check`) passes with zero errors and zero warnings, and static site generation (`npm run build`) successfully builds 17 static pages. Contact navigation to `/about#contact`, hero call-to-action anchor, external link attributes, and the `/contact` compatibility route fallback were all verified. Public safety and clean worktree checks passed.
+
+This candidate remains unmerged to main, unpushed, and undeployed, and the temporary preview was not replaced.
