@@ -41,3 +41,9 @@ Following the one-line trailing-blank-line documentation remediation, the high-d
 Technical validation confirmed that type checking (`npm run astro -- check`) passes with zero errors and zero warnings, and static site generation (`npm run build`) successfully builds 17 static pages. Contact navigation to `/about#contact`, hero call-to-action anchor, external link attributes, and the `/contact` compatibility route fallback were all verified. Public safety and clean worktree checks passed.
 
 This candidate remains unmerged to main, unpushed, and undeployed, and the temporary preview was not replaced.
+
+## 2026-08-03 — Navigation reconsolidation and temporary preview
+
+Following user review, the primary navigation is reconsolidated to one About & Contact entry at /about; the separate Contact navigation item is removed. The /contact compatibility route remains in place and continues to redirect to /about#contact.
+
+The existing temporary Astro preview on port 4322 was switched from the previous research worktree to this About and Contact candidate for manual review. Astro type checking passes with zero errors and zero warnings; the remaining diagnostics are pre-existing deprecation hints from src/content.config.ts.
