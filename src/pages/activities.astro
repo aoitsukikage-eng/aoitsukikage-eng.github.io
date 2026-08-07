@@ -13,21 +13,21 @@ const activityEntries = sortActivities(await getCollection("activities"));
 
 <SiteLayout
 	title="Activities | Aoi Tsukikage Engineering"
-	description="Activity route for volunteer, talk, visit, and forum placeholders with structured photo-caption slots."
+	description="Activity route logging volunteer, talk, visit, and forum experiences with structured role, summary, and photo records."
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
 		<section class="section-card section-shell" data-reveal id="activities-hero" style="--reveal-order: 0;">
 			<p class="section-kicker">[SYSTEM]</p>
-			<h1>Activities is a structured experience log, not a photo wall, with room for future image swaps that do not force a redesign.</h1>
+			<h1>Activities is a structured experience log, not a photo wall — real photos replace placeholder slots as each entry clears for public release.</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
 				Each entry keeps the experience framing first: organization, date, role,
-				summary, and only then a small set of placeholder visual slots with one-line
-				captions ready for the later content pass.
+				summary, and then either real public-safe photos or a placeholder slot
+				for entries still awaiting a content pass.
 			</p>
 			<div class="meta-row">
-				<span class="meta-chip">{activityEntries.length} placeholder entries</span>
+				<span class="meta-chip">{activityEntries.length} activity log entries</span>
 			</div>
 			<div class="cta-row">
 				<a class="cta-link" href="/research">Open Research Route</a>
@@ -35,11 +35,12 @@ const activityEntries = sortActivities(await getCollection("activities"));
 			</div>
 		</section>
 
-		<section class="activity-log" data-reveal id="activities-log" style="--reveal-order: 2;">
+		<section class="activity-log" id="activities-log">
 			{
 				activityEntries.map((activity, index) => (
 					<article
 						class="section-card activity-entry"
+						data-reveal
 						style={`--reveal-order: ${index + 2};`}
 					>
 						<div class="activity-entry__header">
@@ -74,16 +75,23 @@ const activityEntries = sortActivities(await getCollection("activities"));
 
 							<div class="activity-photos">
 								{
-									activity.data.photos.map((photo, photoIndex) => (
-										<figure class="photo-slot">
-											<div class="photo-frame" aria-hidden="true">
-												<span>[PHOTO SLOT {photoIndex + 1}]</span>
-											</div>
-											<figcaption>
-												{getActivityPhotoCaption(activity, photo, photoIndex)}
-											</figcaption>
-										</figure>
-									))
+									activity.data.photos.map((photo, photoIndex) =>
+										typeof photo === "string" ? (
+											<figure class="photo-slot">
+												<div class="photo-frame" aria-hidden="true">
+													<span>[PHOTO SLOT {photoIndex + 1}]</span>
+												</div>
+												<figcaption>
+													{getActivityPhotoCaption(activity, photo, photoIndex)}
+												</figcaption>
+											</figure>
+										) : (
+											<figure class="photo-slot photo-slot--filled">
+												<img alt={photo.alt} loading="lazy" src={photo.src} />
+												<figcaption>{photo.caption}</figcaption>
+											</figure>
+										),
+									)
 								}
 							</div>
 						</div>
@@ -112,6 +120,7 @@ const activityEntries = sortActivities(await getCollection("activities"));
 	}
 
 	.activity-entry__body {
+		align-items: start;
 		display: grid;
 		gap: 1.25rem;
 		grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
@@ -166,6 +175,15 @@ const activityEntries = sortActivities(await getCollection("activities"));
 		color: var(--text-muted);
 		font-size: 0.92rem;
 		line-height: 1.66;
+	}
+
+	.photo-slot--filled img {
+		border-radius: 0.95rem;
+		display: block;
+		height: auto;
+		max-height: 22rem;
+		object-fit: cover;
+		width: 100%;
 	}
 
 	@media (max-width: 900px) {
