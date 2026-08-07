@@ -111,7 +111,16 @@ const activitiesCollection = defineCollection({
 		type: activityTypeEnum,
 		role: z.string().min(1),
 		summary: z.string().min(1),
-		photos: z.array(z.string().min(1)),
+		photos: z.array(
+			z.union([
+				z.string().min(1),
+				z.object({
+					src: z.string().startsWith("/"),
+					alt: z.string().min(1),
+					caption: z.string().min(1),
+				}),
+			]),
+		),
 		tags: z.array(z.string().min(1)),
 	}),
 });
