@@ -2,6 +2,8 @@
 import Nav from "../components/Nav.astro";
 import { siteConfig } from "../config/site";
 import "../styles/tokens.css";
+import { zh } from "../i18n/zh";
+import { en } from "../i18n/en";
 
 interface Props {
 	title: string;
@@ -14,9 +16,12 @@ const {
 	currentPath = "/",
 	description = siteConfig.tagline,
 } = Astro.props;
+
+const currentLocale = Astro.currentLocale || "zh";
+const dict = currentLocale === "en" ? en : zh;
 ---
 
-<html lang="en">
+<html lang={currentLocale}>
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -50,7 +55,7 @@ const {
 						<p class="brand-note">{siteConfig.tagline}</p>
 					</div>
 				</div>
-				<Nav currentPath={currentPath} />
+				<Nav currentPath={currentPath} dict={dict} />
 			</header>
 			<main class="content">
 				<slot />
