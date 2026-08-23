@@ -2,6 +2,7 @@
 title: Beta 與投資組合風險分析
 slug: beta-portfolio-risk-analysis
 summary: 以五檔美股的日報酬、S&P 500 與投資組合權重估計 Beta，說明分散化後的風險結果與作者的 SML 延伸。
+lang: zh
 track: research
 domain:
   - quantitative-finance

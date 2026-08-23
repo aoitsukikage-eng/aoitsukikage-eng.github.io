@@ -38,6 +38,7 @@ const projectCaseCollection = defineCollection({
 		title: z.string().min(1),
 		slug: z.string().min(1),
 		summary: z.string().min(1),
+		lang: z.enum(["zh", "en"]),
 		track: trackEnum,
 		domain: z.array(z.string().min(1)).min(1),
 		status: statusEnum,
@@ -63,10 +64,11 @@ const researchItemCollection = defineCollection({
 		pattern: "**/*.md",
 		base: "./src/content/researchItems",
 	}),
-		schema: z.object({
+	schema: z.object({
 		title: z.string().min(1),
 		slug: z.string().min(1),
 		summary: z.string().min(1),
+		lang: z.enum(["zh", "en"]),
 		track: z.literal("research"),
 		domain: z.array(z.string().min(1)).min(1),
 		status: statusEnum,
@@ -108,6 +110,7 @@ const activitiesCollection = defineCollection({
 		title: z.string().min(1),
 		org: z.string().min(1),
 		date: z.coerce.date(),
+		lang: z.enum(["zh", "en"]),
 		type: activityTypeEnum,
 		role: z.string().min(1),
 		summary: z.string().min(1),

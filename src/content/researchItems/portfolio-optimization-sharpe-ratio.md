@@ -2,6 +2,7 @@
 title: 投資組合最佳化與夏普比率分析
 slug: portfolio-optimization-sharpe-ratio
 summary: 這篇研究從一個具體問題出發：想在 40 年後存到 1500 萬退休金，每年報酬率要多少？算出答案是 4.93% 之後，我選了三檔風險特性互補的基金，用投資組合理論找出風險與報酬最划算的配置方式，最後得出結論：把約 87% 的資金投入這個組合、13% 放定存，就能剛好命中目標報酬率。
+lang: zh
 track: research
 domain:
   - quantitative-finance

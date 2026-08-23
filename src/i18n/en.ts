@@ -12,6 +12,10 @@ export const en: Dictionary = {
 		label: "ZH",
 		targetLocale: "zh",
 	},
+	contentFallback: {
+		notice: "This entry is currently only available in {lang}.",
+		viewLink: "View {lang} version →",
+	},
 };
 
 export default en;

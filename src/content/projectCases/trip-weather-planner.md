@@ -2,6 +2,7 @@
 title: Trip Weather Planner
 slug: trip-weather-planner
 summary: A travel-weather planner for Taiwan — pick a town and a date to see the week's forecast, the next few days hour-by-hour, sunrise/moonrise, UV, air quality, and weather warnings all in one place.
+lang: en
 track: personal_project
 domain:
   - weather

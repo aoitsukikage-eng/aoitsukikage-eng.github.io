@@ -8,11 +8,27 @@ import {
 	sortResearch,
 } from "../lib/research";
 
+import { zh } from "../i18n/zh";
+import { en } from "../i18n/en";
+
+const currentLocale = Astro.currentLocale ?? "zh";
+const dict = currentLocale === "en" ? en : zh;
+
 const researchEntries = sortResearch(getResearchEntries(await getCollection("researchItems")));
 const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 	...group,
 	entries: researchEntries.filter((entry) => getResearchGroup(entry) === group.key),
 }));
+
+function getFallbackText(entryLang: "zh" | "en") {
+	const langName = currentLocale === "zh"
+		? (entryLang === "en" ? "英文" : "中文")
+		: (entryLang === "zh" ? "Traditional Chinese" : "English");
+	return {
+		notice: dict.contentFallback.notice.replace("{lang}", langName),
+		viewLink: dict.contentFallback.viewLink.replace("{lang}", langName),
+	};
+}
 ---
 
 <SiteLayout
@@ -50,20 +66,32 @@ const groupedEntries = RESEARCH_GROUPS.map((group) => ({
 				<div class="hud-divider" aria-hidden="true"></div>
 				<p>{group.description}</p>
 				<div class="research-grid">
-					{group.entries.map((entry) => (
-						<article class="research-card">
-							<div class="meta-row">
-								<span class="project-chip">{entry.data.year}</span>
-								<span class="project-chip">{group.label}</span>
-							</div>
-							<h3><a href={`/research/${entry.data.slug}/`}>{entry.data.title}</a></h3>
-							<p>{entry.data.summary}</p>
-							<div class="meta-row">
-								{entry.data.tags.map((tag) => <span class="meta-chip">{tag}</span>)}
-							</div>
-							<a class="cta-link" href={`/research/${entry.data.slug}/`} aria-label={`Read ${entry.data.title}`}>Open research brief</a>
-						</article>
-					))}
+					{group.entries.map((entry) => {
+						const isLocaleMatch = entry.data.lang === currentLocale;
+						const nativeUrl = entry.data.lang === "en" ? `/en/research/${entry.data.slug}/` : `/research/${entry.data.slug}/`;
+						const { notice, viewLink } = getFallbackText(entry.data.lang);
+
+						return (
+							<article class="research-card">
+								<div class="meta-row">
+									<span class="project-chip">{entry.data.year}</span>
+									<span class="project-chip">{group.label}</span>
+								</div>
+								<h3><a href={nativeUrl}>{entry.data.title}</a></h3>
+								{isLocaleMatch ? (
+									<p>{entry.data.summary}</p>
+								) : (
+									<p>{notice}</p>
+								)}
+								<div class="meta-row">
+									{entry.data.tags.map((tag) => <span class="meta-chip">{tag}</span>)}
+								</div>
+								<a class="cta-link" href={nativeUrl} aria-label={`${isLocaleMatch ? 'Read' : 'View'} ${entry.data.title}`}>
+									{isLocaleMatch ? "Open research brief" : viewLink}
+								</a>
+							</article>
+						);
+					})}
 				</div>
 			</section>
 		))}

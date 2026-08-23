@@ -10,12 +10,28 @@ import {
 	sortProjects,
 } from "../lib/projects";
 
+import { zh } from "../i18n/zh";
+import { en } from "../i18n/en";
+
+const currentLocale = Astro.currentLocale ?? "zh";
+const dict = currentLocale === "en" ? en : zh;
+
 const projectEntries = sortProjects(await getCollection("projectCases"));
 const totalProjects = projectEntries.length;
 const featuredCount = projectEntries.filter((project) => project.data.featured).length;
 const placeholderCount = projectEntries.filter((project) =>
 	isPlaceholderProject(project),
 ).length;
+
+function getFallbackText(entryLang: "zh" | "en") {
+	const langName = currentLocale === "zh"
+		? (entryLang === "en" ? "英文" : "中文")
+		: (entryLang === "zh" ? "Traditional Chinese" : "English");
+	return {
+		notice: dict.contentFallback.notice.replace("{lang}", langName),
+		viewLink: dict.contentFallback.viewLink.replace("{lang}", langName),
+	};
+}
 ---
 
 <SiteLayout
@@ -38,8 +54,8 @@ const placeholderCount = projectEntries.filter((project) =>
 				<span class="meta-chip">{placeholderCount} placeholder-safe</span>
 			</div>
 			<div class="cta-row">
-				<a class="cta-link" href="/about#contact">Contact</a>
-				<a class="cta-link secondary" href="/">Back Home</a>
+				<a class="cta-link" href={currentLocale === "en" ? "/en/about#contact" : "/about#contact"}>Contact</a>
+				<a class="cta-link secondary" href={currentLocale === "en" ? "/en/" : "/"}>Back Home</a>
 			</div>
 		</section>
 
@@ -51,7 +67,9 @@ const placeholderCount = projectEntries.filter((project) =>
 				{
 					projectEntries.map((project) => {
 						const placeholder = isPlaceholderProject(project);
-						const detailHref = `/projects/${project.data.slug}/`;
+						const isLocaleMatch = project.data.lang === currentLocale;
+						const nativeUrl = project.data.lang === "en" ? `/en/projects/${project.data.slug}/` : `/projects/${project.data.slug}/`;
+						const { notice, viewLink } = getFallbackText(project.data.lang);
 
 						return (
 							<article
@@ -116,9 +134,9 @@ const placeholderCount = projectEntries.filter((project) =>
 										}
 									</div>
 									<h3>
-										<a href={detailHref}>{project.data.title}</a>
+										<a href={nativeUrl}>{project.data.title}</a>
 									</h3>
-									<p>{project.data.summary}</p>
+									<p>{isLocaleMatch ? project.data.summary : notice}</p>
 								</div>
 
 								<div class="meta-row">
@@ -129,45 +147,53 @@ const placeholderCount = projectEntries.filter((project) =>
 									}
 								</div>
 
-								<div class="project-card__body">
-									<p class="project-note">{getVisibilityNote(project)}</p>
-									{
-										placeholder && (
-											<div class="placeholder-block">
-												<p><strong>Team Role:</strong> {project.data.teamRole}</p>
-												<p><strong>Background:</strong> {project.data.background}</p>
-											</div>
-										)
-									}
-								</div>
+								{isLocaleMatch ? (
+									<>
+										<div class="project-card__body">
+											<p class="project-note">{getVisibilityNote(project)}</p>
+											{
+												placeholder && (
+													<div class="placeholder-block">
+														<p><strong>Team Role:</strong> {project.data.teamRole}</p>
+														<p><strong>Background:</strong> {project.data.background}</p>
+													</div>
+												)
+											}
+										</div>
 
-								<div class="cta-row">
-									<a class="cta-link" href={detailHref}>Open Detail</a>
-									{
-										project.data.links?.repo && project.data.visibility === "public" && (
-											<a
-												class="cta-link secondary"
-												href={project.data.links.repo}
-												rel="noreferrer"
-												target="_blank"
-											>
-												Repo
-											</a>
-										)
-									}
-									{
-										project.data.links?.demo && project.data.visibility !== "confidential" && (
-											<a
-												class="cta-link secondary"
-												href={project.data.links.demo}
-												rel="noreferrer"
-												target="_blank"
-											>
-												Demo
-											</a>
-										)
-									}
-								</div>
+										<div class="cta-row">
+											<a class="cta-link" href={nativeUrl}>Open Detail</a>
+											{
+												project.data.links?.repo && project.data.visibility === "public" && (
+													<a
+														class="cta-link secondary"
+														href={project.data.links.repo}
+														rel="noreferrer"
+														target="_blank"
+													>
+														Repo
+													</a>
+												)
+											}
+											{
+												project.data.links?.demo && project.data.visibility !== "confidential" && (
+													<a
+														class="cta-link secondary"
+														href={project.data.links.demo}
+														rel="noreferrer"
+														target="_blank"
+													>
+														Demo
+													</a>
+												)
+											}
+										</div>
+									</>
+								) : (
+									<div class="cta-row">
+										<a class="cta-link" href={nativeUrl}>{viewLink}</a>
+									</div>
+								)}
 							</article>
 						);
 					})

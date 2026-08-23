@@ -2,6 +2,7 @@
 title: Campus Visit to IBM Taiwan
 org: LiFUNd × IBM Taiwan
 date: 2026-07-14
+lang: en
 type: visit
 role: >-
   Joined a campus visit to IBM Taiwan, paired with an intro to their

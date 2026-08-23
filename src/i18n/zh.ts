@@ -10,6 +10,10 @@ export interface Dictionary {
 		label: string;
 		targetLocale: string;
 	};
+	contentFallback: {
+		notice: string;
+		viewLink: string;
+	};
 }
 
 export const zh: Dictionary = {
@@ -23,6 +27,10 @@ export const zh: Dictionary = {
 	langSwitch: {
 		label: "EN",
 		targetLocale: "en",
+	},
+	contentFallback: {
+		notice: "此篇目前僅提供{lang}版。",
+		viewLink: "查看{lang}版 →",
 	},
 };
 

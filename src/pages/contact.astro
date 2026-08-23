@@ -1,9 +1,10 @@
 ---
-const destination = "/about#contact";
+const currentLocale = Astro.currentLocale ?? "zh";
+const destination = currentLocale === "en" ? "/en/about#contact" : "/about#contact";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={currentLocale}>
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="refresh" content={`0; url=${destination}`} />
