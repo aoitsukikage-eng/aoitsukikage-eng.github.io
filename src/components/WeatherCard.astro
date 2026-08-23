@@ -1,0 +1,903 @@
+---
+/**
+ * Trip Weather Planner — 首頁即時天氣卡（Round 6 定稿移植）
+ *
+ * 目前資料為 demo 常數。接上真實 API 後只要做兩件事：
+ *   1. 把 regions 換成 fetch 回來的資料
+ *   2. 設定根元素的 data-state（day / night / alert / offline）——配色與版位會自動切換
+ */
+
+export interface WeatherRegion {
+	key: string;
+	tab: string;
+	name: string;
+	hi: number;
+	lo: number;
+	cond: string;
+	icon: "sun" | "cloud" | "rain";
+	pop: number;
+	uv: number;
+	aqi: number;
+	advice: string;
+}
+
+interface Props {
+	state?: "day" | "night" | "alert" | "offline";
+	regions?: WeatherRegion[];
+	href?: string;
+	locale?: string;
+}
+
+const defaultRegions: WeatherRegion[] = [
+	{
+		key: "N",
+		tab: "北部",
+		name: "臺北 · 信義區",
+		hi: 31,
+		lo: 25,
+		cond: "晴時多雲",
+		icon: "sun",
+		pop: 20,
+		uv: 7,
+		aqi: 42,
+		advice: "白天炎熱，外出補水並備妥雨具；午後雷雨機率偏低，適合安排戶外行程。",
+	},
+	{
+		key: "C",
+		tab: "中部",
+		name: "臺中 · 西屯區",
+		hi: 33,
+		lo: 26,
+		cond: "晴",
+		icon: "sun",
+		pop: 10,
+		uv: 9,
+		aqi: 78,
+		advice: "高溫炎熱且紫外線過量，中午前後避免長時間曝曬，空品略差建議減少劇烈運動。",
+	},
+	{
+		key: "S",
+		tab: "南部",
+		name: "臺南 · 中西區",
+		hi: 32,
+		lo: 26,
+		cond: "午後短暫雨",
+		icon: "rain",
+		pop: 45,
+		uv: 9,
+		aqi: 66,
+		advice: "午後有短暫雨，安排室內行程較穩妥；出門前建議再確認一次即時雷達。",
+	},
+	{
+		key: "E",
+		tab: "東部",
+		name: "花蓮 · 花蓮市",
+		hi: 29,
+		lo: 24,
+		cond: "多雲時陰",
+		icon: "cloud",
+		pop: 35,
+		uv: 6,
+		aqi: 28,
+		advice: "雲量偏多但降雨零星，空品全臺最佳，適合安排海岸線與縱谷行程。",
+	},
+];
+
+const {
+	state = "day",
+	regions = defaultRegions,
+	href = "https://github.com/aoitsukikage-eng/trip-weather-planner",
+	locale = "zh",
+} = Astro.props;
+
+const t =
+	locale === "en"
+		? { pop: "Rain", uv: "UV", aqi: "AQI", cta: "View full forecast", live: "Live" }
+		: { pop: "降雨", uv: "紫外線", aqi: "空品", cta: "查看完整天氣預覽", live: "Live" };
+
+const uvBands = [
+	{ max: 2, color: "#5fd694", label: "低量級" },
+	{ max: 5, color: "#ffd166", label: "中量級" },
+	{ max: 7, color: "#ff9f43", label: "高量級" },
+	{ max: 10, color: "#ff6b6b", label: "過量級" },
+	{ max: 99, color: "#b98cff", label: "危險級" },
+];
+
+const bandFor = (uv: number) => uvBands.find((b) => uv <= b.max) ?? uvBands[0];
+const aqiLabel = (aqi: number) => (aqi <= 50 ? "良好" : aqi <= 100 ? "普通" : "敏感");
+const aqiColor = (aqi: number) => (aqi <= 50 ? "#5fd694" : "#ffd76a");
+
+const active = regions[0];
+const band = bandFor(active.uv);
+const uvPct = Math.min(100, (active.uv / 12) * 100);
+const aqiPct = Math.min(100, (active.aqi / 200) * 100);
+
+// 交給 client script 做切換，避免重複打 API
+const payload = regions.map((r) => ({
+	...r,
+	uvPct: Math.min(100, (r.uv / 12) * 100),
+	uvColor: bandFor(r.uv).color,
+	uvLabel: bandFor(r.uv).label,
+	aqiPct: Math.min(100, (r.aqi / 200) * 100),
+	aqiLabel: aqiLabel(r.aqi),
+	aqiColor: aqiColor(r.aqi),
+}));
+---
+
+<article class="weather-card" data-state={state} data-weather-card>
+	<div class="weather-card__glow" aria-hidden="true"></div>
+
+	<svg class="weather-card__moonscape" viewBox="0 0 24 24" aria-hidden="true">
+		<circle cx="12" cy="12" r="9.4" fill="#e0d4ff"></circle>
+		<ellipse cx="8.2" cy="12" rx="6.9" ry="9.4" fill="#120e26"></ellipse>
+	</svg>
+
+	<header class="weather-card__head">
+		<p class="weather-card__brand">Trip Weather Planner</p>
+		<p class="weather-card__status">
+			<span class="weather-card__dot" aria-hidden="true"></span>
+			<span data-wc-status>{t.live} · 13:40 更新</span>
+		</p>
+	</header>
+
+	<div class="weather-card__tabs" role="tablist">
+		{
+			regions.map((r, i) => (
+				<button
+					aria-selected={i === 0 ? "true" : "false"}
+					class="weather-card__tab"
+					data-wc-tab={r.key}
+					role="tab"
+					type="button"
+				>
+					{r.tab}
+				</button>
+			))
+		}
+	</div>
+
+	<div class="weather-card__alert" data-wc-alert>
+		<svg viewBox="0 0 17 17" fill="none" aria-hidden="true">
+			<path d="M8.5 1.8 16 15H1L8.5 1.8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
+			<path d="M8.5 6.4v3.9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+			<circle cx="8.5" cy="12.5" r=".85" fill="currentColor"></circle>
+		</svg>
+		<div>
+			<p class="weather-card__alert-title">大雨特報</p>
+			<p class="weather-card__alert-note">2 則生效中 · 中央氣象署</p>
+		</div>
+	</div>
+
+	<div class="weather-card__now">
+		<div class="weather-card__now-copy">
+			<p class="weather-card__place" data-wc-place>{active.name}</p>
+			<p class="weather-card__temp">
+				<span class="weather-card__temp-value" data-wc-hi>{active.hi}</span>
+				<span class="weather-card__temp-unit">°</span>
+				<span class="weather-card__temp-lo" data-wc-lo>/ {active.lo}°</span>
+			</p>
+			<p class="weather-card__cond" data-wc-cond>{active.cond}</p>
+		</div>
+
+		<div class="weather-card__icon">
+			<div class="weather-card__halo" aria-hidden="true"></div>
+			<svg class="weather-card__glyph" data-wc-icon="sun" hidden={active.icon !== "sun"} viewBox="0 0 58 58" fill="none">
+				<circle cx="24" cy="22" r="9" stroke="var(--wc-accent)" stroke-width="1.5"></circle>
+				<path d="M24 5v5M9 22h-4M12 11l3 3M36 10l-3 3" stroke="var(--wc-brand)" stroke-width="1.4" stroke-linecap="round"></path>
+				<path d="M22 42a8 8 0 0 1 .6-15.9A11.5 11.5 0 0 1 44 31a7 7 0 0 1-.4 11H22Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
+			</svg>
+			<svg class="weather-card__glyph" data-wc-icon="cloud" hidden={active.icon !== "cloud"} viewBox="0 0 58 58" fill="none">
+				<circle cx="21" cy="20" r="7.5" stroke="var(--wc-brand)" stroke-width="1.4"></circle>
+				<path d="M18 41a8.5 8.5 0 0 1 .6-16.9A12 12 0 0 1 41.4 28a7.5 7.5 0 0 1-.4 13H18Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
+			</svg>
+			<svg class="weather-card__glyph" data-wc-icon="rain" hidden={active.icon !== "rain"} viewBox="0 0 58 58" fill="none">
+				<path d="M17 32a8.5 8.5 0 0 1 .6-16.9A12 12 0 0 1 40.4 19a7.5 7.5 0 0 1-.4 13H17Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
+				<path d="M20 39l-2.5 7M29 39l-2.5 7M38 39l-2.5 7" stroke="var(--wc-brand)" stroke-width="1.5" stroke-linecap="round"></path>
+			</svg>
+			<svg class="weather-card__glyph weather-card__glyph--night" viewBox="0 0 24 24" fill="none" stroke="var(--wc-accent)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M12.5 3.2a5.3 5.3 0 0 0 6.4 7.1 5.9 5.9 0 1 1-6.4-7.1z"></path>
+				<path d="M4.2 14.6A3.2 3.2 0 0 1 7 9.9"></path>
+				<path d="M3.6 15.4h10.2" opacity=".55"></path>
+				<path d="M6 19l-.7 2M10 19l-.7 2M14 19l-.7 2"></path>
+			</svg>
+			<svg class="weather-card__glyph weather-card__glyph--storm" viewBox="0 0 58 58" fill="none">
+				<path d="M17 30a8.5 8.5 0 0 1 .6-16.9A12 12 0 0 1 40.4 17a7.5 7.5 0 0 1-.4 13H17Z" stroke="#ff9aa5" stroke-width="1.5" stroke-linejoin="round"></path>
+				<path d="M20 37l-3 8M28 37l-3 8M36 37l-3 8M24 44l-2.5 6" stroke="#ffd2d8" stroke-width="1.5" stroke-linecap="round"></path>
+			</svg>
+		</div>
+	</div>
+
+	<div class="weather-card__metrics">
+		<div class="weather-card__metric">
+			<p class="weather-card__metric-head">
+				<span class="weather-card__metric-label">{t.pop}</span>
+				<span class="weather-card__metric-value" data-wc-pop>{active.pop}%</span>
+			</p>
+			<div class="weather-card__track">
+				<div class="weather-card__bar" data-wc-pop-bar style={`width:${active.pop}%`}></div>
+			</div>
+		</div>
+
+		<div class="weather-card__metric weather-card__metric--uv">
+			<p class="weather-card__metric-head">
+				<span class="weather-card__metric-label">{t.uv}</span>
+				<span class="weather-card__metric-value">
+					<span data-wc-uv>{active.uv}</span>
+					<span class="weather-card__metric-tier" data-wc-uv-label style={`color:${band.color}`}>{band.label}</span>
+				</span>
+			</p>
+			<div class="weather-card__track weather-card__track--uv">
+				<div class="weather-card__uv-clip">
+					<div
+						class="weather-card__uv-fill"
+						data-wc-uv-fill
+						style={`width:${uvPct}%;background:linear-gradient(90deg, ${band.color}1f, ${band.color})`}
+					></div>
+				</div>
+				<div
+					class="weather-card__uv-mark"
+					data-wc-uv-mark
+					style={`left:${uvPct}%;border-color:${band.color}`}
+				></div>
+			</div>
+		</div>
+
+		<div class="weather-card__metric weather-card__metric--moon">
+			<svg viewBox="0 0 24 24" aria-hidden="true">
+				<circle cx="12" cy="12" r="9.4" fill="#efe8ff"></circle>
+				<ellipse cx="8.2" cy="12" rx="6.9" ry="9.4" fill="#151030"></ellipse>
+				<circle cx="12" cy="12" r="9.4" fill="none" stroke="rgba(201,184,255,.35)" stroke-width=".7"></circle>
+			</svg>
+			<p class="weather-card__moon-copy">
+				<span class="weather-card__moon-value">47<span>%</span></span>
+				<span class="weather-card__moon-label">上弦月</span>
+			</p>
+		</div>
+
+		<div class="weather-card__metric">
+			<p class="weather-card__metric-head">
+				<span class="weather-card__metric-label">{t.aqi}</span>
+				<span class="weather-card__metric-value">
+					<span data-wc-aqi>{active.aqi}</span>
+					<span class="weather-card__metric-tier" data-wc-aqi-label style={`color:${aqiColor(active.aqi)}`}>
+						{aqiLabel(active.aqi)}
+					</span>
+				</span>
+			</p>
+			<div class="weather-card__aqi-track">
+				<div class="weather-card__aqi-mark" data-wc-aqi-mark style={`left:${aqiPct}%`}></div>
+			</div>
+		</div>
+	</div>
+
+	<p class="weather-card__advice">
+		<svg viewBox="0 0 14 14" fill="none" aria-hidden="true">
+			<path d="M7 1.4 8.5 5 12.2 5.4 9.5 8 10.3 11.7 7 9.8 3.7 11.7 4.5 8 1.8 5.4 5.5 5Z" stroke="var(--wc-accent)" stroke-width="1.1" stroke-linejoin="round"></path>
+		</svg>
+		<span data-wc-advice>{active.advice}</span>
+	</p>
+
+	<a class="weather-card__foot" href={href}>
+		<span class="weather-card__stack">CWA · FastAPI · Azure</span>
+		<span class="weather-card__cta" data-wc-cta>{t.cta} →</span>
+	</a>
+</article>
+
+<script is:inline define:vars={{ payload }}>
+	(() => {
+		const card = document.querySelector("[data-weather-card]");
+		if (!card) return;
+
+		const q = (sel) => card.querySelector(sel);
+		const byKey = Object.fromEntries(payload.map((r) => [r.key, r]));
+
+		const paint = (key) => {
+			const r = byKey[key];
+			if (!r) return;
+
+			q("[data-wc-place]").textContent = r.name;
+			q("[data-wc-hi]").textContent = r.hi;
+			q("[data-wc-lo]").textContent = `/ ${r.lo}°`;
+			q("[data-wc-cond]").textContent = r.cond;
+			q("[data-wc-advice]").textContent = r.advice;
+
+			q("[data-wc-pop]").textContent = `${r.pop}%`;
+			q("[data-wc-pop-bar]").style.width = `${r.pop}%`;
+
+			q("[data-wc-uv]").textContent = r.uv;
+			const uvLabel = q("[data-wc-uv-label]");
+			uvLabel.textContent = r.uvLabel;
+			uvLabel.style.color = r.uvColor;
+			const uvFill = q("[data-wc-uv-fill]");
+			uvFill.style.width = `${r.uvPct}%`;
+			uvFill.style.background = `linear-gradient(90deg, ${r.uvColor}1f, ${r.uvColor})`;
+			const uvMark = q("[data-wc-uv-mark]");
+			uvMark.style.left = `${r.uvPct}%`;
+			uvMark.style.borderColor = r.uvColor;
+
+			q("[data-wc-aqi]").textContent = r.aqi;
+			const aqiLabel = q("[data-wc-aqi-label]");
+			aqiLabel.textContent = r.aqiLabel;
+			aqiLabel.style.color = r.aqiColor;
+			q("[data-wc-aqi-mark]").style.left = `${r.aqiPct}%`;
+
+			card.querySelectorAll("[data-wc-icon]").forEach((node) => {
+				node.hidden = node.dataset.wcIcon !== r.icon;
+			});
+
+			card.querySelectorAll("[data-wc-tab]").forEach((tab) => {
+				tab.setAttribute("aria-selected", tab.dataset.wcTab === key ? "true" : "false");
+			});
+		};
+
+		card.querySelectorAll("[data-wc-tab]").forEach((tab) => {
+			tab.addEventListener("click", () => paint(tab.dataset.wcTab));
+		});
+	})();
+</script>
+
+<style>
+	.weather-card {
+		--wc-bg: linear-gradient(180deg, rgba(12, 23, 48, 0.94), rgba(8, 18, 38, 0.92));
+		--wc-border: rgba(91, 231, 255, 0.18);
+		--wc-shadow: rgba(91, 231, 255, 0.08);
+		--wc-glow: radial-gradient(circle, rgba(91, 231, 255, 0.13) 0%, rgba(91, 231, 255, 0) 70%);
+		--wc-halo: rgba(91, 231, 255, 0.15);
+		--wc-brand: #7ccfff;
+		--wc-pri: #f4fbff;
+		--wc-sec: rgba(183, 236, 255, 0.66);
+		--wc-accent: #5be7ff;
+		--wc-cond: #b7ecff;
+		--wc-track: rgba(91, 231, 255, 0.12);
+		--wc-panel: rgba(91, 231, 255, 0.06);
+		--wc-panel-border: rgba(91, 231, 255, 0.1);
+		--wc-advice: rgba(244, 251, 255, 0.86);
+		--wc-foot: rgba(183, 236, 255, 0.42);
+		--wc-dot: #5fd694;
+		--wc-pulse: 2.4s;
+		--wc-aqi-opacity: 0.55;
+
+		background: var(--wc-bg);
+		border: 1px solid var(--wc-border);
+		border-radius: 1.25rem;
+		box-shadow: 0 18px 44px var(--wc-shadow);
+		box-sizing: border-box;
+		display: grid;
+		gap: 1.15rem;
+		overflow: hidden;
+		padding: 1.4rem 1.5rem 1.25rem;
+		position: relative;
+		transition:
+			background var(--motion-slow, 560ms) var(--easing-standard, ease),
+			border-color var(--motion-slow, 560ms) var(--easing-standard, ease),
+			box-shadow var(--motion-base, 220ms) var(--easing-standard, ease),
+			transform var(--motion-base, 220ms) var(--easing-standard, ease);
+	}
+
+	.weather-card:hover {
+		transform: translateY(-3px);
+	}
+
+	.weather-card[data-state="night"] {
+		--wc-bg: linear-gradient(180deg, #171233, #0e0b22);
+		--wc-border: rgba(185, 140, 255, 0.22);
+		--wc-shadow: rgba(185, 140, 255, 0.1);
+		--wc-glow: radial-gradient(circle, rgba(185, 140, 255, 0.14) 0%, rgba(185, 140, 255, 0) 70%);
+		--wc-halo: rgba(185, 140, 255, 0.16);
+		--wc-brand: #c9b8ff;
+		--wc-pri: #f7f4ff;
+		--wc-sec: rgba(201, 184, 255, 0.64);
+		--wc-accent: #b98cff;
+		--wc-cond: #d6c8ff;
+		--wc-track: rgba(185, 140, 255, 0.14);
+		--wc-panel: rgba(185, 140, 255, 0.08);
+		--wc-panel-border: rgba(185, 140, 255, 0.14);
+		--wc-advice: rgba(247, 244, 255, 0.86);
+		--wc-foot: rgba(201, 184, 255, 0.4);
+		--wc-dot: #8fe0b0;
+	}
+
+	.weather-card[data-state="alert"] {
+		--wc-bg: linear-gradient(180deg, rgba(46, 18, 30, 0.94), rgba(20, 12, 26, 0.92));
+		--wc-border: rgba(255, 107, 122, 0.3);
+		--wc-shadow: rgba(255, 107, 122, 0.1);
+		--wc-glow: radial-gradient(circle, rgba(255, 107, 122, 0.16) 0%, rgba(255, 107, 122, 0) 70%);
+		--wc-halo: rgba(255, 107, 122, 0.16);
+		--wc-brand: #ffb0ba;
+		--wc-pri: #fff3f4;
+		--wc-sec: rgba(255, 210, 216, 0.66);
+		--wc-accent: #ff6b7a;
+		--wc-cond: #ffd2d8;
+		--wc-track: rgba(255, 107, 122, 0.16);
+		--wc-panel: rgba(255, 107, 122, 0.08);
+		--wc-panel-border: rgba(255, 107, 122, 0.16);
+		--wc-advice: rgba(255, 243, 244, 0.88);
+		--wc-foot: rgba(255, 210, 216, 0.42);
+		--wc-dot: #ff6b7a;
+		--wc-pulse: 1.3s;
+	}
+
+	.weather-card[data-state="offline"] {
+		--wc-bg: linear-gradient(180deg, rgba(24, 28, 36, 0.94), rgba(16, 19, 25, 0.92));
+		--wc-border: rgba(160, 178, 196, 0.16);
+		--wc-shadow: rgba(0, 0, 0, 0.3);
+		--wc-glow: radial-gradient(circle, rgba(160, 178, 196, 0.07) 0%, rgba(160, 178, 196, 0) 70%);
+		--wc-halo: rgba(160, 178, 196, 0.09);
+		--wc-brand: #9fb2c4;
+		--wc-pri: #e4ebf2;
+		--wc-sec: rgba(184, 200, 214, 0.55);
+		--wc-accent: #8fa6ba;
+		--wc-cond: #b8c8d6;
+		--wc-track: rgba(160, 178, 196, 0.12);
+		--wc-panel: rgba(160, 178, 196, 0.05);
+		--wc-panel-border: rgba(160, 178, 196, 0.1);
+		--wc-advice: rgba(228, 235, 242, 0.72);
+		--wc-foot: rgba(184, 200, 214, 0.35);
+		--wc-dot: #78889a;
+		--wc-pulse: none;
+		--wc-aqi-opacity: 0.3;
+	}
+
+	.weather-card__glow {
+		background: var(--wc-glow);
+		border-radius: 50%;
+		height: 230px;
+		pointer-events: none;
+		position: absolute;
+		right: -70px;
+		top: -90px;
+		width: 230px;
+	}
+
+	.weather-card__moonscape {
+		display: none;
+		height: 250px;
+		opacity: 0.17;
+		pointer-events: none;
+		position: absolute;
+		right: -58px;
+		top: -74px;
+		width: 250px;
+	}
+
+	.weather-card[data-state="night"] .weather-card__moonscape {
+		display: block;
+	}
+
+	.weather-card > *:not(.weather-card__glow):not(.weather-card__moonscape) {
+		position: relative;
+	}
+
+	.weather-card__head {
+		align-items: center;
+		display: flex;
+		gap: 0.75rem;
+		justify-content: space-between;
+	}
+
+	.weather-card__brand {
+		color: var(--wc-brand);
+		font-family: var(--font-display);
+		font-size: 0.625rem;
+		letter-spacing: 0.18em;
+		margin: 0;
+		text-transform: uppercase;
+	}
+
+	.weather-card__status {
+		align-items: center;
+		color: var(--wc-sec);
+		display: flex;
+		font-size: 0.66rem;
+		gap: 0.375rem;
+		margin: 0;
+	}
+
+	.weather-card__dot {
+		background: var(--wc-dot);
+		border-radius: 50%;
+		height: 5px;
+		width: 5px;
+	}
+
+	.weather-card:not([data-state="offline"]) .weather-card__dot {
+		animation: wc-pulse var(--wc-pulse) ease-in-out infinite;
+	}
+
+	.weather-card__tabs {
+		display: flex;
+		gap: 0.375rem;
+	}
+
+	.weather-card__tab {
+		background: transparent;
+		border: 1px solid var(--wc-panel-border);
+		border-radius: var(--radius-pill, 999px);
+		color: var(--wc-sec);
+		font-family: inherit;
+		font-size: 0.72rem;
+		padding: 0.32rem 0.8rem;
+		transition: all var(--motion-base, 220ms) var(--easing-standard, ease);
+	}
+
+	.weather-card__tab[aria-selected="true"] {
+		background: var(--wc-accent);
+		border-color: transparent;
+		color: #0a1020;
+		font-weight: 600;
+	}
+
+	.weather-card__alert {
+		align-items: center;
+		background: rgba(255, 107, 122, 0.14);
+		border: 1px solid rgba(255, 107, 122, 0.34);
+		border-radius: 0.8rem;
+		color: #ff9aa5;
+		display: none;
+		gap: 0.625rem;
+		padding: 0.75rem 0.875rem;
+	}
+
+	.weather-card[data-state="alert"] .weather-card__alert {
+		display: flex;
+	}
+
+	.weather-card__alert svg {
+		flex: none;
+		height: 17px;
+		width: 17px;
+	}
+
+	.weather-card__alert-title {
+		color: #ffd2d8;
+		font-size: 0.845rem;
+		font-weight: 700;
+		margin: 0;
+	}
+
+	.weather-card__alert-note {
+		color: rgba(255, 210, 216, 0.72);
+		font-size: 0.69rem;
+		margin: 0.125rem 0 0;
+	}
+
+	.weather-card__now {
+		align-items: center;
+		display: flex;
+		gap: 1rem;
+		justify-content: space-between;
+	}
+
+	.weather-card__now-copy {
+		display: grid;
+		gap: 0.3rem;
+		min-width: 0;
+	}
+
+	.weather-card__place {
+		color: var(--wc-sec);
+		font-size: 0.75rem;
+		letter-spacing: 0.04em;
+		margin: 0;
+	}
+
+	.weather-card__temp {
+		align-items: baseline;
+		color: var(--wc-pri);
+		display: flex;
+		font-family: var(--font-display);
+		margin: 0;
+	}
+
+	.weather-card__temp-value {
+		font-size: 4.125rem;
+		font-weight: 500;
+		letter-spacing: -0.02em;
+		line-height: 0.8;
+	}
+
+	.weather-card__temp-unit {
+		color: var(--wc-brand);
+		font-size: 1.625rem;
+		font-weight: 500;
+		line-height: 0.8;
+	}
+
+	.weather-card__temp-lo {
+		color: var(--wc-sec);
+		font-family: var(--font-body);
+		font-size: 1.125rem;
+		font-weight: 500;
+		line-height: 0.8;
+		margin-left: 0.75rem;
+	}
+
+	.weather-card__cond {
+		color: var(--wc-cond);
+		font-size: 0.9375rem;
+		font-weight: 500;
+		margin: 0;
+	}
+
+	.weather-card__icon {
+		align-items: center;
+		display: flex;
+		flex: none;
+		height: 96px;
+		justify-content: center;
+		margin-right: 0.375rem;
+		position: relative;
+		width: 96px;
+	}
+
+	.weather-card__halo {
+		animation: wc-halo 5s ease-in-out infinite;
+		background: radial-gradient(circle, var(--wc-halo) 0%, rgba(0, 0, 0, 0) 68%);
+		border-radius: 50%;
+		inset: -6px;
+		position: absolute;
+	}
+
+	.weather-card__glyph {
+		height: 76px;
+		position: relative;
+		width: 76px;
+	}
+
+	.weather-card__glyph--night,
+	.weather-card__glyph--storm {
+		display: none;
+	}
+
+	.weather-card[data-state="night"] .weather-card__glyph--night {
+		display: block;
+		height: 72px;
+		width: 72px;
+	}
+
+	.weather-card[data-state="night"] [data-wc-icon],
+	.weather-card[data-state="alert"] [data-wc-icon] {
+		display: none;
+	}
+
+	.weather-card[data-state="alert"] .weather-card__glyph--storm {
+		display: block;
+	}
+
+	.weather-card__metrics {
+		display: grid;
+		gap: 0.875rem;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.weather-card__metric {
+		display: grid;
+		gap: 0.44rem;
+	}
+
+	.weather-card__metric-head {
+		align-items: baseline;
+		display: flex;
+		justify-content: space-between;
+		margin: 0;
+	}
+
+	.weather-card__metric-label {
+		color: var(--wc-sec);
+		font-size: 0.625rem;
+		letter-spacing: 0.12em;
+	}
+
+	.weather-card__metric-value {
+		color: var(--wc-pri);
+		font-family: var(--font-display);
+		font-size: 0.875rem;
+	}
+
+	.weather-card__metric-tier {
+		font-family: var(--font-body);
+		font-size: 0.625rem;
+	}
+
+	.weather-card__track {
+		background: var(--wc-track);
+		border-radius: 999px;
+		height: 5px;
+		overflow: hidden;
+	}
+
+	.weather-card__track--uv {
+		overflow: visible;
+		position: relative;
+	}
+
+	.weather-card__bar {
+		background: var(--wc-accent);
+		border-radius: 999px;
+		height: 100%;
+		transition: width var(--motion-slow, 560ms) var(--easing-standard, ease);
+	}
+
+	.weather-card__uv-clip {
+		border-radius: 999px;
+		inset: 0;
+		overflow: hidden;
+		position: absolute;
+	}
+
+	.weather-card__uv-fill {
+		border-radius: 999px;
+		bottom: 0;
+		left: 0;
+		position: absolute;
+		top: 0;
+		transition: width 420ms ease, background 420ms ease;
+	}
+
+	.weather-card__uv-mark {
+		background: var(--wc-pri);
+		border: 2px solid var(--wc-accent);
+		border-radius: 50%;
+		box-shadow: 0 0 0 2.5px rgba(4, 7, 15, 0.8);
+		height: 10px;
+		position: absolute;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		transition: left 420ms ease, border-color 420ms ease;
+		width: 10px;
+	}
+
+	.weather-card__aqi-track {
+		background: linear-gradient(90deg, #5fd694 0%, #ffd76a 34%, #ff9f5a 58%, #ff6b6b 100%);
+		border-radius: 999px;
+		height: 5px;
+		opacity: var(--wc-aqi-opacity);
+		position: relative;
+	}
+
+	.weather-card__aqi-mark {
+		background: #f4fbff;
+		border-radius: 2px;
+		box-shadow: 0 0 6px rgba(244, 251, 255, 0.7);
+		height: 9px;
+		position: absolute;
+		top: -2px;
+		transform: translateX(-50%);
+		transition: left var(--motion-slow, 560ms) var(--easing-standard, ease);
+		width: 3px;
+	}
+
+	.weather-card__metric--moon {
+		align-items: center;
+		display: none;
+		gap: 0.5rem;
+		grid-template-columns: auto minmax(0, 1fr);
+		justify-content: space-between;
+	}
+
+	.weather-card[data-state="night"] .weather-card__metric--moon {
+		display: grid;
+	}
+
+	.weather-card[data-state="night"] .weather-card__metric--uv {
+		display: none;
+	}
+
+	.weather-card__metric--moon svg {
+		flex: none;
+		height: 32px;
+		width: 32px;
+	}
+
+	.weather-card__moon-copy {
+		display: grid;
+		gap: 0.19rem;
+		justify-items: end;
+		margin: 0;
+	}
+
+	.weather-card__moon-value {
+		color: var(--wc-pri);
+		font-family: var(--font-display);
+		font-size: 1.0625rem;
+		line-height: 1;
+	}
+
+	.weather-card__moon-value span {
+		font-size: 0.625rem;
+	}
+
+	.weather-card__moon-label {
+		color: var(--wc-sec);
+		font-size: 0.69rem;
+		line-height: 1;
+	}
+
+	.weather-card__advice {
+		background: var(--wc-panel);
+		border: 1px solid var(--wc-panel-border);
+		border-radius: 0.8rem;
+		color: var(--wc-advice);
+		display: flex;
+		font-size: 0.75rem;
+		gap: 0.56rem;
+		line-height: 1.55;
+		margin: 0;
+		padding: 0.75rem 0.875rem;
+		text-wrap: pretty;
+		transition: background var(--motion-slow, 560ms) var(--easing-standard, ease);
+	}
+
+	.weather-card__advice svg {
+		flex: none;
+		height: 14px;
+		margin-top: 2px;
+		width: 14px;
+	}
+
+	.weather-card__foot {
+		align-items: center;
+		border-top: 1px solid var(--wc-panel-border);
+		display: flex;
+		gap: 0.75rem;
+		justify-content: space-between;
+		padding-top: 0.875rem;
+		text-decoration: none;
+	}
+
+	.weather-card__stack {
+		color: var(--wc-foot);
+		font-family: var(--font-display);
+		font-size: 0.5625rem;
+		letter-spacing: 0.1em;
+	}
+
+	.weather-card__cta {
+		color: var(--wc-accent);
+		font-size: 0.78rem;
+		font-weight: 600;
+	}
+
+	@keyframes wc-pulse {
+		0%,
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+
+		50% {
+			opacity: 0.35;
+			transform: scale(0.7);
+		}
+	}
+
+	@keyframes wc-halo {
+		0%,
+		100% {
+			opacity: 0.35;
+			transform: scale(1);
+		}
+
+		50% {
+			opacity: 0.75;
+			transform: scale(1.12);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.weather-card,
+		.weather-card__dot,
+		.weather-card__halo,
+		.weather-card__bar,
+		.weather-card__uv-fill,
+		.weather-card__uv-mark,
+		.weather-card__aqi-mark {
+			animation: none;
+			transition: none;
+		}
+
+		.weather-card:hover {
+			transform: none;
+		}
+	}
+</style>
