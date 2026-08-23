@@ -1,240 +1,596 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
+import WeatherCard from "../components/WeatherCard.astro";
+import { siteConfig } from "../config/site";
 
-const typingLines = [
-	"[SYSTEM] PORTFOLIO SHELL LOADED",
-	"[CLASS] PLACEHOLDER CONTENT LAYER",
-	"[MISSION] SOLO UI VISUAL PASS ONLINE",
-];
+const locale = Astro.currentLocale === "en" ? "en" : "zh";
+
+/**
+ * 首頁文案暫時留在本檔，尚未進 src/i18n/。
+ * 目前 Dictionary 只涵蓋 nav / langSwitch / contentFallback；
+ * 等文案定稿後整組搬進去，介面不用改。
+ */
+const copy = {
+	zh: {
+		statusKicker: "[STATUS]",
+		summary:
+			"財金背景，用 Python 把研究流程自動化。目前準備研究所推甄，方向是量化金融與資料驅動的決策分析。",
+		stats: [
+			{ label: "Institution", value: "NTPU · Finance" },
+			{ label: "Focus", value: "Quantitative Finance" },
+			{ label: "Stack", value: "Python · React · Azure" },
+		],
+		activeLabel: "Active",
+		activeValue: "Trip Weather Planner",
+		ctaProjects: "View Projects",
+		ctaResearch: "Research Log",
+		featuredKicker: "[FEATURED MISSION]",
+		featured: [
+			{
+				badge: "● LIVE",
+				badgeTone: "active",
+				title: "Trip Weather Planner",
+				body: "整合中央氣象署與環境部資料的台灣旅遊天氣規劃工具：選定鄉鎮與日期，一次看完週預報、72 小時逐時變化與天氣警特報。前後端與部署一人完成。",
+				tags: ["React", "Python", "FastAPI", "Azure"],
+				href: "/projects/trip-weather-planner",
+				linkLabel: "Open case study ↗",
+				image: "/projects/trip-weather-planner-week-forecast.png",
+				imageAlt: "Trip Weather Planner 週預報畫面",
+				fit: "cover",
+			},
+			{
+				badge: "ONGOING",
+				badgeTone: "ongoing",
+				title: "Portfolio Optimization",
+				body: "以 Sharpe ratio 為目標的投組最佳化，重建效率前緣並回測權重配置，驗證理論與實際報酬的落差。",
+				tags: ["NumPy", "pandas", "Sharpe Ratio"],
+				href: "/research/portfolio-optimization-sharpe-ratio",
+				linkLabel: "Open research ↗",
+				image: "/research/portfolio-efficient-frontier.svg",
+				imageAlt: "效率前緣圖",
+				fit: "contain",
+			},
+		],
+		entries: [
+			{
+				kicker: "[RESEARCH]",
+				title: "研究紀錄",
+				body: "Beta 風險分析、投組最佳化、公司治理與社區金融案例。",
+				href: "/research",
+			},
+			{
+				kicker: "[ACTIVITIES]",
+				title: "參與紀錄",
+				body: "IBM Taiwan 參訪、大成國小 AI 工作坊講者。",
+				href: "/activities",
+				image: "/activities/ibm-taiwan-visit/skillsbuild-intro.jpg",
+				imageAlt: "IBM Taiwan 參訪現場",
+			},
+		],
+		footerNote: "正在尋找量化金融方向的研究所機會 — 歡迎來信。",
+	},
+	en: {
+		statusKicker: "[STATUS]",
+		summary:
+			"Finance undergraduate automating research workflows with Python. Currently preparing graduate applications in quantitative finance and data-driven decision analysis.",
+		stats: [
+			{ label: "Institution", value: "NTPU · Finance" },
+			{ label: "Focus", value: "Quantitative Finance" },
+			{ label: "Stack", value: "Python · React · Azure" },
+		],
+		activeLabel: "Active",
+		activeValue: "Trip Weather Planner",
+		ctaProjects: "View Projects",
+		ctaResearch: "Research Log",
+		featuredKicker: "[FEATURED MISSION]",
+		featured: [
+			{
+				badge: "● LIVE",
+				badgeTone: "active",
+				title: "Trip Weather Planner",
+				body: "A Taiwan trip-planning tool built on Central Weather Administration and Ministry of Environment data: pick a township and a date to get the weekly forecast, 72-hour hourly trend, and active weather warnings in one view. Front end, back end, and deployment built solo.",
+				tags: ["React", "Python", "FastAPI", "Azure"],
+				href: "/projects/trip-weather-planner",
+				linkLabel: "Open case study ↗",
+				image: "/projects/trip-weather-planner-week-forecast.png",
+				imageAlt: "Trip Weather Planner weekly forecast view",
+				fit: "cover",
+			},
+			{
+				badge: "ONGOING",
+				badgeTone: "ongoing",
+				title: "Portfolio Optimization",
+				body: "Sharpe-ratio portfolio optimisation: reconstructing the efficient frontier and backtesting weight allocations to measure the gap between theory and realised return.",
+				tags: ["NumPy", "pandas", "Sharpe Ratio"],
+				href: "/research/portfolio-optimization-sharpe-ratio",
+				linkLabel: "Open research ↗",
+				image: "/research/portfolio-efficient-frontier.svg",
+				imageAlt: "Efficient frontier chart",
+				fit: "contain",
+			},
+		],
+		entries: [
+			{
+				kicker: "[RESEARCH]",
+				title: "Research log",
+				body: "Beta risk analysis, portfolio optimisation, corporate governance and community finance case studies.",
+				href: "/research",
+			},
+			{
+				kicker: "[ACTIVITIES]",
+				title: "Activities",
+				body: "IBM Taiwan site visit, AI workshop speaker at Dacheng Elementary.",
+				href: "/activities",
+				image: "/activities/ibm-taiwan-visit/skillsbuild-intro.jpg",
+				imageAlt: "IBM Taiwan site visit",
+			},
+		],
+		footerNote: "Open to graduate research opportunities in quantitative finance — get in touch.",
+	},
+}[locale];
 ---
 
 <SiteLayout
-	title="Aoi Tsukikage Engineering"
-	description="Solo Leveling inspired portfolio shell with native HUD interface, animated mission cards, and interactive quote treatment."
+	title={`${siteConfig.name} — ${siteConfig.tagline}`}
+	description={siteConfig.tagline}
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
-		<section class="quote-shell section-card" data-reveal id="home-quote" style="--reveal-order: 0;">
+		<div class="quote-shell section-card" data-reveal id="home-quote" style="--reveal-order: 0;">
 			<p class="section-kicker quote-kicker">[SYSTEM]</p>
-			<div class="quote-frame">
-				<img
-					alt="Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present."
-					class="quote-image"
-					height="226"
-					loading="eager"
-					src="/quote/quote-b-v4.svg"
-					width="1400"
-				/>
-			</div>
-		</section>
+			<img
+				alt="Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present."
+				class="quote-image"
+				height="226"
+				loading="eager"
+				src="/quote/quote-b-v4.svg"
+				width="1400"
+			/>
+		</div>
 
-		<section class="hero-shell section-card" data-reveal id="home-hero" style="--reveal-order: 0;">
-			<div class="hero-copy">
-				<p class="section-kicker">[SYSTEM]</p>
-				<h1 class="hero-title">A placeholder-safe portfolio shell shaped with calm, high-tech precision.</h1>
-				<div class="hud-divider" aria-hidden="true"></div>
-				<p class="summary">The content stays intentionally generic while the interface makes room for it to breathe.</p>
-				<div class="meta-row">
-					<span class="meta-chip">Solo UI Pass</span>
-					<span class="meta-chip">Placeholder Safe</span>
-				</div>
-				<div class="cta-row">
-					<a class="cta-link" href="/projects">View Projects</a>
-					<a class="cta-link secondary" href="/about#contact">Contact</a>
-				</div>
-			</div>
-
-			<div class="hero-stack">
-				<aside class="hero-terminal" data-reveal style="--reveal-order: 1;">
-					<div class="hero-terminal__screen" data-system-typing>
-						{
-							typingLines.map((line) => (
-								<p class="typing-line is-complete" data-typing-line>{line}</p>
-							))
-						}
+		<section class="home-top" data-reveal id="home-top" style="--reveal-order: 1;">
+			<div class="status-shell section-card" id="home-status">
+				<div class="status-head">
+					<div class="status-id">
+						<img
+							alt={siteConfig.name}
+							class="status-avatar"
+							height="112"
+							loading="eager"
+							src={siteConfig.avatar}
+							width="112"
+						/>
+						<p class="status-id__tag">ID · NTPU-FIN</p>
 					</div>
-				</aside>
+
+					<div class="status-headline">
+						<p class="section-kicker">{copy.statusKicker}</p>
+						<h1 class="status-name">{siteConfig.name}</h1>
+					</div>
+				</div>
+
+				<p class="status-summary">{copy.summary}</p>
+
+				<dl class="status-grid">
+					{
+						copy.stats.map((stat) => (
+							<div class="status-cell">
+								<dt>{stat.label}</dt>
+								<dd>{stat.value}</dd>
+							</div>
+						))
+					}
+					<div class="status-cell status-cell--active">
+						<dt>{copy.activeLabel}</dt>
+						<dd>{copy.activeValue}</dd>
+					</div>
+				</dl>
+
+				<div class="cta-row">
+					<a class="cta-link" href="/projects">{copy.ctaProjects}</a>
+					<a class="cta-link secondary" href="/research">{copy.ctaResearch}</a>
+				</div>
 			</div>
+
+			<WeatherCard locale={locale} state="day" />
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="home-intro" style="--reveal-order: 2;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Intro section placeholder now sits inside the same mission HUD language as the rest of the site.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>
-				Placeholder copy still defines the homepage overview, but the information
-				hierarchy now reads like a unified system surface instead of isolated cards.
-			</p>
-		</section>
-
-		<section class="section-shell section-plain" data-reveal id="home-focus-areas" style="--reveal-order: 3;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Focus areas remain placeholders while the card treatment upgrades to brighter tactical panels.</h2>
+		<section class="section-shell section-plain" data-reveal id="home-featured" style="--reveal-order: 2;">
+			<p class="section-kicker">{copy.featuredKicker}</p>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="section-grid">
-				<article class="focus-card" data-reveal style="--reveal-order: 4;">
-					<h3>Placeholder focus area one</h3>
-					<p>Reserved for short summary text and one future directional cue.</p>
-				</article>
-				<article class="focus-card" data-reveal style="--reveal-order: 5;">
-					<h3>Placeholder focus area two</h3>
-					<p>Reserved for short summary text and one future directional cue.</p>
-				</article>
+				{
+					copy.featured.map((item) => (
+						<article class="mission-card">
+							<div class="mission-card__media">
+								<img
+									alt={item.imageAlt}
+									class={`mission-card__image mission-card__image--${item.fit}`}
+									loading="lazy"
+									src={item.image}
+								/>
+								<span class={`mission-badge mission-badge--${item.badgeTone}`}>{item.badge}</span>
+							</div>
+							<div class="mission-card__body">
+								<h2>{item.title}</h2>
+								<p>{item.body}</p>
+								<div class="meta-row">
+									{item.tags.map((tag) => (
+										<span class="meta-chip">{tag}</span>
+									))}
+								</div>
+								<a class="mission-link" href={item.href}>
+									{item.linkLabel}
+								</a>
+							</div>
+						</article>
+					))
+				}
 			</div>
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="home-featured-pointer" style="--reveal-order: 4;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Featured pointer section keeps a clean route into Projects without changing the P4 data flow.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>
-				Only the pointer structure exists here. Project taxonomy and detail-page logic
-				continue to stay collection-backed and untouched.
-			</p>
-			<div class="cta-row">
-				<a class="cta-link" href="/projects">Open Projects Hub</a>
+		<section class="section-shell section-plain" data-reveal id="home-entries" style="--reveal-order: 3;">
+			<div class="section-grid">
+				{
+					copy.entries.map((entry) => (
+						<a class="entry-card" href={entry.href}>
+							{entry.image && (
+								<img alt={entry.imageAlt} class="entry-card__bg" loading="lazy" src={entry.image} />
+							)}
+							<span class="entry-card__scrim" aria-hidden="true" />
+							<span class="section-kicker">{entry.kicker}</span>
+							<h2>{entry.title}</h2>
+							<p>{entry.body}</p>
+						</a>
+					))
+				}
 			</div>
 		</section>
 
-		<section class="section-card section-shell" data-reveal id="home-cta" style="--reveal-order: 5;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>Final CTA band exits the homepage with the same active system framing.</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>Placeholder CTA copy stays generic while the visual layer now feels deliberate and fully themed.</p>
-			<div class="cta-row">
-				<a class="cta-link" href="/about">Read About</a>
-				<a class="cta-link secondary" href="/about#contact">Get in touch</a>
+		<section class="home-foot" data-reveal id="home-contact" style="--reveal-order: 4;">
+			<p class="home-foot__note">{copy.footerNote}</p>
+			<div class="home-foot__links">
+				<a href={`mailto:${siteConfig.email}`}>Email</a>
+				<a href={siteConfig.socials.github}>GitHub</a>
+				<a href={siteConfig.socials.linkedin}>LinkedIn</a>
 			</div>
 		</section>
 	</div>
 </SiteLayout>
 
 <style>
-	.hero-shell {
+	.home-top {
 		align-items: start;
 		display: grid;
-		gap: var(--space-6);
-		grid-template-columns: minmax(0, 1.55fr) minmax(16rem, 0.8fr);
-		padding: var(--panel-padding-lg);
+		gap: var(--space-4);
+		grid-template-columns: minmax(0, 1fr) 30rem;
 	}
 
 	.quote-shell {
-		padding: clamp(1.3rem, 2vw, 1.7rem) clamp(1rem, 2vw, 1.45rem);
+		gap: 0.6rem;
+		padding: 1.1rem 1.25rem;
 		text-align: center;
-	}
-
-	.hero-copy,
-	.hero-stack {
-		display: grid;
-		gap: var(--space-4);
-	}
-
-	.hero-title {
-		font-size: clamp(2.1rem, 5vw, 3.6rem);
-		max-width: 12ch;
-		text-wrap: balance;
-	}
-
-	.summary {
-		font-size: 1rem;
-		max-width: 34rem;
-	}
-
-	.hero-terminal {
-		align-self: center;
-		background: rgba(8, 18, 38, 0.42);
-		border: 1px solid rgba(91, 231, 255, 0.12);
-		border-radius: 1.25rem;
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-		padding: 1rem;
-	}
-
-	.hero-terminal__screen {
-		background:
-			linear-gradient(180deg, rgba(91, 231, 255, 0.05), rgba(91, 231, 255, 0.015)),
-			rgba(2, 8, 18, 0.56);
-		border: 1px solid rgba(91, 231, 255, 0.1);
-		border-radius: 1rem;
-		display: grid;
-		gap: 0.65rem;
-		min-height: 9.5rem;
-		padding: 1rem 1rem 1.05rem;
-	}
-
-	.typing-line {
-		color: var(--text-bright);
-		font-family: var(--font-display);
-		font-size: 0.86rem;
-		letter-spacing: 0.08em;
-		line-height: 1.72;
-		margin: 0;
-		text-transform: uppercase;
-	}
-
-	.typing-line.is-active::after {
-		animation: caret-blink 0.9s steps(1, end) infinite;
-		color: var(--accent);
-		content: "_";
-		margin-left: 0.18rem;
 	}
 
 	.quote-kicker {
 		justify-self: center;
 	}
 
-	.quote-frame {
-		margin: 0 auto;
-		max-width: min(100%, 70rem);
-		width: 100%;
-	}
-
 	.quote-image {
 		display: block;
 		height: auto;
 		margin: 0 auto;
+		max-height: 7.4rem;
 		max-width: 100%;
+		object-fit: contain;
 		width: 100%;
 	}
 
-	.focus-card {
-		background: rgba(8, 18, 38, 0.46);
-		border: 1px solid rgba(91, 231, 255, 0.12);
-		border-radius: 1.2rem;
+	.status-shell {
+		align-content: start;
+		border-color: var(--border-strong);
+		box-shadow: var(--glow-strong), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+		box-sizing: border-box;
+		gap: 0.95rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.status-head {
+		align-items: center;
+		display: flex;
+		gap: 1.15rem;
+	}
+
+	.status-headline {
 		display: grid;
-		gap: 0.9rem;
-		padding: 1.15rem 1.2rem;
+		gap: 0.55rem;
+		min-width: 0;
 	}
 
-	@keyframes caret-blink {
-		0%,
-		49% {
-			opacity: 1;
-		}
-
-		50%,
-		100% {
-			opacity: 0;
-		}
+	.status-id {
+		display: grid;
+		gap: 0.55rem;
+		justify-items: center;
 	}
 
-	@media (max-width: 900px) {
-		.hero-shell {
+	.status-avatar {
+		border: 1px solid rgba(91, 231, 255, 0.4);
+		border-radius: 1rem;
+		box-shadow: 0 0 26px rgba(91, 231, 255, 0.16);
+		display: block;
+		height: 7rem;
+		object-fit: cover;
+		width: 7rem;
+	}
+
+	.status-id__tag {
+		color: var(--text-muted);
+		font-family: var(--font-display);
+		font-size: 0.56rem;
+		letter-spacing: 0.18em;
+		margin: 0;
+	}
+
+	.status-name {
+		font-size: clamp(1.6rem, 2.6vw, 1.95rem);
+	}
+
+	.status-summary {
+		color: var(--text-dim);
+		font-size: 0.9rem;
+		line-height: 1.72;
+		text-wrap: pretty;
+	}
+
+	.status-grid {
+		display: grid;
+		gap: 0.55rem;
+		grid-template-columns: repeat(auto-fit, minmax(11.9rem, 1fr));
+		margin: 0;
+	}
+
+	.status-cell {
+		background: rgba(8, 18, 38, 0.46);
+		border: 1px solid var(--border-soft);
+		border-radius: 0.7rem;
+		display: grid;
+		gap: 0.25rem;
+		padding: 0.55rem 0.75rem;
+	}
+
+	.status-cell dt {
+		color: var(--text-muted);
+		font-family: var(--font-display);
+		font-size: 0.5rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.status-cell dd {
+		color: var(--text-bright);
+		font-size: 0.82rem;
+		margin: 0;
+	}
+
+	.status-cell--active {
+		background: var(--status-active-bg);
+		border-color: var(--status-active-border);
+	}
+
+	.status-cell--active dt {
+		color: rgba(201, 255, 224, 0.75);
+	}
+
+	.status-cell--active dd {
+		color: var(--status-active-text);
+	}
+
+	.mission-card {
+		background: rgba(8, 18, 38, 0.46);
+		border: 1px solid var(--border-soft);
+		border-radius: var(--radius-card);
+		display: grid;
+		grid-template-rows: auto 1fr;
+		overflow: hidden;
+		transition:
+			border-color var(--motion-base) var(--easing-standard),
+			transform var(--motion-base) var(--easing-standard);
+	}
+
+	.mission-card:first-child {
+		border-color: var(--border-strong);
+	}
+
+	.mission-card:hover {
+		border-color: var(--border-strong);
+		transform: translateY(-2px);
+	}
+
+	.mission-card__media {
+		aspect-ratio: 16 / 9;
+		background: #04091a;
+		overflow: hidden;
+		position: relative;
+	}
+
+	.mission-card__image {
+		display: block;
+		height: 100%;
+		width: 100%;
+	}
+
+	.mission-card__image--cover {
+		object-fit: cover;
+		opacity: 0.9;
+	}
+
+	.mission-card__image--contain {
+		object-fit: contain;
+		padding: 0.6rem;
+	}
+
+	.mission-badge {
+		background: rgba(5, 11, 23, 0.8);
+		border-radius: var(--radius-pill);
+		font-family: var(--font-display);
+		font-size: 0.56rem;
+		left: 0.75rem;
+		letter-spacing: 0.14em;
+		padding: 0.25rem 0.62rem;
+		position: absolute;
+		top: 0.75rem;
+	}
+
+	.mission-badge--active {
+		border: 1px solid var(--status-active-border);
+		color: var(--status-active-text);
+	}
+
+	.mission-badge--ongoing {
+		border: 1px solid var(--status-ongoing-border);
+		color: var(--status-ongoing-text);
+	}
+
+	.mission-card__body {
+		align-content: start;
+		display: grid;
+		gap: 0.65rem;
+		padding: 1.1rem 1.2rem 1.25rem;
+	}
+
+	.mission-card__body h2 {
+		font-family: var(--font-display);
+		font-size: 1.12rem;
+		letter-spacing: 0.04em;
+		line-height: var(--heading-line-height);
+		margin: 0;
+		text-transform: uppercase;
+	}
+
+	.mission-card__body p {
+		color: var(--text-muted);
+		font-size: 0.82rem;
+		line-height: 1.72;
+		margin: 0;
+		text-wrap: pretty;
+	}
+
+	.mission-link {
+		color: var(--accent);
+		font-family: var(--font-display);
+		font-size: 0.62rem;
+		letter-spacing: 0.14em;
+		text-decoration: none;
+		text-transform: uppercase;
+	}
+
+	.mission-link:hover {
+		color: var(--text-bright);
+	}
+
+	.entry-card {
+		align-content: end;
+		background: linear-gradient(180deg, rgba(12, 23, 48, 0.5), rgba(8, 18, 38, 0.86));
+		border: 1px solid var(--border-soft);
+		border-radius: var(--radius-card);
+		display: grid;
+		gap: 0.4rem;
+		min-height: 11rem;
+		overflow: hidden;
+		padding: 1.25rem;
+		position: relative;
+		text-decoration: none;
+		transition:
+			border-color var(--motion-base) var(--easing-standard),
+			transform var(--motion-base) var(--easing-standard);
+	}
+
+	.entry-card:hover {
+		border-color: var(--border-strong);
+		transform: translateY(-2px);
+	}
+
+	.entry-card__bg {
+		height: 100%;
+		inset: 0;
+		object-fit: cover;
+		opacity: 0.32;
+		position: absolute;
+		width: 100%;
+	}
+
+	.entry-card__scrim {
+		background: linear-gradient(180deg, rgba(5, 11, 23, 0.35), rgba(5, 11, 23, 0.92));
+		inset: 0;
+		position: absolute;
+	}
+
+	.entry-card .section-kicker,
+	.entry-card h2,
+	.entry-card p {
+		position: relative;
+	}
+
+	.entry-card h2 {
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+		letter-spacing: 0.04em;
+		margin: 0;
+		text-transform: uppercase;
+	}
+
+	.entry-card p {
+		color: var(--text-muted);
+		font-size: 0.82rem;
+		line-height: 1.7;
+		margin: 0;
+	}
+
+	.home-foot {
+		align-items: center;
+		border-top: 1px solid var(--border-soft);
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3);
+		justify-content: space-between;
+		padding-top: var(--space-4);
+	}
+
+	.home-foot__note {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		margin: 0;
+	}
+
+	.home-foot__links {
+		display: flex;
+		gap: 1.15rem;
+	}
+
+	.home-foot__links a {
+		color: var(--accent);
+		font-family: var(--font-display);
+		font-size: 0.7rem;
+		letter-spacing: 0.12em;
+		text-decoration: none;
+		text-transform: uppercase;
+	}
+
+	.home-foot__links a:hover {
+		color: var(--text-bright);
+	}
+
+	@media (max-width: 1080px) {
+		.home-top {
 			grid-template-columns: 1fr;
 		}
-
-		.hero-title {
-			max-width: 100%;
-		}
-
-		.quote-shell {
-			padding-inline: clamp(0.9rem, 3vw, 1.2rem);
-		}
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.typing-line.is-active::after {
-			animation: none;
-			content: "";
+	@media (max-width: 520px) {
+		.status-head {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 0.9rem;
 		}
 	}
 </style>
