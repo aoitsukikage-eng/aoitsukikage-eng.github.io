@@ -2,6 +2,7 @@
 title: AI Workshop Volunteer at Dacheng Elementary School
 org: GDG on Campus NTPU
 date: 2026-06-24
+lang: en
 type: volunteer
 role: >-
   Joined GDG on Campus NTPU for an AI workshop at Dacheng Elementary School in

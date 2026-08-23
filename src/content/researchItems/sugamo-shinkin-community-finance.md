@@ -2,6 +2,7 @@
 title: 巢鴨信用金庫：超高齡社會中的社區金融實踐
 slug: sugamo-shinkin-community-finance
 summary: 以巢鴨信用金庫為例，整理超高齡社會中社區金融服務、在地關係與可近性的案例觀察。
+lang: zh
 track: research
 domain:
   - narrative-research

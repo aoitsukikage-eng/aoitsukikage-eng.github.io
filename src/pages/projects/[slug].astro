@@ -10,6 +10,9 @@ import {
 	sortProjects,
 } from "../../lib/projects";
 
+import { zh } from "../../i18n/zh";
+import { en } from "../../i18n/en";
+
 export async function getStaticPaths() {
 	const projectEntries = sortProjects(await getCollection("projectCases"));
 
@@ -23,6 +26,19 @@ const { project } = Astro.props;
 const { Content } = await render(project);
 const placeholder = isPlaceholderProject(project);
 const showDisclosureLayer = project.data.showDisclosureLayer !== false;
+
+const currentLocale = Astro.currentLocale ?? "zh";
+const dict = currentLocale === "en" ? en : zh;
+const isLocaleMatch = project.data.lang === currentLocale;
+const nativeUrl = project.data.lang === "en" ? `/en/projects/${project.data.slug}/` : `/projects/${project.data.slug}/`;
+
+const langName = currentLocale === "zh"
+	? (project.data.lang === "en" ? "英文" : "中文")
+	: (project.data.lang === "zh" ? "Traditional Chinese" : "English");
+const notice = dict.contentFallback.notice.replace("{lang}", langName);
+const viewLink = dict.contentFallback.viewLink.replace("{lang}", langName);
+const backProjectsUrl = currentLocale === "en" ? "/en/projects" : "/projects";
+const contactUrl = currentLocale === "en" ? "/en/about#contact" : "/about#contact";
 ---
 
 <SiteLayout
@@ -87,7 +103,7 @@ const showDisclosureLayer = project.data.showDisclosureLayer !== false;
 				}
 			</div>
 			{
-				project.data.links?.repo && project.data.visibility === "public" && (
+				isLocaleMatch && project.data.links?.repo && project.data.visibility === "public" && (
 					<div class="cta-row">
 						<a
 							class="cta-link secondary"
@@ -102,48 +118,60 @@ const showDisclosureLayer = project.data.showDisclosureLayer !== false;
 			}
 		</section>
 
-		{
-			showDisclosureLayer && (
-				<section class="section-shell section-plain" data-reveal id="project-detail-safety" style="--reveal-order: 1;">
+		{isLocaleMatch ? (
+			<>
+				{
+					showDisclosureLayer && (
+						<section class="section-shell section-plain" data-reveal id="project-detail-safety" style="--reveal-order: 1;">
+							<p class="section-kicker">[SYSTEM]</p>
+							<h2>Public-safe disclosure layer</h2>
+							<div class="hud-divider" aria-hidden="true"></div>
+							<p>{getVisibilityNote(project)}</p>
+							<div class="detail-grid">
+								<article class="detail-item" data-reveal style="--reveal-order: 2;">
+									<h3>Team Role</h3>
+									<p>{project.data.teamRole ?? "Role details are not published for this entry."}</p>
+								</article>
+								<article class="detail-item" data-reveal style="--reveal-order: 3;">
+									<h3>Background</h3>
+									<p>{project.data.background ?? "Background context is limited to this safe placeholder layer."}</p>
+								</article>
+								<article class="detail-item" data-reveal style="--reveal-order: 4;">
+									<h3>Disclosure Scope</h3>
+									<p>{project.data.disclosure ?? "Only routing and taxonomy validation data is exposed."}</p>
+								</article>
+							</div>
+						</section>
+					)
+				}
+
+				<section class="section-card section-shell" data-reveal id="project-detail-body" style="--reveal-order: 2;">
 					<p class="section-kicker">[SYSTEM]</p>
-					<h2>Public-safe disclosure layer</h2>
+					<h2>{placeholder ? "Placeholder Detail" : "Project Notes"}</h2>
 					<div class="hud-divider" aria-hidden="true"></div>
-					<p>{getVisibilityNote(project)}</p>
-					<div class="detail-grid">
-						<article class="detail-item" data-reveal style="--reveal-order: 2;">
-							<h3>Team Role</h3>
-							<p>{project.data.teamRole ?? "Role details are not published for this entry."}</p>
-						</article>
-						<article class="detail-item" data-reveal style="--reveal-order: 3;">
-							<h3>Background</h3>
-							<p>{project.data.background ?? "Background context is limited to this safe placeholder layer."}</p>
-						</article>
-						<article class="detail-item" data-reveal style="--reveal-order: 4;">
-							<h3>Disclosure Scope</h3>
-							<p>{project.data.disclosure ?? "Only routing and taxonomy validation data is exposed."}</p>
-						</article>
+					<div class="detail-body prose-shell">
+						<Content />
 					</div>
 				</section>
-			)
-		}
-
-		<section class="section-card section-shell" data-reveal id="project-detail-body" style="--reveal-order: 2;">
-			<p class="section-kicker">[SYSTEM]</p>
-			<h2>{placeholder ? "Placeholder Detail" : "Project Notes"}</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<div class="detail-body prose-shell">
-				<Content />
-			</div>
-		</section>
+			</>
+		) : (
+			<section class="section-card section-shell" data-reveal id="project-detail-body" style="--reveal-order: 1;">
+				<p class="section-kicker">[LOCALE NOTICE]</p>
+				<p>{notice}</p>
+				<div class="cta-row">
+					<a class="cta-link" href={nativeUrl}>{viewLink}</a>
+				</div>
+			</section>
+		)}
 
 		<section class="section-shell section-plain" data-reveal id="project-detail-links" style="--reveal-order: 3;">
 			<p class="section-kicker">[SYSTEM]</p>
 			<h2>Available public routes</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="cta-row">
-				<a class="cta-link" href="/projects">Back to Projects</a>
+				<a class="cta-link" href={backProjectsUrl}>Back to Projects</a>
 				{
-					project.data.links?.repo && project.data.visibility === "public" && (
+					isLocaleMatch && project.data.links?.repo && project.data.visibility === "public" && (
 						<a
 							class="cta-link secondary"
 							href={project.data.links.repo}
@@ -155,7 +183,7 @@ const showDisclosureLayer = project.data.showDisclosureLayer !== false;
 					)
 				}
 				{
-					project.data.links?.demo && project.data.visibility !== "confidential" && (
+					isLocaleMatch && project.data.links?.demo && project.data.visibility !== "confidential" && (
 						<a
 							class="cta-link secondary"
 							href={project.data.links.demo}
@@ -166,7 +194,7 @@ const showDisclosureLayer = project.data.showDisclosureLayer !== false;
 						</a>
 					)
 				}
-				<a class="cta-link secondary" href="/about#contact">Get in touch</a>
+				<a class="cta-link secondary" href={contactUrl}>Get in touch</a>
 			</div>
 		</section>
 	</div>
