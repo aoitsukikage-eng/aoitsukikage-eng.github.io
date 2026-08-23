@@ -1,21 +1,64 @@
 ---
-const { currentPath = "/" } = Astro.props;
+import type { Dictionary } from "../i18n/zh";
+import { zh } from "../i18n/zh";
+import { en } from "../i18n/en";
 
-const links = [
-	{ href: "/", label: "Home" },
-	{ href: "/research", label: "Research" },
-	{ href: "/projects", label: "Projects" },
-	{ href: "/activities", label: "Activities" },
-	{ href: "/about", label: "About & Contact" },
+interface Props {
+	currentPath?: string;
+	dict?: Dictionary;
+}
+
+const { currentPath = "/", dict } = Astro.props;
+const currentLocale = Astro.currentLocale || "zh";
+const t = dict || (currentLocale === "en" ? en : zh);
+
+const isEn = currentLocale === "en";
+
+const rawLinks = [
+	{ href: "/", label: t.nav.home },
+	{ href: "/research", label: t.nav.research },
+	{ href: "/projects", label: t.nav.projects },
+	{ href: "/activities", label: t.nav.activities },
+	{ href: "/about", label: t.nav.about },
 ];
 
-const isActive = (href: string) => {
-	if (href === "/") {
-		return currentPath === "/";
+const links = rawLinks.map((link) => ({
+	...link,
+	href: isEn ? (link.href === "/" ? "/en/" : `/en${link.href}`) : link.href,
+}));
+
+const normalizePath = (p: string) => {
+	const stripped = p.replace(/^\/en(\/|$)/, "/");
+	const trimmed = stripped.replace(/\/+$/, "");
+	return trimmed === "" ? "/" : trimmed;
+};
+
+const isActive = (linkHref: string) => {
+	const normCurrent = normalizePath(currentPath);
+	const normLink = normalizePath(linkHref);
+
+	if (normLink === "/") {
+		return normCurrent === "/";
 	}
 
-	return currentPath === href || currentPath.startsWith(`${href}/`);
+	return (
+		normCurrent === normLink ||
+		normCurrent.startsWith(`${normLink}/`)
+	);
 };
+
+const getSwitchPath = (path: string, locale: string) => {
+	if (locale === "en") {
+		const target = path.replace(/^\/en(\/|$)/, "/");
+		return target || "/";
+	} else {
+		if (path === "/") return "/en/";
+		return `/en${path.startsWith("/") ? path : `/${path}`}`;
+	}
+};
+
+const switchPath = getSwitchPath(currentPath, currentLocale);
+const switchLabel = t.langSwitch.label;
 ---
 
 <nav aria-label="Primary" class="nav">
@@ -37,6 +80,11 @@ const isActive = (href: string) => {
 				);
 			})
 		}
+		<li>
+			<a href={switchPath} class="lang-switch" aria-label="Switch language">
+				<span>{switchLabel}</span>
+			</a>
+		</li>
 	</ul>
 </nav>
 
