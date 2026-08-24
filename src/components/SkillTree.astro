@@ -1,0 +1,681 @@
+---
+interface Props {
+	locale?: "zh" | "en";
+}
+
+const { locale = "zh" } = Astro.props;
+
+const copy = {
+	zh: {
+		title: "SKILL TREE",
+		unspent: "UNSPENT",
+		unspentVal: "4",
+		tabs: [
+			{ key: "A", rune: "ᚲ", label: "CORE" },
+			{ key: "B", rune: "ᚹ", label: "TOOLS" },
+			{ key: "C", rune: "ᚠ", label: "FINANCE" },
+		],
+		defaultHint: "16 項技能 · 4 項待習得 · hover 節點查看細節",
+		notAcquired: "尚未習得 · 下一階段目標",
+	},
+	en: {
+		title: "SKILL TREE",
+		unspent: "UNSPENT",
+		unspentVal: "4",
+		tabs: [
+			{ key: "A", rune: "ᚲ", label: "CORE" },
+			{ key: "B", rune: "ᚹ", label: "TOOLS" },
+			{ key: "C", rune: "ᚠ", label: "FINANCE" },
+		],
+		defaultHint: "16 skills · 4 planned · hover a node for details",
+		notAcquired: "Not acquired · Next goal",
+	},
+}[locale];
+---
+
+<section class="skill-tree-shell section-card" id="home-skill-tree">
+	<div class="hud-grid-bg"></div>
+	<div class="hud-corner hud-corner--tl"></div>
+	<div class="hud-corner hud-corner--tr"></div>
+	<div class="hud-corner hud-corner--bl"></div>
+	<div class="hud-corner hud-corner--br"></div>
+
+	<div class="skill-tree-content">
+		<div class="skill-tree-head">
+			<span class="skill-tree-title">{copy.title}</span>
+			<span class="skill-tree-line"></span>
+			<span class="skill-tree-unspent">
+				{copy.unspent} <span class="unspent-num">{copy.unspentVal}</span>
+			</span>
+		</div>
+
+		<div class="skill-tree-tabs">
+			{
+				copy.tabs.map((tab, idx) => (
+					<button
+						type="button"
+						class={`skill-tab-btn ${idx === 0 ? "active" : ""}`}
+						data-tab-target={tab.key}
+					>
+						<span class="rune-icon">{tab.rune}</span>
+						<span>{tab.label}</span>
+					</button>
+				))
+			}
+		</div>
+
+		<div class="skill-tree-canvas" data-skill-canvas>
+			<!-- TAB A: CORE -->
+			<div class="tree-panel active" data-tree-panel="A">
+				<div class="tree-stage">
+					<svg viewBox="0 0 330 312" width="330" height="312" class="tree-svg">
+						<path d="M 43 58 V 75 H 165 V 91" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 43 58 V 75 H 165 V 91" fill="none" stroke="rgba(91,231,255,.5)" stroke-width="1.6"></path>
+						<polygon points="161,85 169,85 165,92" fill="rgba(91,231,255,.5)"></polygon>
+						<path d="M 287 58 V 75 H 287 V 91" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 287 58 V 75 H 287 V 91" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1.6" stroke-dasharray="4 4"></path>
+						<polygon points="283,85 291,85 287,92" fill="rgba(91,231,255,.2)"></polygon>
+						<path d="M 165 138 V 155 H 165 V 171" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 165 138 V 155 H 165 V 171" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1.6" stroke-dasharray="4 4"></path>
+						<polygon points="161,165 169,165 165,172" fill="rgba(91,231,255,.2)"></polygon>
+					</svg>
+					<div
+						data-skill="Python"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "Trip Weather Planner · 資料分析腳本" : "Trip Weather Planner · Data scripts"}
+						data-lv="4"
+						class="skill-node node-mastered"
+						style="left:20px;top:12px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:python.svg?color=%23a8e8ff&width=26&height=26" alt="Python" />
+						<span class="node-lv">4</span>
+					</div>
+					<div
+						data-skill="SQL"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "資料查詢與清理" : "Data querying & cleaning"}
+						data-lv="3"
+						class="skill-node node-mastered"
+						style="left:264px;top:12px;"
+					>
+						<img src="https://api.iconify.design/tabler:database.svg?color=%23a8e8ff&width=26&height=26" alt="SQL" />
+						<span class="node-lv">3</span>
+					</div>
+					<div
+						data-skill="pandas · NumPy"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "Portfolio Optimization 研究" : "Portfolio Optimization research"}
+						data-lv="3"
+						class="skill-node node-mastered"
+						style="left:142px;top:92px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:pandas.svg?color=%23a8e8ff&width=26&height=26" alt="pandas · NumPy" />
+						<span class="node-lv">3</span>
+					</div>
+					<div
+						data-skill="Query Optimization"
+						data-state="planned"
+						data-proj=""
+						data-lv="0"
+						class="skill-node node-planned"
+						style="left:264px;top:92px;"
+					>
+						<img src="https://api.iconify.design/tabler:database-search.svg?color=%234a7f96&width=26&height=26" alt="Query Optimization" />
+						<span class="node-lv">0</span>
+					</div>
+					<div
+						data-skill="Time Series Analysis"
+						data-state="planned"
+						data-proj=""
+						data-lv="0"
+						class="skill-node node-planned"
+						style="left:142px;top:172px;"
+					>
+						<img src="https://api.iconify.design/tabler:chart-line.svg?color=%234a7f96&width=26&height=26" alt="Time Series Analysis" />
+						<span class="node-lv">0</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- TAB B: TOOLS -->
+			<div class="tree-panel" data-tree-panel="B">
+				<div class="tree-stage">
+					<svg viewBox="0 0 330 312" width="330" height="312" class="tree-svg">
+						<path d="M 43 58 V 75 H 165 V 91" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 43 58 V 75 H 165 V 91" fill="none" stroke="rgba(95,214,148,.5)" stroke-width="1.6"></path>
+						<polygon points="161,85 169,85 165,92" fill="rgba(95,214,148,.5)"></polygon>
+						<path d="M 287 58 V 75 H 287 V 91" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 287 58 V 75 H 287 V 91" fill="none" stroke="rgba(91,231,255,.5)" stroke-width="1.6"></path>
+						<polygon points="283,85 291,85 287,92" fill="rgba(91,231,255,.5)"></polygon>
+						<path d="M 165 138 V 155 H 165 V 171" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 165 138 V 155 H 165 V 171" fill="none" stroke="rgba(95,214,148,.5)" stroke-width="1.6"></path>
+						<polygon points="161,165 169,165 165,172" fill="rgba(95,214,148,.5)"></polygon>
+						<path d="M 165 218 V 235 H 43 V 251" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 165 218 V 235 H 43 V 251" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1.6" stroke-dasharray="4 4"></path>
+						<polygon points="39,245 47,245 43,252" fill="rgba(91,231,255,.2)"></polygon>
+					</svg>
+					<div
+						data-skill="Git · GitHub"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "所有專案版本控管" : "Version control for all projects"}
+						data-lv="4"
+						class="skill-node node-mastered"
+						style="left:20px;top:12px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:github.svg?color=%23a8e8ff&width=26&height=26" alt="Git · GitHub" />
+						<span class="node-lv">4</span>
+					</div>
+					<div
+						data-skill="Excel"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "證券結算交割實務" : "Securities settlement ops"}
+						data-lv="4"
+						class="skill-node node-mastered"
+						style="left:264px;top:12px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:microsoftexcel.svg?color=%23a8e8ff&width=26&height=26" alt="Excel" />
+						<span class="node-lv">4</span>
+					</div>
+					<div
+						data-skill="React · Astro"
+						data-state="learning"
+						data-proj={locale === "zh" ? "個人網站 · Trip Weather 前端" : "Personal site · Trip Weather frontend"}
+						data-lv="2"
+						class="skill-node node-learning"
+						style="left:142px;top:92px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:react.svg?color=%23a5f0c6&width=26&height=26" alt="React · Astro" />
+						<span class="node-lv">2</span>
+					</div>
+					<div
+						data-skill="Notion"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "Portfolio 作品集" : "Portfolio docs"}
+						data-lv="3"
+						class="skill-node node-mastered"
+						style="left:264px;top:92px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:notion.svg?color=%23a8e8ff&width=26&height=26" alt="Notion" />
+						<span class="node-lv">3</span>
+					</div>
+					<div
+						data-skill="Azure"
+						data-state="learning"
+						data-proj={locale === "zh" ? "Trip Weather Planner 部署" : "Trip Weather Planner deployment"}
+						data-lv="2"
+						class="skill-node node-learning"
+						style="left:142px;top:172px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:microsoftazure.svg?color=%23a5f0c6&width=26&height=26" alt="Azure" />
+						<span class="node-lv">2</span>
+					</div>
+					<div
+						data-skill="CI · GitHub Actions"
+						data-state="planned"
+						data-proj=""
+						data-lv="0"
+						class="skill-node node-planned"
+						style="left:20px;top:252px;"
+					>
+						<img src="https://api.iconify.design/simple-icons:githubactions.svg?color=%234a7f96&width=26&height=26" alt="CI · GitHub Actions" />
+						<span class="node-lv">0</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- TAB C: FINANCE -->
+			<div class="tree-panel" data-tree-panel="C">
+				<div class="tree-stage">
+					<svg viewBox="0 0 330 312" width="330" height="312" class="tree-svg">
+						<path d="M 43 58 V 75 H 165 V 91" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 43 58 V 75 H 165 V 91" fill="none" stroke="rgba(91,231,255,.5)" stroke-width="1.6"></path>
+						<polygon points="161,85 169,85 165,92" fill="rgba(91,231,255,.5)"></polygon>
+						<path d="M 165 138 V 155 H 165 V 171" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 165 138 V 155 H 165 V 171" fill="none" stroke="rgba(91,231,255,.5)" stroke-width="1.6"></path>
+						<polygon points="161,165 169,165 165,172" fill="rgba(91,231,255,.5)"></polygon>
+						<path d="M 165 218 V 235 H 287 V 251" fill="none" stroke="rgba(3,8,18,.9)" stroke-width="4"></path>
+						<path d="M 165 218 V 235 H 287 V 251" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1.6" stroke-dasharray="4 4"></path>
+						<polygon points="283,245 291,245 287,252" fill="rgba(91,231,255,.2)"></polygon>
+					</svg>
+					<div
+						data-skill="Securities Settlement"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "券商結算交割實習" : "Securities settlement internship"}
+						data-lv="3"
+						class="skill-node node-mastered"
+						style="left:20px;top:12px;"
+					>
+						<img src="https://api.iconify.design/tabler:building-bank.svg?color=%23a8e8ff&width=26&height=26" alt="Securities Settlement" />
+						<span class="node-lv">3</span>
+					</div>
+					<div
+						data-skill="ESG Assessment"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "NTPU ESG Center 研究" : "NTPU ESG Center research"}
+						data-lv="3"
+						class="skill-node node-mastered"
+						style="left:264px;top:12px;"
+					>
+						<img src="https://api.iconify.design/tabler:scale.svg?color=%23a8e8ff&width=26&height=26" alt="ESG Assessment" />
+						<span class="node-lv">3</span>
+					</div>
+					<div
+						data-skill="Portfolio Optimization"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "Sharpe Ratio 投組研究" : "Sharpe Ratio portfolio study"}
+						data-lv="3"
+						class="skill-node node-mastered"
+						style="left:142px;top:92px;"
+					>
+						<img src="https://api.iconify.design/tabler:chart-pie.svg?color=%23a8e8ff&width=26&height=26" alt="Portfolio Optimization" />
+						<span class="node-lv">3</span>
+					</div>
+					<div
+						data-skill="Sharpe Ratio Analysis"
+						data-state="mastered"
+						data-proj={locale === "zh" ? "風險調整後報酬分析" : "Risk-adjusted return analysis"}
+						data-lv="3"
+						class="skill-node node-mastered"
+						style="left:142px;top:172px;"
+					>
+						<img src="https://api.iconify.design/tabler:chart-candle.svg?color=%23a8e8ff&width=26&height=26" alt="Sharpe Ratio Analysis" />
+						<span class="node-lv">3</span>
+					</div>
+					<div
+						data-skill="Factor Models"
+						data-state="planned"
+						data-proj=""
+						data-lv="0"
+						class="skill-node node-planned"
+						style="left:264px;top:252px;"
+					>
+						<img src="https://api.iconify.design/tabler:math-function.svg?color=%234a7f96&width=26&height=26" alt="Factor Models" />
+						<span class="node-lv">0</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="skill-info-box" data-skill-info data-not-acquired={copy.notAcquired} data-default-hint={copy.defaultHint}>
+			<div class="info-top-row">
+				<span class="info-state" data-sk-state>IDLE</span>
+				<span class="info-name" data-sk-name>SELECT A NODE</span>
+				<span class="info-spacer"></span>
+				<span class="info-lv" data-sk-lv></span>
+			</div>
+			<div class="info-proj" data-sk-proj>{copy.defaultHint}</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	function initSkillTree() {
+		const shell = document.getElementById("home-skill-tree");
+		if (!shell) return;
+
+		const tabBtns = shell.querySelectorAll<HTMLButtonElement>("[data-tab-target]");
+		const panels = shell.querySelectorAll<HTMLElement>("[data-tree-panel]");
+		const infoBox = shell.querySelector<HTMLElement>("[data-skill-info]");
+
+		if (!infoBox) return;
+
+		const stateEl = infoBox.querySelector<HTMLElement>("[data-sk-state]");
+		const nameEl = infoBox.querySelector<HTMLElement>("[data-sk-name]");
+		const lvEl = infoBox.querySelector<HTMLElement>("[data-sk-lv]");
+		const projEl = infoBox.querySelector<HTMLElement>("[data-sk-proj]");
+
+		const defaultHint = infoBox.dataset.defaultHint || "";
+		const notAcquired = infoBox.dataset.notAcquired || "";
+
+		const stateMap: Record<string, [string, string]> = {
+			mastered: ["MASTERED", "#5be7ff"],
+			learning: ["LEARNING", "#8fe0b0"],
+			planned: ["PLANNED", "rgba(183,236,255,.5)"],
+		};
+
+		function resetInfo() {
+			if (stateEl) {
+				stateEl.textContent = "IDLE";
+				stateEl.style.color = "rgba(183,236,255,.35)";
+			}
+			if (nameEl) {
+				nameEl.textContent = "SELECT A NODE";
+				nameEl.style.color = "rgba(183,236,255,.45)";
+			}
+			if (lvEl) {
+				lvEl.textContent = "";
+			}
+			if (projEl) {
+				projEl.textContent = defaultHint;
+				projEl.style.color = "rgba(183,236,255,.42)";
+			}
+		}
+
+		tabBtns.forEach((btn) => {
+			btn.addEventListener("click", () => {
+				const target = btn.dataset.tabTarget;
+				tabBtns.forEach((b) => b.classList.remove("active"));
+				btn.classList.add("active");
+
+				panels.forEach((p) => {
+					if (p.dataset.treePanel === target) {
+						p.classList.add("active");
+					} else {
+						p.classList.remove("active");
+					}
+				});
+				resetInfo();
+			});
+		});
+
+		const nodes = shell.querySelectorAll<HTMLElement>("[data-skill]");
+		nodes.forEach((node) => {
+			node.addEventListener("mouseenter", () => {
+				const sk = node.dataset.skill || "";
+				const stKey = node.dataset.state || "mastered";
+				const lv = node.dataset.lv || "0";
+				const proj = node.dataset.proj || "";
+
+				const stInfo = stateMap[stKey] || stateMap.mastered;
+
+				if (stateEl) {
+					stateEl.textContent = stInfo[0];
+					stateEl.style.color = stInfo[1];
+				}
+				if (nameEl) {
+					nameEl.textContent = sk;
+					nameEl.style.color = "#e6f7ff";
+				}
+				if (lvEl) {
+					lvEl.textContent = stKey === "planned" ? "LV 0 / 5" : `LV ${lv} / 5`;
+				}
+				if (projEl) {
+					projEl.textContent = proj || notAcquired;
+					projEl.style.color = proj ? "rgba(183,236,255,.8)" : "rgba(183,236,255,.42)";
+				}
+			});
+
+			node.addEventListener("mouseleave", () => {
+				resetInfo();
+			});
+		});
+	}
+
+	document.addEventListener("DOMContentLoaded", initSkillTree);
+	document.addEventListener("astro:page-load", initSkillTree);
+	initSkillTree();
+</script>
+
+<style>
+	.skill-tree-shell {
+		box-sizing: border-box;
+		position: relative;
+		overflow: hidden;
+		padding: 20px 20px 18px;
+		border: 1px solid rgba(91, 231, 255, 0.34);
+		border-radius: 4px;
+		background: linear-gradient(180deg, rgba(9, 19, 42, 0.96), rgba(6, 13, 29, 0.96));
+		box-shadow: 0 0 0 1px rgba(5, 11, 23, 0.9), 0 20px 52px rgba(91, 231, 255, 0.07);
+	}
+
+	.hud-grid-bg {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		opacity: 0.5;
+		background-image: linear-gradient(rgba(91, 231, 255, 0.055) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(91, 231, 255, 0.055) 1px, transparent 1px);
+		background-size: 26px 26px;
+	}
+
+	.hud-corner {
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		pointer-events: none;
+	}
+
+	.hud-corner--tl { top: -1px; left: -1px; border-top: 2px solid #5be7ff; border-left: 2px solid #5be7ff; }
+	.hud-corner--tr { top: -1px; right: -1px; border-top: 2px solid #5be7ff; border-right: 2px solid #5be7ff; }
+	.hud-corner--bl { bottom: -1px; left: -1px; border-bottom: 2px solid #5be7ff; border-left: 2px solid #5be7ff; }
+	.hud-corner--br { bottom: -1px; right: -1px; border-bottom: 2px solid #5be7ff; border-right: 2px solid #5be7ff; }
+
+	.skill-tree-content {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.skill-tree-head {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.skill-tree-title {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 10px;
+		letter-spacing: 0.26em;
+		color: #5be7ff;
+	}
+
+	.skill-tree-line {
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(90deg, rgba(91, 231, 255, 0.36), rgba(91, 231, 255, 0.04));
+	}
+
+	.skill-tree-unspent {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 9px;
+		letter-spacing: 0.08em;
+		color: rgba(183, 236, 255, 0.55);
+	}
+
+	.unspent-num {
+		color: #5be7ff;
+	}
+
+	.skill-tree-tabs {
+		display: flex;
+		gap: 6px;
+	}
+
+	.skill-tab-btn {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		padding: 7px 4px;
+		cursor: pointer;
+		font-family: var(--font-display);
+		font-size: 8.5px;
+		letter-spacing: 0.14em;
+		transition: all 200ms ease;
+		border: 1px solid rgba(91, 231, 255, 0.16);
+		background: rgba(6, 13, 29, 0.7);
+		color: rgba(183, 236, 255, 0.45);
+	}
+
+	.skill-tab-btn.active {
+		border-color: rgba(91, 231, 255, 0.7);
+		background: linear-gradient(180deg, rgba(18, 46, 84, 0.95), rgba(9, 22, 44, 0.95));
+		color: #dff6ff;
+		box-shadow: inset 0 0 14px rgba(91, 231, 255, 0.16);
+	}
+
+	.rune-icon {
+		font-size: 13px;
+	}
+
+	.skill-tree-canvas {
+		position: relative;
+		padding: 6px 0;
+	}
+
+	.tree-panel {
+		display: none;
+	}
+
+	.tree-panel.active {
+		display: block;
+	}
+
+	.tree-stage {
+		position: relative;
+		width: 330px;
+		height: 312px;
+		margin: 0 auto;
+	}
+
+	.tree-svg {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.skill-node {
+		position: absolute;
+		width: 46px;
+		height: 46px;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: border-color 200ms ease, box-shadow 200ms ease;
+	}
+
+	.skill-node img {
+		width: 26px;
+		height: 26px;
+		display: block;
+	}
+
+	.node-lv {
+		position: absolute;
+		right: -4px;
+		bottom: -8px;
+		min-width: 14px;
+		padding: 0 3px;
+		text-align: center;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 9px;
+		line-height: 1.5;
+		background: rgba(4, 10, 22, 0.96);
+	}
+
+	.node-mastered {
+		border: 1px solid rgba(91, 231, 255, 0.5);
+		border-top-color: rgba(91, 231, 255, 0.8);
+		border-left-color: rgba(91, 231, 255, 0.8);
+		background: linear-gradient(150deg, rgba(16, 40, 74, 0.98), rgba(7, 17, 36, 0.98));
+		box-shadow: inset 0 0 12px rgba(91, 231, 255, 0.12);
+	}
+
+	.node-mastered:hover {
+		border-color: #5be7ff;
+		box-shadow: inset 0 0 16px rgba(91, 231, 255, 0.28), 0 0 18px rgba(91, 231, 255, 0.34);
+	}
+
+	.node-mastered img {
+		opacity: 0.95;
+	}
+
+	.node-mastered .node-lv {
+		color: #dff6ff;
+		border: 1px solid rgba(91, 231, 255, 0.45);
+	}
+
+	.node-learning {
+		border: 1px solid rgba(95, 214, 148, 0.5);
+		border-top-color: rgba(95, 214, 148, 0.8);
+		border-left-color: rgba(95, 214, 148, 0.8);
+		background: linear-gradient(150deg, rgba(14, 46, 42, 0.98), rgba(7, 22, 24, 0.98));
+		box-shadow: inset 0 0 12px rgba(95, 214, 148, 0.14);
+	}
+
+	.node-learning:hover {
+		border-color: #5fd694;
+		box-shadow: inset 0 0 16px rgba(95, 214, 148, 0.26), 0 0 18px rgba(95, 214, 148, 0.32);
+	}
+
+	.node-learning img {
+		opacity: 0.95;
+	}
+
+	.node-learning .node-lv {
+		color: #d8ffe9;
+		border: 1px solid rgba(95, 214, 148, 0.45);
+	}
+
+	.node-planned {
+		border: 1px solid rgba(91, 231, 255, 0.16);
+		border-top-color: rgba(91, 231, 255, 0.24);
+		border-left-color: rgba(91, 231, 255, 0.24);
+		background: linear-gradient(150deg, rgba(9, 18, 34, 0.96), rgba(5, 11, 23, 0.96));
+		box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+	}
+
+	.node-planned:hover {
+		border-color: rgba(91, 231, 255, 0.45);
+		box-shadow: inset 0 0 14px rgba(91, 231, 255, 0.12);
+	}
+
+	.node-planned img {
+		opacity: 0.5;
+	}
+
+	.node-planned .node-lv {
+		color: rgba(183, 236, 255, 0.4);
+		border: 1px solid rgba(91, 231, 255, 0.18);
+	}
+
+	.skill-info-box {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		min-height: 56px;
+		padding: 11px 13px;
+		border: 1px solid rgba(91, 231, 255, 0.2);
+		background: rgba(4, 10, 24, 0.72);
+	}
+
+	.info-top-row {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+	}
+
+	.info-state {
+		font-family: var(--font-display);
+		font-size: 8px;
+		letter-spacing: 0.14em;
+		color: rgba(183, 236, 255, 0.35);
+	}
+
+	.info-name {
+		font-size: 12.5px;
+		font-weight: 600;
+		color: rgba(183, 236, 255, 0.45);
+	}
+
+	.info-spacer {
+		flex: 1;
+	}
+
+	.info-lv {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 9.5px;
+		color: rgba(183, 236, 255, 0.5);
+	}
+
+	.info-proj {
+		font-size: 11px;
+		line-height: 1.55;
+		color: rgba(183, 236, 255, 0.42);
+	}
+</style>
