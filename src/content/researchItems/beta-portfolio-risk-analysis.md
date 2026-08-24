@@ -44,7 +44,7 @@ reflection: 兩張圖表都是我自己做的。原始作業使用日資料、Be
 - **SML（證券市場線）**：把 CAPM 算出來的「Beta 對合理報酬」畫成一條線；一檔股票的實際報酬若落在線的上方，代表表現優於這個風險水準該有的合理報酬，落在線下方則代表落後。
 - **Alpha（超額報酬）**：一檔股票的實際報酬，減去 CAPM 算出來的合理報酬，正值代表贏過合理水準，負值代表輸給合理水準。
 
-本研究依 `financial-management-report.pdf` 與 `financial-management-analysis.xlsx` 的財務管理作業，分析 Beta 對投資組合系統性風險的意義。原始作業以 2023-07-12 至 2024-07-11 的日資料，對 CITI、GRMN、LOGI、TM、UA 與 S&P 500 計算日報酬與 Beta。`beta-risk-comparison.png` 與 `beta-sml-analysis.png` 是我自己做的兩張圖表。
+本研究依 `financial-management-report.pdf` 與 `financial-management-analysis.xlsx` 的財務管理作業，分析 Beta 對投資組合系統性風險的意義。原始作業以 2023-07-12 至 2024-07-11 的日資料，對 CITI、GRMN、LOGI、TM、UA 與 S&P 500 計算日報酬與 Beta。`beta-risk-comparison.svg` 與 `beta-sml-analysis.svg` 是我自己做的兩張圖表。
 
 ## 分析內容
 
@@ -63,7 +63,7 @@ reflection: 兩張圖表都是我自己做的。原始作業使用日資料、Be
 | UA | 10% | 1.2800 | 0.000540096 | 1,091.95% |
 | 五檔投組 | 100% | 0.8586 | 0.000096871 | 195.85% |
 
-<img src="/research/beta-risk-comparison.png" alt="Beta 與投資組合風險比較長條圖。" loading="lazy" />
+<img src="/research/beta-risk-comparison.svg" alt="Beta 與投資組合風險比較長條圖。" loading="lazy" />
 
 </div>
 
@@ -85,7 +85,7 @@ reflection: 兩張圖表都是我自己做的。原始作業使用日資料、Be
 | TM | 20.606% | 27.915% | 7.309% | Above SML |
 | UA | 32.369% | −6.958% | −39.327% | Below SML |
 
-<img src="/research/beta-sml-analysis.png" alt="證券市場線與 Beta 分析圖。" loading="lazy" />
+<img src="/research/beta-sml-analysis.svg" alt="證券市場線與 Alpha 分析圖：各股實際報酬對照 CAPM 合理報酬，並列出各股 Alpha。" loading="lazy" />
 
 </div>
 
@@ -95,4 +95,4 @@ reflection: 兩張圖表都是我自己做的。原始作業使用日資料、Be
 
 ## 可追溯來源與頁內閱讀
 
-兩張圖表都保留在本頁供直接閱讀：`/research/beta-risk-comparison.png`（原始作業的 Beta／風險比較）與 `/research/beta-sml-analysis.png`（我後來自己加的延伸）。原始的課堂報告和試算表我留著沒有公開，這裡呈現的都是我自己整理過、可以直接對照的數字。
+兩張圖表都保留在本頁供直接閱讀：`/research/beta-risk-comparison.svg`（原始作業的 Beta／風險比較）與 `/research/beta-sml-analysis.svg`（我後來自己加的延伸）。原始的課堂報告和試算表我留著沒有公開，這裡呈現的都是我自己整理過、可以直接對照的數字。
