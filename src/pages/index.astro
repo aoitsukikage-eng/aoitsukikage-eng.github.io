@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
 import WeatherCard from "../components/WeatherCard.astro";
+import SkillTree from "../components/SkillTree.astro";
 import { siteConfig } from "../config/site";
 
 const locale = Astro.currentLocale === "en" ? "en" : "zh";
@@ -279,10 +280,14 @@ const copy = {
 				</div>
 			</div>
 
+			<SkillTree locale={locale} />
+		</section>
+
+		<section class="home-weather-section" data-reveal id="home-weather" style="--reveal-order: 2;">
 			<WeatherCard locale={locale} state="day" />
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="home-featured" style="--reveal-order: 2;">
+		<section class="section-shell section-plain" data-reveal id="home-featured" style="--reveal-order: 3;">
 			<p class="section-kicker">{copy.featuredKicker}</p>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="section-grid">
@@ -316,7 +321,7 @@ const copy = {
 			</div>
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="home-entries" style="--reveal-order: 3;">
+		<section class="section-shell section-plain" data-reveal id="home-entries" style="--reveal-order: 4;">
 			<div class="section-grid">
 				{
 					copy.entries.map((entry) => (
@@ -334,7 +339,7 @@ const copy = {
 			</div>
 		</section>
 
-		<section class="home-foot" data-reveal id="home-contact" style="--reveal-order: 4;">
+		<section class="home-foot" data-reveal id="home-contact" style="--reveal-order: 5;">
 			<p class="home-foot__note">{copy.footerNote}</p>
 			<div class="home-foot__links">
 				<a href={`mailto:${siteConfig.email}`}>Email</a>
@@ -350,7 +355,13 @@ const copy = {
 		align-items: start;
 		display: grid;
 		gap: var(--space-4);
-		grid-template-columns: minmax(0, 1fr) 30rem;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
+
+	.home-weather-section {
+		display: flex;
+		justify-content: center;
+		width: 100%;
 	}
 
 	.quote-shell {
