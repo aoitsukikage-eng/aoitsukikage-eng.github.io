@@ -170,6 +170,13 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 	.source-brief :global(th) { background: rgba(91, 231, 255, .1); color: var(--text-bright); font-family: var(--font-display); font-size: .76rem; letter-spacing: .04em; }
 	.source-brief :global(td) { color: var(--text-dim); }
 	.source-brief :global(.table-chip) { display: inline-flex; padding: .26rem .62rem; border: 1px solid rgba(91, 231, 255, .22); border-radius: 999px; background: rgba(91, 231, 255, .07); color: #5be7ff; font-family: 'Orbitron', sans-serif; font-size: .64rem; letter-spacing: .14em; margin-right: .5rem; }
+	.source-brief :global(.index-card) { max-width: 40rem; padding: 1rem 1.25rem; background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: grid; gap: .6rem; margin: 1.25rem 0; }
+	.source-brief :global(.index-divider) { height: 1px; background: linear-gradient(90deg, rgba(91, 231, 255, .5), rgba(91, 231, 255, 0)); }
+	.source-brief :global(.toc-nav) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .15rem .9rem; }
+	@media (max-width: 560px) { .source-brief :global(.toc-nav) { grid-template-columns: 1fr; } }
+	.source-brief :global(.toc-link) { display: flex; gap: .6rem; padding: .5rem .3rem; font-size: .86rem; line-height: 1.5; color: rgba(211, 230, 242, .8); border-radius: .4rem; text-decoration: none; transition: background 200ms ease, color 200ms ease; }
+	.source-brief :global(.toc-link:hover) { background: rgba(91, 231, 255, .08); color: #5be7ff; }
+	.source-brief :global(.toc-num) { font-family: 'Orbitron', sans-serif; font-size: .68rem; color: #5be7ff; padding-top: .15rem; }
 	.source-brief :global(.solve-card) { max-width: 52rem; padding: 1.35rem 1.5rem; background: rgba(8, 18, 38, .56); border: 1px solid rgba(91, 231, 255, .22); border-radius: 1rem; display: grid; gap: .55rem; margin: 1.2rem 0; }
 	.source-brief :global(.solve-card p) { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: .98rem; line-height: 1.9; color: #f4fbff; font-variant-numeric: tabular-nums; }
 	.source-brief :global(.frontier-figure) { align-items: center; display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); margin: 1.25rem 0; max-width: 56rem; }

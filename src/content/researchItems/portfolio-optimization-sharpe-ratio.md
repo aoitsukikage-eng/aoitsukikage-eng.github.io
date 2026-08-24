@@ -40,7 +40,18 @@ findings:
 reflection: 這個公開版本忠實呈現原始報告與工作簿裡已經算出的目標設定、必要報酬率、統計量與最佳化結果，沒有重新計算或補上原始資料沒有的數字。退休目標與必要報酬率只是這份報告設定的情境，不是理財建議；歷史報酬也不保證未來績效。
 ---
 
-## <span class="table-chip">[01]</span>研究目標與必要報酬率
+<div class="index-card">
+  <p class="section-kicker">[INDEX]</p>
+  <div class="index-divider"></div>
+  <nav class="toc-nav">
+    <a href="#sec-target" class="toc-link"><span class="toc-num">01</span><span>研究目標與必要報酬率</span></a>
+    <a href="#sec-data" class="toc-link"><span class="toc-num">02</span><span>資料、統計量與 Solver</span></a>
+    <a href="#sec-frontier" class="toc-link"><span class="toc-num">03</span><span>效率前緣與資本市場線</span></a>
+    <a href="#sec-allocation" class="toc-link"><span class="toc-num">04</span><span>從效率前緣到最終配置</span></a>
+  </nav>
+</div>
+
+<h2 id="sec-target"><span class="table-chip">[01]</span>研究目標與必要報酬率</h2>
 
 本研究以退休儲蓄目標作為投資組合設計的起點，而非直接指定一個報酬率。報告採階梯式目標（20 年存 500 萬、30 年存 1000 萬、40 年存 1500 萬），每期皆以每月投入 1 萬元回推必要報酬率：
 
@@ -76,7 +87,7 @@ reflection: 這個公開版本忠實呈現原始報告與工作簿裡已經算�
 
 三檔基金的選擇並非隨機。如果組合裡有一檔基金的夏普值明顯贏過其他兩檔，最佳化的結果會把資金幾乎全押在那一檔，其餘兩檔的權重被壓到接近零，效率前緣畫出來也會是一條很平的線，看不出漂亮的弧度。因此標的篩選鎖定兩個條件：「夏普值差異不大」、「彼此相關係數低」，反覆比對後選出三檔互補標的：全球非投資等級債券（風險最低）、世界健康科學股票型（中風險中報酬）、美國中小型股票（風險最高）。
 
-## <span class="table-chip">[02]</span>資料、統計量與 Solver 條件
+<h2 id="sec-data"><span class="table-chip">[02]</span>資料、統計量與 Solver 條件</h2>
 
 月報酬以每月月底淨值的相鄰變動計算，樣本為 2020-12-31 至 2025-12-31。年化報酬為平均月報酬乘以 12；年化標準差為月標準差乘以 √12。個別 Sharpe 比率以來源的 1.70% 無風險利率計算。
 
@@ -111,7 +122,7 @@ reflection: 這個公開版本忠實呈現原始報告與工作簿裡已經算�
 
 白話讀法：GMV 把 96.74% 的錢放在最穩的 Fund 1（債券），優先求穩；Max Sharpe 則把較高比例（58.16%）放在報酬更高的 Fund 2，換來更高的預期報酬與夏普值，代價是標準差從 6.9% 升高到 10.8%。
 
-## <span class="table-chip">[03]</span>效率前緣與資本市場線
+<h2 id="sec-frontier"><span class="table-chip">[03]</span>效率前緣與資本市場線</h2>
 
 下方座標取自工作簿列出的實際數字，橫軸是風險（標準差）、縱軸是預期報酬，右側圖表是同一組數字的視覺化，GMV、Max Sharpe、無風險利率與資本市場線都直接標在圖上：
 
@@ -137,7 +148,7 @@ reflection: 這個公開版本忠實呈現原始報告與工作簿裡已經算�
 
 白話讀法：從 GMV 往右移動，風險上升的同時報酬也上升，但過了 Point 5 之後，風險每多增加 1 個百分點，換到的報酬成長越來越少——這就是效率前緣「後段報酬遞減」的意思，也是為什麼 Max Sharpe（而非最右邊風險最高的點）才是效率前緣上最划算的位置。資本市場線從無風險利率 1.70% 出發，以 Max Sharpe 組合的夏普值 0.3448 為斜率，代表把定存和 Max Sharpe 組合搭配起來，能拿到比只投資效率前緣上任一點更好的風險－報酬組合。
 
-## <span class="table-chip">[04]</span>從效率前緣到最終配置：兩基金分離定理
+<h2 id="sec-allocation"><span class="table-chip">[04]</span>從效率前緣到最終配置：兩基金分離定理</h2>
 
 效率前緣與資本市場線只回答了「風險與預期報酬之間可以怎麼取捨」，還沒有回答「應該投多少錢在風險資產上」。這一步要回到研究起點：4.93% 的必要年化報酬率。
 
