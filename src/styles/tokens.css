@@ -27,6 +27,7 @@
 	--surface: #f4fbff;
 	--accent: #5be7ff;
 	--font-display: "Orbitron", "Trebuchet MS", sans-serif;
+	--font-heading: "Orbitron", "Huninn", "IBM Plex Sans", sans-serif;
 	--font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
 	--space-1: 0.4rem;
 	--space-2: 0.7rem;
@@ -48,7 +49,7 @@
 	--panel-alt: #0c1730;
 	--accent-soft: #7ccfff;
 	--text-bright: #f4fbff;
-	--text-dim: #b7ecff;
+	--text-dim: #d3e6f2;
 	--text-muted: rgba(183, 236, 255, 0.72);
 	--border-soft: rgba(91, 231, 255, 0.12);
 	--border-strong: rgba(91, 231, 255, 0.26);
