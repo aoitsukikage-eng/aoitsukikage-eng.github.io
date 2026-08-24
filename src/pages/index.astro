@@ -12,18 +12,32 @@ const locale = Astro.currentLocale === "en" ? "en" : "zh";
  */
 const copy = {
 	zh: {
-		statusKicker: "[STATUS]",
-		summary:
-			"財金背景，用 Python 把研究流程自動化。目前準備研究所推甄，方向是量化金融與資料驅動的決策分析。",
-		stats: [
-			{ label: "Institution", value: "NTPU · Finance" },
-			{ label: "Focus", value: "Quantitative Finance" },
-			{ label: "Stack", value: "Python · React · Azure" },
+		statusKicker: "STATUS CORE",
+		syncedLabel: "SYNCED",
+		levelBadge: "04",
+		identityGrid: [
+			{ label: "LEVEL", value: "Senior · Undergrad Y4" },
+			{ label: "CLASS", value: "NTPU Finance" },
+			{ label: "GUILD", value: "NTPU ESG Center" },
+			{ label: "SUB-CLASS", value: "Research Assistant" },
 		],
-		activeLabel: "Active",
-		activeValue: "Trip Weather Planner",
-		ctaProjects: "View Projects",
-		ctaResearch: "Research Log",
+		summary:
+			"國立臺北大學金融學系，專注於量化金融與 AI 工作流開發，具備風險控制意識與複雜度重構能力。",
+		missionLabel: "MISSION",
+		missionValue: "研究所推甄申請 · 量化金融",
+		combatStatsLabel: "COMBAT STATS",
+		combatStats: [
+			{ code: "ATK", name: "EXECUTION POWER", value: 84 },
+			{ code: "INT", name: "COMPLEXITY BREAKDOWN", value: 86 },
+			{ code: "PER", name: "RISK CONTROL", value: 91 },
+			{ code: "RES", name: "RESILIENCE", value: 88 },
+			{ code: "HP", name: "STAMINA", value: 82 },
+			{ code: "CRIT", name: "MULTI-TASK ORCHESTRATION", value: 73 },
+		],
+		activeQuestLabel: "ACTIVE QUEST",
+		activeQuestValue: "Trip Weather Planner 旅遊天氣規劃",
+		ctaProjects: "VIEW PROJECTS",
+		ctaResearch: "RESEARCH LOG",
 		featuredKicker: "[FEATURED MISSION]",
 		featured: [
 			{
@@ -70,18 +84,32 @@ const copy = {
 		footerNote: "正在尋找量化金融方向的研究所機會 — 歡迎來信。",
 	},
 	en: {
-		statusKicker: "[STATUS]",
-		summary:
-			"Finance undergraduate automating research workflows with Python. Currently preparing graduate applications in quantitative finance and data-driven decision analysis.",
-		stats: [
-			{ label: "Institution", value: "NTPU · Finance" },
-			{ label: "Focus", value: "Quantitative Finance" },
-			{ label: "Stack", value: "Python · React · Azure" },
+		statusKicker: "STATUS CORE",
+		syncedLabel: "SYNCED",
+		levelBadge: "04",
+		identityGrid: [
+			{ label: "LEVEL", value: "Senior · Undergrad Y4" },
+			{ label: "CLASS", value: "NTPU Finance" },
+			{ label: "GUILD", value: "NTPU ESG Center" },
+			{ label: "SUB-CLASS", value: "Research Assistant" },
 		],
-		activeLabel: "Active",
-		activeValue: "Trip Weather Planner",
-		ctaProjects: "View Projects",
-		ctaResearch: "Research Log",
+		summary:
+			"Finance major at National Taipei University, building practical AI workflows with risk-aware execution and a focus on complexity refactoring.",
+		missionLabel: "MISSION",
+		missionValue: "Grad School Application · Quantitative Finance",
+		combatStatsLabel: "COMBAT STATS",
+		combatStats: [
+			{ code: "ATK", name: "EXECUTION POWER", value: 84 },
+			{ code: "INT", name: "COMPLEXITY BREAKDOWN", value: 86 },
+			{ code: "PER", name: "RISK CONTROL", value: 91 },
+			{ code: "RES", name: "RESILIENCE", value: 88 },
+			{ code: "HP", name: "STAMINA", value: 82 },
+			{ code: "CRIT", name: "MULTI-TASK ORCHESTRATION", value: 73 },
+		],
+		activeQuestLabel: "ACTIVE QUEST",
+		activeQuestValue: "Trip Weather Planner",
+		ctaProjects: "VIEW PROJECTS",
+		ctaResearch: "RESEARCH LOG",
 		featuredKicker: "[FEATURED MISSION]",
 		featured: [
 			{
@@ -150,45 +178,104 @@ const copy = {
 
 		<section class="home-top" data-reveal id="home-top" style="--reveal-order: 1;">
 			<div class="status-shell section-card" id="home-status">
-				<div class="status-head">
-					<div class="status-id">
-						<img
-							alt={siteConfig.name}
-							class="status-avatar"
-							height="112"
-							loading="eager"
-							src={siteConfig.avatar}
-							width="112"
-						/>
-						<p class="status-id__tag">ID · NTPU-FIN</p>
+				<div class="hud-grid-bg"></div>
+				<div class="hud-sweep"></div>
+				<div class="hud-scan"></div>
+				<div class="hud-inset-border"></div>
+				<div class="hud-corner hud-corner--tl"></div>
+				<div class="hud-corner hud-corner--tr"></div>
+				<div class="hud-corner hud-corner--bl"></div>
+				<div class="hud-corner hud-corner--br"></div>
+
+				<div class="status-content">
+					<div class="status-top-bar">
+						<span class="status-kicker">{copy.statusKicker}</span>
+						<span class="status-top-line"></span>
+						<span class="status-sync">
+							<span class="sync-dot"></span>{copy.syncedLabel}
+						</span>
 					</div>
 
-					<div class="status-headline">
-						<p class="section-kicker">{copy.statusKicker}</p>
-						<h1 class="status-name">{siteConfig.name}</h1>
-					</div>
-				</div>
-
-				<p class="status-summary">{copy.summary}</p>
-
-				<dl class="status-grid">
-					{
-						copy.stats.map((stat) => (
-							<div class="status-cell">
-								<dt>{stat.label}</dt>
-								<dd>{stat.value}</dd>
+					<div class="status-profile">
+						<div class="avatar-container">
+							<div class="avatar-frame">
+								<img
+									alt={siteConfig.name}
+									class="avatar-img"
+									height="104"
+									loading="eager"
+									src={siteConfig.avatar}
+									width="104"
+								/>
+								<div class="avatar-overlay"></div>
 							</div>
-						))
-					}
-					<div class="status-cell status-cell--active">
-						<dt>{copy.activeLabel}</dt>
-						<dd>{copy.activeValue}</dd>
-					</div>
-				</dl>
+							<div class="level-badge">
+								<span class="lv-prefix">LV</span>
+								<span class="lv-num">{copy.levelBadge}</span>
+							</div>
+						</div>
 
-				<div class="cta-row">
-					<a class="cta-link" href="/projects">{copy.ctaProjects}</a>
-					<a class="cta-link secondary" href="/research">{copy.ctaResearch}</a>
+						<div class="identity-col">
+							<h1 class="status-name">{siteConfig.name}</h1>
+							<div class="identity-grid">
+								{
+									copy.identityGrid.map((item) => (
+										<div class="identity-cell">
+											<span class="cell-label">{item.label}</span>
+											<span class="cell-value">{item.value}</span>
+										</div>
+									))
+								}
+							</div>
+						</div>
+					</div>
+
+					<p class="status-summary">{copy.summary}</p>
+
+					<div class="mission-strip">
+						<span class="mission-label">{copy.missionLabel}</span>
+						<span class="mission-value">{copy.missionValue}</span>
+					</div>
+
+					<div class="combat-stats-section">
+						<div class="combat-stats-head">
+							<span class="combat-stats-title">{copy.combatStatsLabel}</span>
+							<span class="combat-stats-line"></span>
+						</div>
+
+						<div class="combat-stats-list">
+							{
+								copy.combatStats.map((stat, idx) => (
+									<div class="stat-row">
+										<div class="stat-info">
+											<span class="stat-code">{stat.code}</span>
+											<span class="stat-name">{stat.name}</span>
+											<span class="stat-num">{stat.value}</span>
+										</div>
+										<div class="stat-bar-track">
+											<div
+												class="stat-bar-fill"
+												style={`width: ${stat.value}%; animation-delay: ${0.64 + idx * 0.08}s;`}
+											/>
+										</div>
+									</div>
+								))
+							}
+						</div>
+					</div>
+
+					<a class="active-quest-banner" href="/projects/trip-weather-planner">
+						<span class="active-quest-badge">
+							<span class="live-dot"></span>{copy.activeQuestLabel}
+						</span>
+						<span class="active-quest-title">{copy.activeQuestValue}</span>
+						<span class="active-quest-arrow">→</span>
+					</a>
+
+					<div class="cta-row">
+						<a class="cta-link" href="/projects">{copy.ctaProjects}</a>
+						<a class="cta-link secondary" href="/research">{copy.ctaResearch}</a>
+					</div>
 				</div>
 			</div>
 
@@ -286,103 +373,426 @@ const copy = {
 		width: 100%;
 	}
 
+	@keyframes livePulse {
+		0%, 100% { opacity: 1; transform: scale(1); }
+		50% { opacity: .35; transform: scale(.7); }
+	}
+	@keyframes hudOpen {
+		0% { opacity: 0; transform: scaleY(.72); filter: blur(3px); }
+		60% { opacity: 1; filter: blur(0); }
+		100% { opacity: 1; transform: scaleY(1); }
+	}
+	@keyframes hudScan {
+		0% { transform: translateY(-8%); opacity: 0; }
+		12% { opacity: .85; }
+		88% { opacity: .5; }
+		100% { transform: translateY(760%); opacity: 0; }
+	}
+	@keyframes hudRise {
+		0% { opacity: 0; transform: translateY(7px); }
+		100% { opacity: 1; transform: translateY(0); }
+	}
+	@keyframes barFill {
+		0% { transform: scaleX(0); }
+		100% { transform: scaleX(1); }
+	}
+	@keyframes hudSweep {
+		0% { transform: translateX(-115%); }
+		100% { transform: translateX(215%); }
+	}
+
 	.status-shell {
-		align-content: start;
-		border-color: var(--border-strong);
-		box-shadow: var(--glow-strong), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 		box-sizing: border-box;
-		gap: 0.95rem;
-		grid-template-columns: minmax(0, 1fr);
+		position: relative;
+		overflow: hidden;
+		padding: 20px 22px 22px;
+		border: 1px solid rgba(91, 231, 255, 0.34);
+		border-radius: 4px;
+		background: linear-gradient(180deg, rgba(9, 19, 42, 0.96), rgba(6, 13, 29, 0.96));
+		box-shadow: 0 0 0 1px rgba(5, 11, 23, 0.9), 0 20px 52px rgba(91, 231, 255, 0.07);
+		transform-origin: center top;
+		animation: hudOpen 0.62s cubic-bezier(0.2, 0.9, 0.25, 1) both;
 	}
 
-	.status-head {
-		align-items: center;
+	.hud-grid-bg {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		opacity: 0.5;
+		background-image: linear-gradient(rgba(91, 231, 255, 0.055) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(91, 231, 255, 0.055) 1px, transparent 1px);
+		background-size: 28px 28px;
+	}
+
+	.hud-sweep {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 34%;
+		pointer-events: none;
+		background: linear-gradient(100deg, transparent, rgba(91, 231, 255, 0.05) 45%, transparent);
+		animation: hudSweep 11s linear infinite;
+	}
+
+	.hud-scan {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		height: 1px;
+		pointer-events: none;
+		background: linear-gradient(90deg, transparent, rgba(133, 240, 255, 0.9), transparent);
+		box-shadow: 0 0 10px rgba(91, 231, 255, 0.6);
+		animation: hudScan 1.45s cubic-bezier(0.34, 0.72, 0.3, 1) 0.18s both;
+	}
+
+	.hud-inset-border {
+		position: absolute;
+		inset: 6px;
+		pointer-events: none;
+		border: 1px solid rgba(75, 207, 255, 0.14);
+		border-radius: 2px;
+	}
+
+	.hud-corner {
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		pointer-events: none;
+	}
+
+	.hud-corner--tl { top: -1px; left: -1px; border-top: 2px solid #5be7ff; border-left: 2px solid #5be7ff; }
+	.hud-corner--tr { top: -1px; right: -1px; border-top: 2px solid #5be7ff; border-right: 2px solid #5be7ff; }
+	.hud-corner--bl { bottom: -1px; left: -1px; border-bottom: 2px solid #5be7ff; border-left: 2px solid #5be7ff; }
+	.hud-corner--br { bottom: -1px; right: -1px; border-bottom: 2px solid #5be7ff; border-right: 2px solid #5be7ff; }
+
+	.status-content {
+		position: relative;
 		display: flex;
-		gap: 1.15rem;
+		flex-direction: column;
+		gap: 15px;
 	}
 
-	.status-headline {
-		display: grid;
-		gap: 0.55rem;
-		min-width: 0;
+	.status-top-bar {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		animation: hudRise 0.5s ease-out 0.26s both;
 	}
 
-	.status-id {
-		display: grid;
-		gap: 0.55rem;
-		justify-items: center;
-	}
-
-	.status-avatar {
-		border: 1px solid rgba(91, 231, 255, 0.4);
-		border-radius: 1rem;
-		box-shadow: 0 0 26px rgba(91, 231, 255, 0.16);
-		display: block;
-		height: 7rem;
-		object-fit: cover;
-		width: 7rem;
-	}
-
-	.status-id__tag {
-		color: var(--text-muted);
+	.status-kicker {
 		font-family: var(--font-display);
-		font-size: 0.56rem;
-		letter-spacing: 0.18em;
-		margin: 0;
+		font-weight: 700;
+		font-size: 10px;
+		letter-spacing: 0.26em;
+		color: #5be7ff;
+	}
+
+	.status-top-line {
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(90deg, rgba(91, 231, 255, 0.36), rgba(91, 231, 255, 0.04));
+	}
+
+	.status-sync {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 9.5px;
+		letter-spacing: 0.1em;
+		color: rgba(183, 236, 255, 0.5);
+	}
+
+	.sync-dot, .live-dot {
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background: #5fd694;
+		box-shadow: 0 0 7px rgba(95, 214, 148, 0.8);
+		animation: livePulse 2.6s ease-in-out infinite;
+	}
+
+	.status-profile {
+		display: flex;
+		align-items: flex-start;
+		gap: 17px;
+		animation: hudRise 0.5s ease-out 0.34s both;
+	}
+
+	.avatar-container {
+		position: relative;
+		flex: 0 0 auto;
+		width: 104px;
+		height: 104px;
+	}
+
+	.avatar-frame {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		border: 1px solid rgba(91, 231, 255, 0.45);
+		background: #04091a;
+		clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 13px, 100% 100%, 13px 100%, 0 calc(100% - 13px));
+	}
+
+	.avatar-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.avatar-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(91, 231, 255, 0.14), transparent 52%, rgba(4, 9, 26, 0.5));
+	}
+
+	.level-badge {
+		position: absolute;
+		bottom: -1px;
+		left: -1px;
+		display: flex;
+		align-items: baseline;
+		gap: 3px;
+		padding: 3px 7px 2px;
+		border: 1px solid rgba(91, 231, 255, 0.5);
+		background: rgba(5, 11, 23, 0.94);
+	}
+
+	.lv-prefix {
+		font-family: var(--font-display);
+		font-size: 7.5px;
+		letter-spacing: 0.14em;
+		color: rgba(183, 236, 255, 0.62);
+	}
+
+	.lv-num {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 13px;
+		line-height: 1;
+		color: #5be7ff;
+	}
+
+	.identity-col {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+		min-width: 0;
+		flex: 1;
 	}
 
 	.status-name {
-		font-size: clamp(1.6rem, 2.6vw, 1.95rem);
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 29px;
+		line-height: 1.08;
+		letter-spacing: 0.02em;
+		color: #f4fbff;
+	}
+
+	.identity-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1px;
+		background: rgba(91, 231, 255, 0.13);
+		border: 1px solid rgba(91, 231, 255, 0.13);
+	}
+
+	.identity-cell {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 6px 9px;
+		background: rgba(7, 17, 37, 0.96);
+	}
+
+	.cell-label {
+		font-family: var(--font-display);
+		font-size: 7.5px;
+		letter-spacing: 0.18em;
+		color: rgba(111, 195, 255, 0.72);
+	}
+
+	.cell-value {
+		font-size: 11.5px;
+		font-weight: 500;
+		color: #d7f4ff;
 	}
 
 	.status-summary {
-		color: var(--text-dim);
-		font-size: 0.9rem;
-		line-height: 1.72;
+		margin: 0;
+		font-size: 13px;
+		line-height: 1.7;
+		color: #b7ecff;
 		text-wrap: pretty;
+		animation: hudRise 0.5s ease-out 0.42s both;
 	}
 
-	.status-grid {
-		display: grid;
-		gap: 0.55rem;
-		grid-template-columns: repeat(auto-fit, minmax(11.9rem, 1fr));
-		margin: 0;
+	.mission-strip {
+		display: flex;
+		align-items: center;
+		gap: 11px;
+		padding: 9px 12px;
+		border-left: 2px solid rgba(91, 231, 255, 0.55);
+		background: linear-gradient(90deg, rgba(91, 231, 255, 0.09), rgba(91, 231, 255, 0.01));
+		animation: hudRise 0.5s ease-out 0.5s both;
 	}
 
-	.status-cell {
-		background: rgba(8, 18, 38, 0.46);
-		border: 1px solid var(--border-soft);
-		border-radius: 0.7rem;
-		display: grid;
-		gap: 0.25rem;
-		padding: 0.55rem 0.75rem;
-	}
-
-	.status-cell dt {
-		color: var(--text-muted);
+	.mission-label {
 		font-family: var(--font-display);
-		font-size: 0.5rem;
+		font-size: 8px;
+		letter-spacing: 0.18em;
+		color: #5be7ff;
+		flex: 0 0 auto;
+	}
+
+	.mission-value {
+		font-size: 12.5px;
+		color: #e6f7ff;
+		min-width: 0;
+	}
+
+	.combat-stats-section {
+		display: flex;
+		flex-direction: column;
+		gap: 11px;
+	}
+
+	.combat-stats-head {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		animation: hudRise 0.5s ease-out 0.56s both;
+	}
+
+	.combat-stats-title {
+		font-family: var(--font-display);
+		font-size: 9px;
+		letter-spacing: 0.22em;
+		color: rgba(154, 223, 255, 0.9);
+	}
+
+	.combat-stats-line {
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(90deg, rgba(87, 212, 255, 0.26), rgba(87, 212, 255, 0.03));
+	}
+
+	.combat-stats-list {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+	}
+
+	.stat-row {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+
+	.stat-info {
+		display: flex;
+		align-items: baseline;
+		gap: 9px;
+	}
+
+	.stat-code {
+		flex: 0 0 34px;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 12px;
+		letter-spacing: 0.06em;
+		color: #a2e7ff;
+	}
+
+	.stat-name {
+		flex: 1;
+		font-family: var(--font-display);
+		font-size: 8.5px;
 		letter-spacing: 0.16em;
-		text-transform: uppercase;
+		color: rgba(110, 168, 198, 0.95);
 	}
 
-	.status-cell dd {
-		color: var(--text-bright);
-		font-size: 0.82rem;
-		margin: 0;
+	.stat-num {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 11.5px;
+		color: #b4ecff;
 	}
 
-	.status-cell--active {
-		background: var(--status-active-bg);
-		border-color: var(--status-active-border);
+	.stat-bar-track {
+		position: relative;
+		height: 6px;
+		border-radius: 3px;
+		background: #12335e;
+		overflow: hidden;
 	}
 
-	.status-cell--active dt {
-		color: rgba(201, 255, 224, 0.75);
+	.stat-bar-fill {
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		border-radius: 3px;
+		background: linear-gradient(90deg, #58e2ff, #78a8ff);
+		box-shadow: 0 0 9px rgba(88, 226, 255, 0.4);
+		transform-origin: left center;
+		animation: barFill 0.78s cubic-bezier(0.2, 0.85, 0.3, 1) both;
 	}
 
-	.status-cell--active dd {
-		color: var(--status-active-text);
+	.active-quest-banner {
+		display: flex;
+		align-items: center;
+		gap: 11px;
+		padding: 10px 13px;
+		border: 1px solid rgba(95, 214, 148, 0.34);
+		background: linear-gradient(90deg, rgba(95, 214, 148, 0.13), rgba(95, 214, 148, 0.02));
+		text-decoration: none;
+		transition: border-color 240ms ease, background 240ms ease;
+		animation: hudRise 0.5s ease-out 1.12s both;
+	}
+
+	.active-quest-banner:hover {
+		border-color: rgba(95, 214, 148, 0.6);
+	}
+
+	.active-quest-badge {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-family: var(--font-display);
+		font-size: 8px;
+		letter-spacing: 0.18em;
+		color: #8fe0b0;
+	}
+
+	.active-quest-title {
+		flex: 1;
+		min-width: 0;
+		font-size: 12.5px;
+		color: #c9ffe0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.active-quest-arrow {
+		flex: 0 0 auto;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 11px;
+		color: rgba(201, 255, 224, 0.6);
+	}
+
+	.cta-row {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		animation: hudRise 0.5s ease-out 1.2s both;
 	}
 
 	.mission-card {
@@ -587,10 +997,12 @@ const copy = {
 	}
 
 	@media (max-width: 520px) {
-		.status-head {
-			align-items: flex-start;
+		.status-profile {
 			flex-direction: column;
-			gap: 0.9rem;
+			gap: 12px;
+		}
+		.identity-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>
