@@ -234,3 +234,69 @@ local to `main` on the Ubuntu working copy; it has not been pushed to
 `origin` or deployed, so nothing in this entry is a live-site claim.
 Worktrees: `task-20260731-portfolio-discordbot-copy-rewrite` (superseded),
 `task-20260802-portfolio-discordbot-copy-final`.
+
+## 2026-08-07 — Activities log: first two real entries publication
+
+Two of the four placeholder activity entries were replaced with real,
+public-cleared content: an AI workshop volunteering shift with GDG on
+Campus NTPU at Dacheng Elementary School (2026-06-24), and a campus visit
+to IBM Taiwan paired with an IBM SkillsBuild platform introduction
+(2026-07-14). The remaining two placeholder entries (semester demo talk,
+sustainability forum) were removed rather than left alongside the real
+ones, so the page's entry count reflects actual activity history rather
+than a mix of real and placeholder records. Role Summary and Learning
+Capture copy was reused near-verbatim from the author's own LinkedIn posts
+for both entries, split across the two fields along their natural
+scene-setting / reflection break.
+
+The `activities.photos` schema only supported placeholder caption strings
+before this entry; there was no way to render an actual photo. It was
+extended to a union of the legacy string form and a new
+`{ src, alt, caption }` object form, and `activities.astro` was updated to
+render a real `<img>` for object-typed photos while keeping the existing
+placeholder-frame rendering for any future string-typed entries, so no
+prior content needed migration. Six photos (three per entry) were sourced
+from the author's own event photos; two oversized IBM slide photos
+(~2MB, 4032x2268 phone originals) were downscaled to ~400KB before adding
+to `public/activities/`, matching the size range of other published site
+assets.
+
+Photo selection went through an explicit privacy pass with the site owner
+before publication: one candidate photo (the Dacheng closing group shot)
+clearly shows the faces of a dozen-plus elementary school students, and
+was confirmed by the owner as pre-cleared with the school/foundation for
+public use before being included as-is. Photo captions were also iterated
+against the owner's confirmation of who actually appears in each frame,
+since several show multiple people and the intent was for captions to
+accurately reflect the author's own participation (e.g. "Guiding a
+student one-on-one...", "Asking a question during the Q&A...") rather than
+describe bystanders.
+
+Two defects were found and fixed during live-preview review of the new
+content, both pre-existing bug classes already documented elsewhere in
+this log rather than novel to this change:
+
+- The `#activities-log` section wrapped all activity entries under a
+  single `data-reveal` scroll-reveal target. With three-photo entries
+  now much taller than the old two-slot placeholder cards, the section
+  became too tall to ever satisfy the sitewide IntersectionObserver's
+  18%-visibility threshold, leaving the entire activity list invisible
+  at `opacity: 0` regardless of scroll position — the same failure mode
+  previously fixed on the Sharpe-ratio research page. Fixed by moving
+  `data-reveal` from the wrapping section down to each `<article>` card
+  individually, so each card reveals independently at a height the
+  observer can actually satisfy.
+- `.activity-entry__body`'s two-column grid (text column | photo column)
+  defaulted to `align-items: stretch`, so once the photo column grew tall
+  enough to hold three real images, the text column was stretched to
+  match and distributed the extra height across its own internal rows —
+  including the tag-chip row, whose flex children then stretched
+  vertically into elongated pill shapes instead of staying compact. Fixed
+  with `align-items: start` on the two-column grid so each column sizes
+  to its own content.
+
+All changes were verified with `npm run astro -- check` (0 errors,
+0 warnings) and `npm run build` (17 pages) after each edit, and visually
+confirmed against a live `astro preview` served over the Tailscale network
+so the site owner could review the rendered page and photo captions
+directly before merge. Branch: `task/20260803-portfolio-activities-real-content`.

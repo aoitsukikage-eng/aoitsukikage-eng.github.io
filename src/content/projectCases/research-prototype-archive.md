@@ -2,6 +2,7 @@
 title: Research Prototype Archive Placeholder
 slug: research-prototype-archive-placeholder
 summary: Placeholder entry for a confidential archived research-oriented project record.
+lang: en
 track: research
 domain:
   - quantitative

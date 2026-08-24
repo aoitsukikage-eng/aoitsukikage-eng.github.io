@@ -2,6 +2,7 @@
 title: Beta 與投資組合風險分析
 slug: beta-portfolio-risk-analysis
 summary: 這篇研究從一個常見的疑問出發：買很多支股票分散風險，真的能把風險「消掉」嗎？我以五檔美股（CITI、GRMN、LOGI、TM、UA）一年的日報酬做實驗，分別算出每一檔對大盤（S&P 500）的敏感度（Beta），再依實際持股比例合成一個五檔投組。結果：投組的 Beta 是 0.8586，波動也確實比大部分單一持股低——但仍然高於大盤本身，說明分散化能降低部份風險，卻無法把跟著大盤一起漲跌的系統性風險完全消掉。交完作業後，我另外想把課堂上學到的 CAPM、SML 理論實際套用看看，所以自己加做了一段延伸分析，檢查這五檔股票的實際報酬有沒有對得起各自的風險水準。
+lang: zh
 track: research
 domain:
   - quantitative-finance

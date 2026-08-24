@@ -5,4 +5,15 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	site: 'https://aoitsukikage-eng.github.io',
 	base: '/',
+	i18n: {
+		defaultLocale: 'zh',
+		locales: ['zh', 'en'],
+		routing: {
+			prefixDefaultLocale: false,
+			fallbackType: 'rewrite',
+		},
+		fallback: {
+			en: 'zh',
+		},
+	},
 });

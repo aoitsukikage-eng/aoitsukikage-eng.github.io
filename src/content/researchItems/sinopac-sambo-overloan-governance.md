@@ -2,6 +2,7 @@
 title: 永豐金控三寶超貸案：金融法規與公司治理案例研究
 slug: sinopac-sambo-overloan-governance
 summary: 以公開行政處分、司法判決與法規資料為基礎，討論三寶超貸案的金融監理與公司治理問題。
+lang: zh
 track: research
 domain:
   - narrative-research

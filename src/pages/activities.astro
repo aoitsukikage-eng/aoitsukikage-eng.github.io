@@ -8,87 +8,130 @@ import {
 	sortActivities,
 } from "../lib/activities";
 
+import { zh } from "../i18n/zh";
+import { en } from "../i18n/en";
+
+const currentLocale = Astro.currentLocale ?? "zh";
+const dict = currentLocale === "en" ? en : zh;
+
 const activityEntries = sortActivities(await getCollection("activities"));
+
+function getFallbackText(entryLang: "zh" | "en") {
+	const langName = currentLocale === "zh"
+		? (entryLang === "en" ? "英文" : "中文")
+		: (entryLang === "zh" ? "Traditional Chinese" : "English");
+	return {
+		notice: dict.contentFallback.notice.replace("{lang}", langName),
+		viewLink: dict.contentFallback.viewLink.replace("{lang}", langName),
+	};
+}
 ---
 
 <SiteLayout
 	title="Activities | Aoi Tsukikage Engineering"
-	description="Activity route for volunteer, talk, visit, and forum placeholders with structured photo-caption slots."
+	description="Activity route logging volunteer, talk, visit, and forum experiences with structured role, summary, and photo records."
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
 		<section class="section-card section-shell" data-reveal id="activities-hero" style="--reveal-order: 0;">
 			<p class="section-kicker">[SYSTEM]</p>
-			<h1>Activities is a structured experience log, not a photo wall, with room for future image swaps that do not force a redesign.</h1>
+			<h1>Activities is a structured experience log, not a photo wall — real photos replace placeholder slots as each entry clears for public release.</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
 				Each entry keeps the experience framing first: organization, date, role,
-				summary, and only then a small set of placeholder visual slots with one-line
-				captions ready for the later content pass.
+				summary, and then either real public-safe photos or a placeholder slot
+				for entries still awaiting a content pass.
 			</p>
 			<div class="meta-row">
-				<span class="meta-chip">{activityEntries.length} placeholder entries</span>
+				<span class="meta-chip">{activityEntries.length} activity log entries</span>
 			</div>
 			<div class="cta-row">
-				<a class="cta-link" href="/research">Open Research Route</a>
-				<a class="cta-link secondary" href="/projects">View Projects</a>
+				<a class="cta-link" href={currentLocale === "en" ? "/en/research" : "/research"}>Open Research Route</a>
+				<a class="cta-link secondary" href={currentLocale === "en" ? "/en/projects" : "/projects"}>View Projects</a>
 			</div>
 		</section>
 
-		<section class="activity-log" data-reveal id="activities-log" style="--reveal-order: 2;">
+		<section class="activity-log" id="activities-log">
 			{
-				activityEntries.map((activity, index) => (
-					<article
-						class="section-card activity-entry"
-						style={`--reveal-order: ${index + 2};`}
-					>
-						<div class="activity-entry__header">
-							<div class="meta-row">
-								<span class="project-chip">{getActivityTypeLabel(activity.data.type)}</span>
-								<span class="meta-chip">{activity.data.org}</span>
-								<span class="meta-chip">{formatActivityDate(activity.data.date)}</span>
-							</div>
-							<h2>{activity.data.title}</h2>
-						</div>
+				activityEntries.map((activity, index) => {
+					const isLocaleMatch = activity.data.lang === currentLocale;
+					const nativeUrl = activity.data.lang === "en" ? "/en/activities" : "/activities";
+					const { notice, viewLink } = getFallbackText(activity.data.lang);
 
-						<div class="hud-divider" aria-hidden="true"></div>
-
-						<div class="activity-entry__body">
-							<div class="activity-copy">
-								<div class="detail-block">
-									<h3 class="detail-title">Role Summary</h3>
-									<p>{activity.data.role}</p>
-								</div>
-								<div class="detail-block">
-									<h3 class="detail-title">Learning Capture</h3>
-									<p>{activity.data.summary}</p>
-								</div>
+					return (
+						<article
+							class="section-card activity-entry"
+							data-reveal
+							style={`--reveal-order: ${index + 2};`}
+						>
+							<div class="activity-entry__header">
 								<div class="meta-row">
-									{
-										activity.data.tags.map((tag) => (
-											<span class="meta-chip">{tag.replaceAll("-", " ")}</span>
-										))
-									}
+									<span class="project-chip">{getActivityTypeLabel(activity.data.type)}</span>
+									<span class="meta-chip">{activity.data.org}</span>
+									<span class="meta-chip">{formatActivityDate(activity.data.date)}</span>
 								</div>
+								<h2>{activity.data.title}</h2>
 							</div>
 
-							<div class="activity-photos">
-								{
-									activity.data.photos.map((photo, photoIndex) => (
-										<figure class="photo-slot">
-											<div class="photo-frame" aria-hidden="true">
-												<span>[PHOTO SLOT {photoIndex + 1}]</span>
-											</div>
-											<figcaption>
-												{getActivityPhotoCaption(activity, photo, photoIndex)}
-											</figcaption>
-										</figure>
-									))
-								}
-							</div>
-						</div>
-					</article>
-				))
+							<div class="hud-divider" aria-hidden="true"></div>
+
+							{isLocaleMatch ? (
+								<div class="activity-entry__body">
+									<div class="activity-copy">
+										<div class="detail-block">
+											<h3 class="detail-title">Role Summary</h3>
+											<p>{activity.data.role}</p>
+										</div>
+										<div class="detail-block">
+											<h3 class="detail-title">Learning Capture</h3>
+											<p>{activity.data.summary}</p>
+										</div>
+										<div class="meta-row">
+											{
+												activity.data.tags.map((tag) => (
+													<span class="meta-chip">{tag.replaceAll("-", " ")}</span>
+												))
+											}
+										</div>
+									</div>
+
+									<div class="activity-photos">
+										{
+											activity.data.photos.map((photo, photoIndex) =>
+												typeof photo === "string" ? (
+													<figure class="photo-slot">
+														<div class="photo-frame" aria-hidden="true">
+															<span>[PHOTO SLOT {photoIndex + 1}]</span>
+														</div>
+														<figcaption>
+															{getActivityPhotoCaption(activity, photo, photoIndex)}
+														</figcaption>
+													</figure>
+												) : (
+													<figure class="photo-slot photo-slot--filled">
+														<img alt={photo.alt} loading="lazy" src={photo.src} />
+														<figcaption>{photo.caption}</figcaption>
+													</figure>
+												),
+											)
+										}
+									</div>
+								</div>
+							) : (
+								<div class="activity-entry__body">
+									<div class="activity-copy">
+										<div class="detail-block">
+											<p>{notice}</p>
+										</div>
+										<div class="cta-row">
+											<a class="cta-link" href={nativeUrl}>{viewLink}</a>
+										</div>
+									</div>
+								</div>
+							)}
+						</article>
+					);
+				})
 			}
 		</section>
 	</div>
@@ -112,6 +155,7 @@ const activityEntries = sortActivities(await getCollection("activities"));
 	}
 
 	.activity-entry__body {
+		align-items: start;
 		display: grid;
 		gap: 1.25rem;
 		grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
@@ -166,6 +210,15 @@ const activityEntries = sortActivities(await getCollection("activities"));
 		color: var(--text-muted);
 		font-size: 0.92rem;
 		line-height: 1.66;
+	}
+
+	.photo-slot--filled img {
+		border-radius: 0.95rem;
+		display: block;
+		height: auto;
+		max-height: 22rem;
+		object-fit: cover;
+		width: 100%;
 	}
 
 	@media (max-width: 900px) {

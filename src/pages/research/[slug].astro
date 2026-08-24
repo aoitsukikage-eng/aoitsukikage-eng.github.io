@@ -4,6 +4,9 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { siteConfig } from "../../config/site";
 import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
 
+import { zh } from "../../i18n/zh";
+import { en } from "../../i18n/en";
+
 export async function getStaticPaths() {
 	const entries = sortResearch(getResearchEntries(await getCollection("researchItems")));
 	return entries.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
@@ -14,6 +17,18 @@ const { Content } = await render(entry);
 const group = RESEARCH_GROUPS.find((item) => item.key === getResearchGroup(entry));
 const isEsgStudy = entry.data.slug === "executive-compensation-esg-disclosure";
 const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
+
+const currentLocale = Astro.currentLocale ?? "zh";
+const dict = currentLocale === "en" ? en : zh;
+const isLocaleMatch = entry.data.lang === currentLocale;
+const nativeUrl = entry.data.lang === "en" ? `/en/research/${entry.data.slug}/` : `/research/${entry.data.slug}/`;
+
+const langName = currentLocale === "zh"
+	? (entry.data.lang === "en" ? "英文" : "中文")
+	: (entry.data.lang === "zh" ? "Traditional Chinese" : "English");
+const notice = dict.contentFallback.notice.replace("{lang}", langName);
+const viewLink = dict.contentFallback.viewLink.replace("{lang}", langName);
+const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 ---
 
 <SiteLayout title={`${entry.data.title} | Research`} description={entry.data.summary} currentPath={Astro.url.pathname}>
@@ -29,82 +44,94 @@ const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 			</div>
 		</header>
 
-		<section class="section-shell section-plain" aria-labelledby="highlights-heading" data-reveal style="--reveal-order: 1;">
-			<p class="section-kicker">[HIGHLIGHTS]</p>
-			<h2 id="highlights-heading">At a glance</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<dl class="highlights-grid">
-				{entry.data.highlights.map((highlight) => (
-					<div><dt>{highlight.label}</dt><dd>{highlight.value}</dd>{highlight.detail && <p>{highlight.detail}</p>}</div>
-				))}
-			</dl>
-		</section>
+		{isLocaleMatch ? (
+			<>
+				<section class="section-shell section-plain" aria-labelledby="highlights-heading" data-reveal style="--reveal-order: 1;">
+					<p class="section-kicker">[HIGHLIGHTS]</p>
+					<h2 id="highlights-heading">At a glance</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<dl class="highlights-grid">
+						{entry.data.highlights.map((highlight) => (
+							<div><dt>{highlight.label}</dt><dd>{highlight.value}</dd>{highlight.detail && <p>{highlight.detail}</p>}</div>
+						))}
+					</dl>
+				</section>
 
-		<section class="section-shell section-plain" aria-labelledby="method-heading" data-reveal style="--reveal-order: 2;">
-			<p class="section-kicker">[METHOD]</p>
-			<h2 id="method-heading">How the brief was constructed</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<ol class="method-list">{entry.data.methods.map((method) => <li>{method}</li>)}</ol>
-		</section>
+				<section class="section-shell section-plain" aria-labelledby="method-heading" data-reveal style="--reveal-order: 2;">
+					<p class="section-kicker">[METHOD]</p>
+					<h2 id="method-heading">How the brief was constructed</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<ol class="method-list">{entry.data.methods.map((method) => <li>{method}</li>)}</ol>
+				</section>
 
-		<section class="section-shell section-plain" aria-labelledby="findings-heading" data-reveal style="--reveal-order: 3;">
-			<p class="section-kicker">[FINDINGS]</p>
-			<h2 id="findings-heading">What the source-supported analysis indicates</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<ul class="finding-list">{entry.data.findings.map((finding) => <li>{finding}</li>)}</ul>
-		</section>
+				<section class="section-shell section-plain" aria-labelledby="findings-heading" data-reveal style="--reveal-order: 3;">
+					<p class="section-kicker">[FINDINGS]</p>
+					<h2 id="findings-heading">What the source-supported analysis indicates</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<ul class="finding-list">{entry.data.findings.map((finding) => <li>{finding}</li>)}</ul>
+				</section>
 
-		{(entry.data.visuals?.length || entry.data.type !== "quantitative") && (
-		<section class="section-shell section-plain" aria-labelledby="visuals-heading" data-reveal style="--reveal-order: 4;">
-			<p class="section-kicker">[VISUAL MODEL]</p>
-			<h2 id="visuals-heading">{entry.data.type === "quantitative" ? "Author-created charts and framework" : "Native reading framework"}</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			{entry.data.visuals?.length ? <div class="visual-grid">
-				{entry.data.visuals.map((visual) => <figure><img src={visual.src} alt={visual.alt} loading="lazy" /><figcaption><span>{visual.caption}</span><span class="visual-rights">© 2026 {siteConfig.name} · <a href={Astro.url.href}>{Astro.url.href}</a></span></figcaption></figure>)}
-			</div> : entry.data.type === "comparative" ? <div class="comparison-model" aria-label="Four-company disclosure comparison framework">
-				<div><span>01</span><strong>Company disclosures</strong><p>Annual reports and sustainability reports</p></div>
-				<div><span>02</span><strong>Course questions</strong><p>ESG indicators and compensation weighting</p></div>
-				<div><span>03</span><strong>Author extension</strong><p>Cross-industry and cross-document comparison</p></div>
-			</div> : <ol class="narrative-timeline" aria-label="Narrative research framework">
-				<li><span>01</span><div><strong>Context</strong><p>{isLegalStudy ? "Reconstruct the source-reported case setting and relationships." : "Place the case in its local community and ageing-society context."}</p></div></li>
-				<li><span>02</span><div><strong>Framework</strong><p>{isLegalStudy ? "Read administrative, criminal, and internal-control layers separately." : "Read financial accessibility through service situations and relationships."}</p></div></li>
-				<li><span>03</span><div><strong>Boundary</strong><p>Publish a text-based, source-traceable brief without redistributing protected source material.</p></div></li>
-			</ol>}
-		</section>
+				{(entry.data.visuals?.length || entry.data.type !== "quantitative") && (
+				<section class="section-shell section-plain" aria-labelledby="visuals-heading" data-reveal style="--reveal-order: 4;">
+					<p class="section-kicker">[VISUAL MODEL]</p>
+					<h2 id="visuals-heading">{entry.data.type === "quantitative" ? "Author-created charts and framework" : "Native reading framework"}</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					{entry.data.visuals?.length ? <div class="visual-grid">
+						{entry.data.visuals.map((visual) => <figure><img src={visual.src} alt={visual.alt} loading="lazy" /><figcaption><span>{visual.caption}</span><span class="visual-rights">© 2026 {siteConfig.name} · <a href={Astro.url.href}>{Astro.url.href}</a></span></figcaption></figure>)}
+					</div> : entry.data.type === "comparative" ? <div class="comparison-model" aria-label="Four-company disclosure comparison framework">
+						<div><span>01</span><strong>Company disclosures</strong><p>Annual reports and sustainability reports</p></div>
+						<div><span>02</span><strong>Course questions</strong><p>ESG indicators and compensation weighting</p></div>
+						<div><span>03</span><strong>Author extension</strong><p>Cross-industry and cross-document comparison</p></div>
+					</div> : <ol class="narrative-timeline" aria-label="Narrative research framework">
+						<li><span>01</span><div><strong>Context</strong><p>{isLegalStudy ? "Reconstruct the source-reported case setting and relationships." : "Place the case in its local community and ageing-society context."}</p></div></li>
+						<li><span>02</span><div><strong>Framework</strong><p>{isLegalStudy ? "Read administrative, criminal, and internal-control layers separately." : "Read financial accessibility through service situations and relationships."}</p></div></li>
+						<li><span>03</span><div><strong>Boundary</strong><p>Publish a text-based, source-traceable brief without redistributing protected source material.</p></div></li>
+					</ol>}
+				</section>
+				)}
+
+				{isEsgStudy && <section class="section-card section-shell distinction" aria-labelledby="assignment-boundary-heading" data-reveal style="--reveal-order: 5;">
+					<p class="section-kicker">[SCOPE BOUNDARY]</p>
+					<h2 id="assignment-boundary-heading">Teacher requirements and author extension</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<p><strong>Teacher requirements:</strong> identify the ESG performance indicators used and their weighting in executive compensation evaluation.</p>
+					<p><strong>Author extension:</strong> the four-company cross-industry sample, annual-report/sustainability-report cross-reading, disclosure-consistency comparison, clawback, and governance observations.</p>
+				</section>}
+
+				<section class="section-shell section-plain" aria-labelledby="reflection-heading" data-reveal style={`--reveal-order: ${isEsgStudy ? 6 : 5};`}>
+					<p class="section-kicker">[REFLECTION & LIMITS]</p>
+					<h2 id="reflection-heading">Public-version boundary</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<p>{entry.data.reflection}</p>
+					{isLegalStudy && <p class="legal-note"><strong>Research-time notice:</strong> This page reflects publicly available material at the report-writing time, is not legal advice, and does not claim the latest or final judicial outcome.</p>}
+				</section>
+
+				<section class="section-shell section-plain source-brief" aria-labelledby="source-brief-heading">
+					<p class="section-kicker">[SOURCE-TRACEABLE BRIEF]</p>
+					<h2 id="source-brief-heading">Research context and publication boundary</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<Content />
+				</section>
+
+				<section class="section-shell section-plain publication-rights" aria-labelledby="publication-rights-heading" data-reveal style="--reveal-order: 8;">
+					<p class="section-kicker">[PUBLICATION RIGHTS]</p>
+					<h2 id="publication-rights-heading">Citation and rights</h2>
+					<div class="hud-divider" aria-hidden="true"></div>
+					<p><strong>{siteConfig.name}</strong> · © 2026 · All Rights Reserved</p>
+					<p>Fixed page URL: <a href={Astro.url.href}>{Astro.url.href}</a></p>
+					<p>Reasonable quotation is welcome when it clearly identifies the author and this source page.</p>
+				</section>
+			</>
+		) : (
+			<section class="section-card section-shell" data-reveal style="--reveal-order: 1;">
+				<p class="section-kicker">[LOCALE NOTICE]</p>
+				<p>{notice}</p>
+				<div class="cta-row">
+					<a class="cta-link" href={nativeUrl}>{viewLink}</a>
+				</div>
+			</section>
 		)}
-
-		{isEsgStudy && <section class="section-card section-shell distinction" aria-labelledby="assignment-boundary-heading" data-reveal style="--reveal-order: 5;">
-			<p class="section-kicker">[SCOPE BOUNDARY]</p>
-			<h2 id="assignment-boundary-heading">Teacher requirements and author extension</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p><strong>Teacher requirements:</strong> identify the ESG performance indicators used and their weighting in executive compensation evaluation.</p>
-			<p><strong>Author extension:</strong> the four-company cross-industry sample, annual-report/sustainability-report cross-reading, disclosure-consistency comparison, clawback, and governance observations.</p>
-		</section>}
-
-		<section class="section-shell section-plain" aria-labelledby="reflection-heading" data-reveal style={`--reveal-order: ${isEsgStudy ? 6 : 5};`}>
-			<p class="section-kicker">[REFLECTION & LIMITS]</p>
-			<h2 id="reflection-heading">Public-version boundary</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p>{entry.data.reflection}</p>
-			{isLegalStudy && <p class="legal-note"><strong>Research-time notice:</strong> This page reflects publicly available material at the report-writing time, is not legal advice, and does not claim the latest or final judicial outcome.</p>}
-		</section>
-
-		<section class="section-shell section-plain source-brief" aria-labelledby="source-brief-heading">
-			<p class="section-kicker">[SOURCE-TRACEABLE BRIEF]</p>
-			<h2 id="source-brief-heading">Research context and publication boundary</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<Content />
-		</section>
-
-		<section class="section-shell section-plain publication-rights" aria-labelledby="publication-rights-heading" data-reveal style="--reveal-order: 8;">
-			<p class="section-kicker">[PUBLICATION RIGHTS]</p>
-			<h2 id="publication-rights-heading">Citation and rights</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<p><strong>{siteConfig.name}</strong> · © 2026 · All Rights Reserved</p>
-			<p>Fixed page URL: <a href={Astro.url.href}>{Astro.url.href}</a></p>
-			<p>Reasonable quotation is welcome when it clearly identifies the author and this source page.</p>
-		</section>
-		<p class="back-link"><a class="cta-link secondary" href="/research/">Back to Research Hub</a></p>
+		<p class="back-link"><a class="cta-link secondary" href={backHubUrl}>Back to Research Hub</a></p>
 	</article>
 </SiteLayout>
 

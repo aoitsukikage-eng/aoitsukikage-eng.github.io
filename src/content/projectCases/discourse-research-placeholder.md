@@ -2,6 +2,7 @@
 title: Discourse Research Placeholder
 slug: discourse-research-placeholder
 summary: Placeholder entry for a regulation and academic-writing oriented research record.
+lang: en
 track: research
 domain:
   - academic-writing

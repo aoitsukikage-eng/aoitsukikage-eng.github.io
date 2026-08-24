@@ -2,6 +2,7 @@
 title: Competition Ongoing Placeholder
 slug: competition-ongoing-placeholder
 summary: Placeholder entry for an ongoing competition-style project that must expose only public-safe progress signals.
+lang: en
 track: professional_case
 domain:
   - competition

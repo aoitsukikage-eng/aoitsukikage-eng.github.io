@@ -2,6 +2,7 @@
 title: Client Operations Case Placeholder
 slug: client-ops-case-placeholder
 summary: Placeholder entry for a partially shareable professional case without NDA-sensitive details.
+lang: en
 track: professional_case
 domain:
   - operations

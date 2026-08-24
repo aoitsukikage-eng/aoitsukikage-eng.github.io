@@ -2,6 +2,7 @@
 title: Discord Multi-Bot Showcase
 slug: discord-bot-showcase
 summary: Three Gemini-powered Discord chatbots, each with its own personality, living together in one server — they remember conversations, understand images and YouTube links, tell daily horoscopes, and even run a playful kick-roulette mini-game.
+lang: en
 track: personal_project
 domain:
   - discord

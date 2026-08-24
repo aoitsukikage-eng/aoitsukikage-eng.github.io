@@ -2,6 +2,7 @@
 title: 高階主管薪酬與 ESG 績效連結：四家上市公司的跨產業揭露分析
 slug: executive-compensation-esg-disclosure
 summary: 比較四家臺灣上市公司在 2024 年期間對高階主管薪酬與 ESG 績效連結的指標、權重與跨文件揭露。
+lang: zh
 track: research
 domain:
   - comparative-research
