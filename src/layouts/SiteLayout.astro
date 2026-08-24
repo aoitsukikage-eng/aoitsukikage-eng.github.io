@@ -40,6 +40,12 @@ const dict = currentLocale === "en" ? en : zh;
 			rel="preload"
 			type="font/woff2"
 		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Huninn&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
@@ -620,6 +626,140 @@ const dict = currentLocale === "en" ? en : zh;
 
 		:global(html[data-js="ready"] [data-reveal]) {
 			opacity: 1;
+		}
+	}
+
+	@media print {
+		/* 1. 解除 reveal 動畫的 opacity:0，否則未捲動到的區塊會印成空白 */
+		:global(html[data-js="ready"] [data-reveal]) {
+			opacity: 1 !important;
+			transform: none !important;
+			transition: none !important;
+		}
+
+		/* 2. 深底轉白底、文字轉黑，並移除背景格線與光暈 */
+		:global(html) {
+			background: #fff !important;
+			color: #111 !important;
+		}
+
+		:global(body) {
+			background: #fff !important;
+			color: #111 !important;
+		}
+
+		:global(body)::before,
+		:global(body)::after {
+			display: none !important;
+		}
+
+		/* 3. sticky header 改為靜態，避免壓住內容或重複 */
+		.site-header {
+			position: static !important;
+			background: none !important;
+			border: 0 !important;
+			border-bottom: 1px solid #999 !important;
+			border-radius: 0 !important;
+			box-shadow: none !important;
+			backdrop-filter: none !important;
+			padding: 0 0 0.6rem !important;
+		}
+
+		.site-header::before,
+		.site-header::after {
+			display: none !important;
+		}
+
+		.brand-title,
+		.brand-note,
+		.eyebrow {
+			color: #111 !important;
+			background: none !important;
+			border-color: #999 !important;
+		}
+
+		/* 4. 面板卡片去底去光，保留細框 */
+		:global(.section-card),
+		:global(.project-card) {
+			background: none !important;
+			border: 1px solid #bbb !important;
+			box-shadow: none !important;
+			backdrop-filter: none !important;
+			transform: none !important;
+		}
+
+		:global(.section-card)::before,
+		:global(.section-card)::after {
+			display: none !important;
+		}
+
+		:global(.section-kicker),
+		:global(.section-tag),
+		:global(.meta-chip) {
+			background: none !important;
+			border: 1px solid #999 !important;
+			color: #333 !important;
+		}
+
+		:global(.hud-divider) {
+			background: #999 !important;
+			box-shadow: none !important;
+		}
+
+		:global(.hud-divider::after) {
+			display: none !important;
+		}
+
+		:global(.section-card p),
+		:global(.section-shell p),
+		:global(.section-card li),
+		:global(.section-shell li),
+		:global(.section-card h1),
+		:global(.section-card h2),
+		:global(.section-card h3),
+		:global(.section-shell h1),
+		:global(.section-shell h2),
+		:global(.section-shell h3) {
+			color: #111 !important;
+		}
+
+		:global(a) {
+			color: #111 !important;
+			text-decoration: underline !important;
+		}
+
+		/* 5. 版面：移除螢幕用的最大寬度限制與外距 */
+		.page-shell {
+			max-width: none !important;
+			min-height: 0 !important;
+			padding: 0 !important;
+			gap: 1.2rem !important;
+		}
+
+		.content {
+			max-width: none !important;
+			gap: 1.6rem !important;
+		}
+
+		/* 6. 避免標題與表格被切斷 */
+		:global(h1),
+		:global(h2),
+		:global(h3) {
+			break-after: avoid;
+			page-break-after: avoid;
+		}
+
+		:global(table),
+		:global(figure),
+		:global(img) {
+			break-inside: avoid;
+			page-break-inside: avoid;
+		}
+
+		/* 7. 隱藏導覽與返回連結（列印時無作用） */
+		:global(nav),
+		:global(.back-link) {
+			display: none !important;
 		}
 	}
 </style>

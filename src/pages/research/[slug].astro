@@ -136,6 +136,20 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 </SiteLayout>
 
 <style>
+	.research-detail :global(h1),
+	.research-detail :global(h2),
+	.research-detail :global(h3) {
+		font-family: var(--font-heading);
+		font-weight: 400;
+		letter-spacing: 0.04em;
+		line-height: 1.28;
+		color: var(--text-bright);
+	}
+	.research-detail :global(p) {
+		max-width: 40rem;
+		color: var(--text-dim);
+		line-height: 1.82;
+	}
 	.lede { color: var(--text-dim); font-size: clamp(1.05rem, 2vw, 1.2rem); }
 	.highlights-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin: 0; }
 	.highlights-grid div { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; padding: 1rem; }
@@ -149,11 +163,16 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 	.source-brief :global(h2) { font-size: 1.25rem; }
 	.source-brief :global(h3) { font-size: 1.08rem; }
 	.source-brief :global(li) { margin: .5rem 0; }
-	.source-brief :global(table) { border-collapse: collapse; display: block; margin: 1.25rem 0; max-width: 100%; overflow-x: auto; width: 100%; }
+	.source-brief :global(table) { border-collapse: collapse; display: block; margin: 1.25rem 0; max-width: 100%; overflow-x: auto; width: 100%; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
 	.source-brief :global(th), .source-brief :global(td) { border: 1px solid rgba(91, 231, 255, .18); padding: .65rem .75rem; text-align: left; white-space: nowrap; }
+	.source-brief :global(td:nth-child(n+2)) { text-align: right; }
+	.source-brief :global(tr:hover) { background: rgba(91, 231, 255, 0.06); }
 	.source-brief :global(th) { background: rgba(91, 231, 255, .1); color: var(--text-bright); font-family: var(--font-display); font-size: .76rem; letter-spacing: .04em; }
 	.source-brief :global(td) { color: var(--text-dim); }
-	.source-brief :global(.frontier-figure) { align-items: center; display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); margin: 1.25rem 0; }
+	.source-brief :global(.table-chip) { display: inline-flex; padding: .26rem .62rem; border: 1px solid rgba(91, 231, 255, .22); border-radius: 999px; background: rgba(91, 231, 255, .07); color: #5be7ff; font-family: 'Orbitron', sans-serif; font-size: .64rem; letter-spacing: .14em; margin-right: .5rem; }
+	.source-brief :global(.solve-card) { max-width: 52rem; padding: 1.35rem 1.5rem; background: rgba(8, 18, 38, .56); border: 1px solid rgba(91, 231, 255, .22); border-radius: 1rem; display: grid; gap: .55rem; margin: 1.2rem 0; }
+	.source-brief :global(.solve-card p) { margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: .98rem; line-height: 1.9; color: #f4fbff; font-variant-numeric: tabular-nums; }
+	.source-brief :global(.frontier-figure) { align-items: center; display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); margin: 1.25rem 0; max-width: 56rem; }
 	.source-brief :global(.frontier-figure table) { margin: 0; }
 	.source-brief :global(.frontier-figure img) { border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: block; height: auto; width: 100%; }
 	@media (max-width: 760px) { .source-brief :global(.frontier-figure) { grid-template-columns: 1fr; } }
@@ -176,4 +195,38 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 	.narrative-timeline li { display: grid; gap: .45rem; grid-template-columns: 2.5rem 1fr; }
 	@media (max-width: 680px) { .comparison-model { grid-template-columns: 1fr; } }
 	.back-link { margin: 0; }
+
+	@media print {
+		.source-brief :global(table) {
+			display: table !important;
+			overflow: visible !important;
+			width: 100% !important;
+		}
+
+		.source-brief :global(th),
+		.source-brief :global(td) {
+			white-space: normal !important;
+			border-color: #999 !important;
+			color: #111 !important;
+			background: none !important;
+		}
+
+		.source-brief :global(.frontier-figure) {
+			grid-template-columns: 1fr !important;
+		}
+
+		.visual-grid,
+		.comparison-model {
+			grid-template-columns: 1fr !important;
+		}
+
+		.visual-grid figure {
+			background: none !important;
+			border-color: #bbb !important;
+		}
+
+		.publication-rights {
+			border-left-color: #999 !important;
+		}
+	}
 </style>
