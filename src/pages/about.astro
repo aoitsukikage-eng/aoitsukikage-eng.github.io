@@ -14,8 +14,8 @@ import { siteConfig } from "../config/site";
 			<h1>{siteConfig.name}</h1>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p class="summary">
-				NTPU Finance Student exploring quantitative finance, Python automation, and
-				FinTech.
+				I didn't come from a CS background. I learned to build things because a
+				job needed it.
 			</p>
 			<div class="hero-actions">
 				<div class="cta-row">
@@ -32,37 +32,35 @@ import { siteConfig } from "../config/site";
 			</div>
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="focus" style="--reveal-order: 1;">
-			<p class="section-kicker">[FOCUS]</p>
-			<h2>Current areas of interest</h2>
-			<div class="hud-divider" aria-hidden="true"></div>
-			<div class="section-grid focus-grid">
-				<article class="focus-card">
-					<h3>Quantitative finance</h3>
-					<p>Exploring finance through quantitative perspectives.</p>
-				</article>
-				<article class="focus-card">
-					<h3>Python automation</h3>
-					<p>Using Python to automate repeatable work.</p>
-				</article>
-				<article class="focus-card">
-					<h3>FinTech</h3>
-					<p>Following the intersection of finance and technology.</p>
-				</article>
-			</div>
-		</section>
-
-		<section class="section-shell section-plain" data-reveal id="context" style="--reveal-order: 2;">
-			<p class="section-kicker">[CONTEXT]</p>
-			<h2>Working context</h2>
+		<section class="section-shell section-plain" data-reveal id="journey" style="--reveal-order: 1;">
+			<p class="section-kicker">[JOURNEY]</p>
+			<h2>How I got here</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<p>
-				This portfolio is a space to connect interests in finance, automation, and
-				financial technology with work that can be shared publicly.
+				When I started as a research assistant at NTPU's Center for Corporate
+				Sustainability, the work was reading corporate sustainability reports by
+				hand, one at a time. With some encouragement from my supervisors, I
+				picked up Python to automate the parts that didn't need to be manual. It
+				stuck — I started building my own tools for coursework too, just because
+				I wanted the practice, not because anyone asked.
 			</p>
+			<p>
+				That habit shaped how I build now: I start from what a task actually
+				needs, not from what a "proper" architecture would look like. It's less
+				elegant on paper, but it ships, and it's easier for the next person to
+				maintain.
+			</p>
+			<p>
+				From there it snowballed — I designed and shipped an ESG advisory
+				chatbot end-to-end for the center, talked my way into a GDG NTPU ×
+				TPIsoftware industry project doing chatbot front-end and UI/UX, and more
+				recently found myself on the other side of it, volunteering to teach
+				elementary school kids how to use AI tools.
+			</p>
+			<p>I'm still mostly self-taught, still mostly figuring it out as I build.</p>
 		</section>
 
-		<section class="section-card section-shell contact-section" data-reveal id="contact" style="--reveal-order: 3;">
+		<section class="section-card section-shell contact-section" data-reveal id="contact" style="--reveal-order: 2;">
 			<p class="section-kicker">[CONTACT]</p>
 			<h2>Get in Touch</h2>
 			<div class="hud-divider" aria-hidden="true"></div>
@@ -183,23 +181,6 @@ import { siteConfig } from "../config/site";
 	.hint-symbol {
 		color: var(--accent);
 		margin-right: 0.25rem;
-	}
-
-	.focus-grid {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-
-	.focus-card {
-		background: rgba(8, 18, 38, 0.46);
-		border: 1px solid rgba(91, 231, 255, 0.12);
-		border-radius: 1.2rem;
-		display: grid;
-		gap: 0.75rem;
-		padding: 1.15rem 1.2rem;
-	}
-
-	.focus-card h3 {
-		margin: 0;
 	}
 
 	:global(.section-shell) {
@@ -355,7 +336,6 @@ import { siteConfig } from "../config/site";
 	}
 
 	@media (max-width: 760px) {
-		.focus-grid,
 		.contact-secondary-grid {
 			grid-template-columns: 1fr;
 		}
