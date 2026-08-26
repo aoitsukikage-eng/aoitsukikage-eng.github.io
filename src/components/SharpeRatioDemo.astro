@@ -15,12 +15,41 @@ import demoArticle from "./sharpe-ratio-demo.html?raw";
 		font-family: "IBM Plex Sans", "Huninn", sans-serif;
 	}
 
+	/* The page background remains the shared SiteLayout treatment. */
+	.sharpe-demo :global(.sharpe-hero) {
+		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+		position: relative;
+		transition:
+			transform var(--motion-base) var(--easing-standard),
+			border-color var(--motion-base) var(--easing-standard),
+			box-shadow var(--motion-base) var(--easing-standard),
+			background var(--motion-base) var(--easing-standard);
+	}
+
+	.sharpe-demo :global(.sharpe-hero:hover),
+	.sharpe-demo :global(.sharpe-hero:focus-within) {
+		border-color: var(--border-strong) !important;
+		box-shadow: var(--glow-strong), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+		transform: translateY(-1px);
+	}
+
 	.sharpe-demo :global(a) {
 		color: var(--accent);
 	}
 
 	.sharpe-demo :global(a:hover) {
 		color: var(--text-bright);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sharpe-demo :global(.sharpe-hero) {
+			transition: none;
+		}
+
+		.sharpe-demo :global(.sharpe-hero:hover),
+		.sharpe-demo :global(.sharpe-hero:focus-within) {
+			transform: none;
+		}
 	}
 
 	@media (max-width: 620px) {
