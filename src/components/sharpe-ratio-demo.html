@@ -1,6 +1,6 @@
 <article style="max-width:52rem; width:100%; margin:0 auto; display:grid; gap:3.4rem">
 
-      <header class="sharpe-hero" style="display:grid; gap:1.15rem; padding:1.5rem 1.6rem 1.55rem; background:linear-gradient(180deg, rgba(12,23,48,.72), rgba(8,18,38,.5)); border:1px solid rgba(91,231,255,.1); border-radius:1.35rem">
+      <header class="sharpe-hero sharpe-panel" style="display:grid; gap:1.15rem; padding:1.5rem 1.6rem 1.55rem; background:linear-gradient(180deg, rgba(12,23,48,.72), rgba(8,18,38,.5)); border:1px solid rgba(91,231,255,.1); border-radius:1.35rem">
         <p style="margin:0; width:fit-content; padding:.26rem .62rem; background:rgba(91,231,255,.05); border:1px solid rgba(91,231,255,.14); border-radius:999px; color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.68rem; letter-spacing:.16em">[RESEARCH / 量化研究]</p>
         <h1 style="margin:0; font-family:'Huninn',sans-serif; font-weight:400; font-size:2.35rem; line-height:1.28; letter-spacing:.02em; color:#f4fbff; text-wrap:pretty">投資組合最佳化與夏普比率分析</h1>
         <div style="height:1px; width:min(100%,14rem); border-radius:999px; background:linear-gradient(90deg, rgba(91,231,255,.68), rgba(91,231,255,0))"></div>
@@ -11,7 +11,7 @@
         </div>
       </header>
 
-      <nav style="display:grid; gap:.8rem; padding:1.1rem 1.3rem 1.25rem; background:rgba(8,18,38,.5); border:1px solid rgba(91,231,255,.12); border-radius:1.15rem">
+      <nav class="sharpe-panel" style="display:grid; gap:.8rem; padding:1.1rem 1.3rem 1.25rem; background:rgba(8,18,38,.5); border:1px solid rgba(91,231,255,.12); border-radius:1.15rem">
         <p style="margin:0; width:fit-content; padding:.26rem .62rem; background:rgba(91,231,255,.05); border:1px solid rgba(91,231,255,.14); border-radius:999px; color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.16em">[INDEX]</p>
         <div style="height:1px; background:linear-gradient(90deg, rgba(91,231,255,.5), rgba(91,231,255,0))"></div>
         <div class="toc-nav" style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.1rem .9rem">
@@ -26,7 +26,7 @@
         </div>
       </nav>
 
-      <section style="display:grid; gap:.9rem; padding:1.15rem 1.3rem 1.3rem; background:rgba(8,18,38,.38); border:1px solid rgba(91,231,255,.1); border-radius:1.05rem">
+      <section class="sharpe-panel" style="display:grid; gap:.9rem; padding:1.15rem 1.3rem 1.3rem; background:rgba(8,18,38,.38); border:1px solid rgba(91,231,255,.1); border-radius:1.05rem">
         <p style="margin:0; width:fit-content; padding:.26rem .62rem; background:rgba(91,231,255,.05); border:1px solid rgba(91,231,255,.14); border-radius:999px; color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.16em">[ABSTRACT]</p>
         <p style="margin:0; max-width:40rem; font-size:1.02rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">這篇研究從一個具體問題出發：想在 40 年後存到 1500 萬退休金，每年報酬率要多少？算出答案是 4.93% 之後，我選了三檔風險特性互補的基金，用投資組合理論找出風險與報酬最划算的配置方式，最後得出結論：把約 87% 的資金投入這個組合、13% 放定存，就能剛好命中目標報酬率。</p>
         <div style="display:flex; flex-wrap:wrap; gap:.5rem">
@@ -58,17 +58,17 @@
           <h2 style="margin:0; font-family:'Huninn','Orbitron',sans-serif; font-weight:400; font-size:1.3rem; letter-spacing:.02em; line-height:1.4; color:#f4fbff">研究概要</h2>
         </div>
         <div style="display:grid; gap:.9rem; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))">
-          <div style="padding:1.1rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:.95rem; display:grid; gap:.45rem; align-content:start">
+          <div class="sharpe-card" style="padding:1.1rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:.95rem; display:grid; gap:.45rem; align-content:start">
             <span style="font-family:'Huninn',sans-serif; font-size:.82rem; letter-spacing:.04em; color:#5be7ff">研究起點</span>
             <strong style="font-size:1rem; font-weight:500; color:#f4fbff; line-height:1.62">想在 40 年後存到 1500 萬退休金，需要多少報酬率？</strong>
             <p style="margin:0; font-size:.9rem; line-height:1.72; color:rgba(211,230,242,.72)">答案是必要年化報酬率 4.93%，這是後面所有分析要回答的目標數字。</p>
           </div>
-          <div style="padding:1.1rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:.95rem; display:grid; gap:.45rem; align-content:start">
+          <div class="sharpe-card" style="padding:1.1rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:.95rem; display:grid; gap:.45rem; align-content:start">
             <span style="font-family:'Huninn',sans-serif; font-size:.82rem; letter-spacing:.04em; color:#5be7ff">投資組合設計</span>
             <strong style="font-size:1rem; font-weight:500; color:#f4fbff; line-height:1.62">在風險與報酬之間，找出最划算的三檔基金組合方式</strong>
             <p style="margin:0; font-size:.9rem; line-height:1.72; color:rgba(211,230,242,.72)">財務學上稱為全域最小變異（GMV）與最大夏普比率（Max Sharpe）投資組合，並以效率前緣呈現所有取捨。</p>
           </div>
-          <div style="padding:1.1rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:.95rem; display:grid; gap:.45rem; align-content:start">
+          <div class="sharpe-card" style="padding:1.1rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:.95rem; display:grid; gap:.45rem; align-content:start">
             <span style="font-family:'Huninn',sans-serif; font-size:.82rem; letter-spacing:.04em; color:#5be7ff">最終配置結論</span>
             <strong style="font-size:1rem; font-weight:500; color:#f4fbff; line-height:1.62">約 87% 放進投資組合、13% 放定存，剛好命中目標報酬率</strong>
             <p style="margin:0; font-size:.9rem; line-height:1.72; color:rgba(211,230,242,.72)">精確比例為風險資產 86.98% ／ 無風險資產（定存）13.02%，財務學上稱為兩基金分離定理。</p>
@@ -113,7 +113,7 @@
         </div>
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">本研究以退休儲蓄目標作為投資組合設計的起點，而非直接指定一個報酬率。報告採階梯式目標（20 年存 500 萬、30 年存 1000 萬、40 年存 1500 萬），每期皆以每月投入 1 萬元回推必要報酬率：</p>
 
-        <figure style="margin:.6rem 0 0; display:grid; gap:.65rem">
+        <figure class="sharpe-panel sharpe-figure" style="margin:.6rem 0 0; display:grid; gap:.65rem">
           <figcaption style="display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap">
             <span style="padding:.24rem .6rem; border:1px solid rgba(91,231,255,.22); border-radius:999px; background:rgba(91,231,255,.07); color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.14em">TABLE 01</span>
             <span style="font-size:.9rem; color:rgba(211,230,242,.78)">退休目標與必要報酬率</span>
@@ -182,7 +182,7 @@
         </div>
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">月報酬以每月月底淨值的相鄰變動計算，樣本為 2020-12-31 至 2025-12-31。年化報酬為平均月報酬乘以 12；年化標準差為月標準差乘以 √12。個別 Sharpe 比率以來源的 1.70% 無風險利率計算。</p>
 
-        <figure style="margin:.6rem 0 0; display:grid; gap:.65rem">
+        <figure class="sharpe-panel sharpe-figure" style="margin:.6rem 0 0; display:grid; gap:.65rem">
           <figcaption style="display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap">
             <span style="padding:.24rem .6rem; border:1px solid rgba(91,231,255,.22); border-radius:999px; background:rgba(91,231,255,.07); color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.14em">TABLE 02</span>
             <span style="font-size:.9rem; color:rgba(211,230,242,.78)">個別基金統計量</span>
@@ -222,7 +222,7 @@
         <p style="margin:.4rem 0 0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">白話讀法：Fund 3（美國中小型股票）報酬最高，但波動也最大；Fund 1（債券）最穩，但報酬最低；Fund 2（醫療科技股）介於兩者之間——這正是「風險特性互補」的意思。</p>
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">相關係數矩陣為 Fund 1/2 = 0.5144、Fund 1/3 = 0.7489、Fund 2/3 = 0.5959。年化共變異數矩陣（Fund 1、Fund 2、Fund 3 的順序）如下：</p>
 
-        <figure style="margin:.6rem 0 0; display:grid; gap:.65rem">
+        <figure class="sharpe-panel sharpe-figure" style="margin:.6rem 0 0; display:grid; gap:.65rem">
           <figcaption style="display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap">
             <span style="padding:.24rem .6rem; border:1px solid rgba(91,231,255,.22); border-radius:999px; background:rgba(91,231,255,.07); color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.14em">TABLE 03</span>
             <span style="font-size:.9rem; color:rgba(211,230,242,.78)">年化共變異數矩陣</span>
@@ -262,7 +262,7 @@
         <p style="margin:.4rem 0 0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">相關係數越低，代表這兩檔基金漲跌的連動性越小——這正是前面挑基金時「找低相關係數」的原因：把連動性低的標的湊在一起，能在不犧牲太多報酬的情況下降低整體波動。</p>
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">來源工作簿的 Solver 對所有投組均設定「權重總和 = 1」與「權重 ≥ 0」。GMV 以投資組合變異數最小化；最大夏普組合以「（預期報酬 − 無風險利率）÷ 標準差」最大化。這些為工作簿的最佳化條件與結果，不是公開版重新求解。</p>
 
-        <figure style="margin:.6rem 0 0; display:grid; gap:.65rem">
+        <figure class="sharpe-panel sharpe-figure" style="margin:.6rem 0 0; display:grid; gap:.65rem">
           <figcaption style="display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap">
             <span style="padding:.24rem .6rem; border:1px solid rgba(91,231,255,.22); border-radius:999px; background:rgba(91,231,255,.07); color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.14em">TABLE 04</span>
             <span style="font-size:.9rem; color:rgba(211,230,242,.78)">GMV 與 Max Sharpe 最佳化權重</span>
@@ -312,7 +312,7 @@
         </div>
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">下方座標取自工作簿列出的實際數字，橫軸是風險（標準差）、縱軸是預期報酬，圖表是同一組數字的視覺化，GMV、Max Sharpe、無風險利率與資本市場線都直接標在圖上：</p>
 
-        <figure style="margin:.6rem 0 0; display:grid; gap:.9rem">
+        <figure class="sharpe-panel sharpe-figure" style="margin:.6rem 0 0; display:grid; gap:.9rem">
           <figcaption style="display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap">
             <span style="padding:.24rem .6rem; border:1px solid rgba(91,231,255,.22); border-radius:999px; background:rgba(91,231,255,.07); color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.14em">FIG 01</span>
             <span style="font-size:.9rem; color:rgba(211,230,242,.78)">效率前緣與資本市場線（斜率 0.3448）</span>
@@ -354,18 +354,18 @@
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">效率前緣與資本市場線只回答了「風險與預期報酬之間可以怎麼取捨」，還沒有回答「應該投多少錢在風險資產上」。這一步要回到研究起點：4.93% 的必要年化報酬率。</p>
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">Max Sharpe 組合的預期報酬為 5.4133148%，無風險利率為 1.70%。依兩基金分離定理，投資人可以把資金依比例 w 分配在 Max Sharpe 組合與無風險資產（定存）之間，使組合的預期報酬恰好等於目標報酬：</p>
 
-        <div style="padding:1.3rem 1.45rem; background:rgba(8,18,38,.56); border:1px solid rgba(91,231,255,.22); border-radius:1rem; display:grid; gap:.5rem">
+        <div class="sharpe-card" style="padding:1.3rem 1.45rem; background:rgba(8,18,38,.56); border:1px solid rgba(91,231,255,.22); border-radius:1rem; display:grid; gap:.5rem">
           <span style="font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.16em; color:#5be7ff">SOLVE</span>
           <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:.95rem; line-height:1.9; color:#f4fbff; font-variant-numeric:tabular-nums; overflow-wrap:anywhere">w = (4.93% − 1.70%) ÷ (5.4133148% − 1.70%) = 0.0323 ÷ 0.03713314 ≈ <span style="color:#5be7ff">0.8698</span></p>
         </div>
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(12rem,1fr)); gap:.9rem; margin-top:.3rem">
-          <div style="padding:1.1rem 1.2rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:1rem; display:grid; gap:.3rem">
+          <div class="sharpe-card" style="padding:1.1rem 1.2rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:1rem; display:grid; gap:.3rem">
             <span style="font-family:'Huninn',sans-serif; font-size:.82rem; color:#5be7ff">風險資產</span>
             <strong style="font-family:'Orbitron',sans-serif; font-weight:500; font-size:1.9rem; color:#f4fbff; font-variant-numeric:tabular-nums; letter-spacing:.02em">86.98%</strong>
             <span style="font-size:.88rem; color:rgba(211,230,242,.72)">Max Sharpe 組合</span>
           </div>
-          <div style="padding:1.1rem 1.2rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:1rem; display:grid; gap:.3rem">
+          <div class="sharpe-card" style="padding:1.1rem 1.2rem; background:rgba(8,18,38,.48); border:1px solid rgba(91,231,255,.12); border-radius:1rem; display:grid; gap:.3rem">
             <span style="font-family:'Huninn',sans-serif; font-size:.82rem; color:#5be7ff">無風險資產</span>
             <strong style="font-family:'Orbitron',sans-serif; font-weight:500; font-size:1.9rem; color:#f4fbff; font-variant-numeric:tabular-nums; letter-spacing:.02em">13.02%</strong>
             <span style="font-size:.88rem; color:rgba(211,230,242,.72)">一年期定存（1.70%）</span>
@@ -377,7 +377,7 @@
 
       <div style="height:1px; background:linear-gradient(90deg, rgba(91,231,255,.28), rgba(91,231,255,0))"></div>
 
-      <section id="sec-limits" style="display:grid; gap:1rem">
+      <section id="sec-limits" class="sharpe-panel sharpe-boundary" style="display:grid; gap:1rem">
         <div style="display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap">
           <span style="padding:.26rem .6rem; background:rgba(91,231,255,.05); border:1px solid rgba(91,231,255,.14); border-radius:999px; color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.16em">07</span>
           <h2 style="margin:0; font-family:'Huninn','Orbitron',sans-serif; font-weight:400; font-size:1.3rem; letter-spacing:.02em; line-height:1.4; color:#f4fbff">公開版本邊界</h2>
@@ -386,7 +386,7 @@
         <p style="margin:0; max-width:40rem; font-size:1rem; line-height:1.82; color:#d3e6f2; text-wrap:pretty">來源為作者的課程報告與分析工作簿。原始 DOCX 與 XLSX 含有文件中繼資料，因此不公開重發；公開值的工作表範圍記於 <code style="font-family:'IBM Plex Mono',monospace; font-size:.9rem; padding:.1rem .35rem; background:rgba(91,231,255,.08); border-radius:.3rem; color:#d3e6f2">document/quant-research-source-map.md</code>，並在本頁直接呈現核心結果。完整報告檔案不提供下載。</p>
       </section>
 
-      <section id="sec-rights" style="display:grid; gap:.65rem; padding:1.25rem 1.4rem; border-left:1px solid rgba(91,231,255,.45); background:linear-gradient(90deg, rgba(91,231,255,.05), transparent 60%)">
+      <section id="sec-rights" class="sharpe-panel sharpe-rights" style="display:grid; gap:.65rem; padding:1.25rem 1.4rem; border-left:1px solid rgba(91,231,255,.45); background:linear-gradient(90deg, rgba(91,231,255,.05), transparent 60%)">
         <div style="display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap">
           <span style="padding:.26rem .6rem; background:rgba(91,231,255,.05); border:1px solid rgba(91,231,255,.14); border-radius:999px; color:#5be7ff; font-family:'Orbitron',sans-serif; font-size:.62rem; letter-spacing:.16em">08</span>
           <h2 style="margin:0; font-family:'Huninn','Orbitron',sans-serif; font-weight:400; font-size:1.15rem; letter-spacing:.02em; line-height:1.4; color:#f4fbff">引用與版權</h2>

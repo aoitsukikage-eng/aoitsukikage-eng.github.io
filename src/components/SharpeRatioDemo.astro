@@ -16,7 +16,8 @@ import demoArticle from "./sharpe-ratio-demo.html?raw";
 	}
 
 	/* The page background remains the shared SiteLayout treatment. */
-	.sharpe-demo :global(.sharpe-hero) {
+	.sharpe-demo :global(.sharpe-panel),
+	.sharpe-demo :global(.sharpe-card) {
 		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 		position: relative;
 		transition:
@@ -26,11 +27,32 @@ import demoArticle from "./sharpe-ratio-demo.html?raw";
 			background var(--motion-base) var(--easing-standard);
 	}
 
-	.sharpe-demo :global(.sharpe-hero:hover),
-	.sharpe-demo :global(.sharpe-hero:focus-within) {
+	.sharpe-demo :global(.sharpe-panel:hover),
+	.sharpe-demo :global(.sharpe-panel:focus-within),
+	.sharpe-demo :global(.sharpe-card:hover),
+	.sharpe-demo :global(.sharpe-card:focus-within) {
 		border-color: var(--border-strong) !important;
 		box-shadow: var(--glow-strong), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 		transform: translateY(-1px);
+	}
+
+	.sharpe-demo :global(.sharpe-figure) {
+		background: var(--panel-gradient);
+		border: 1px solid var(--border-soft);
+		border-radius: var(--radius-card);
+		padding: var(--space-3);
+	}
+
+	.sharpe-demo :global(.sharpe-boundary) {
+		background: rgba(8, 18, 38, 0.38);
+		border: 1px solid var(--border-soft);
+		border-radius: var(--radius-card);
+		padding: var(--panel-padding);
+	}
+
+	.sharpe-demo :global(.sharpe-rights) {
+		border: 1px solid rgba(91, 231, 255, 0.45) !important;
+		border-radius: var(--radius-card);
 	}
 
 	.sharpe-demo :global(a) {
