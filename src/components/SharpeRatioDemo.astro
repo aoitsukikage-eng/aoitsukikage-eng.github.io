@@ -1,0 +1,31 @@
+---
+import demoArticle from "./sharpe-ratio-demo.html?raw";
+---
+
+<div class="sharpe-demo" data-reveal style="--reveal-order: 0;">
+	<Fragment set:html={demoArticle} />
+</div>
+
+<style>
+	.sharpe-demo {
+		padding: 0 0 var(--space-5);
+	}
+
+	.sharpe-demo :global(article) {
+		font-family: "IBM Plex Sans", "Huninn", sans-serif;
+	}
+
+	.sharpe-demo :global(a) {
+		color: var(--accent);
+	}
+
+	.sharpe-demo :global(a:hover) {
+		color: var(--text-bright);
+	}
+
+	@media (max-width: 620px) {
+		.sharpe-demo :global(.toc-nav) {
+			grid-template-columns: 1fr !important;
+		}
+	}
+</style>
