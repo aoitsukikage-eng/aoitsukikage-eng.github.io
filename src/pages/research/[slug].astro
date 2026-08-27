@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import SharpeRatioDemo from "../../components/SharpeRatioDemo.astro";
 import { siteConfig } from "../../config/site";
 import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
 
@@ -17,6 +18,7 @@ const { Content } = await render(entry);
 const group = RESEARCH_GROUPS.find((item) => item.key === getResearchGroup(entry));
 const isEsgStudy = entry.data.slug === "executive-compensation-esg-disclosure";
 const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
+const isSharpeRatioDemo = entry.data.slug === "portfolio-optimization-sharpe-ratio";
 
 const currentLocale = Astro.currentLocale ?? "zh";
 const dict = currentLocale === "en" ? en : zh;
@@ -33,6 +35,10 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 
 <SiteLayout title={`${entry.data.title} | Research`} description={entry.data.summary} currentPath={Astro.url.pathname}>
 	<article class="page-stack research-detail">
+		{isLocaleMatch && isSharpeRatioDemo ? (
+			<SharpeRatioDemo />
+		) : (
+			<>
 		<header class="section-card section-shell" data-reveal style="--reveal-order: 0;">
 			<p class="section-kicker">[RESEARCH / {group?.label ?? "Brief"}]</p>
 			<h1>{entry.data.title}</h1>
@@ -132,6 +138,8 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 			</section>
 		)}
 		<p class="back-link"><a class="cta-link secondary" href={backHubUrl}>Back to Research Hub</a></p>
+			</>
+		)}
 	</article>
 </SiteLayout>
 
