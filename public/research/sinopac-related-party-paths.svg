@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 660" role="img" aria-labelledby="rpTitle rpDesc">
+  <title id="rpTitle">銀行法第 33-1 條利害關係人之兩條認定路徑</title>
+  <desc id="rpDesc">本圖依金管會處分書所載事實，推導兩條利害關係人認定路徑：其一，董事長配偶擔任 Star City 董事，使該公司落入銀行法第三十三條之一第四款；其二，以永豐銀行董事為基準點，鼎興貿易負責人為其二親等以內姻親，落入同條第一款。圖示關係僅供說明認定基礎之用。</desc>
+  <defs>
+    <style>
+      .f  { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .h  { font-size: 21px; fill: #f4fbff; letter-spacing: .04em; }
+      .st { font-size: 11.5px; fill: #5be7ff; letter-spacing: .16em; }
+      .lb { font-size: 14px; fill: #f4fbff; }
+      .sb { font-size: 11.5px; fill: rgba(183,236,255,.72); }
+      .nt { font-size: 12px; fill: rgba(183,236,255,.6); }
+      .ed { font-size: 11.5px; fill: #5be7ff; letter-spacing: .08em; }
+      .wr { font-size: 13px; fill: #ffd2a8; }
+      .dis{ font-size: 11.5px; fill: rgba(183,236,255,.55); }
+    </style>
+  </defs>
+
+  <rect width="1000" height="660" fill="#081226"/>
+  <text class="f h" x="40" y="42">利害關係人的兩條認定路徑</text>
+  <text class="f nt" x="40" y="64">銀行法 §33-1 之適用推導．依金管會 106 年處分書所載事實</text>
+  <line x1="40" y1="78" x2="960" y2="78" stroke="#5be7ff" stroke-opacity=".35"/>
+  <line x1="500" y1="100" x2="500" y2="548" stroke="#5be7ff" stroke-opacity=".14" stroke-dasharray="4 6"/>
+
+  <!-- ═══ 路徑 A ═══ -->
+  <text class="f st" x="40" y="110">路徑 A ／ §33-1 第 4 款</text>
+
+  <rect x="130" y="126" width="250" height="58" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".34"/>
+  <text class="f lb" x="255" y="150" text-anchor="middle">何壽川</text>
+  <text class="f sb" x="255" y="170" text-anchor="middle">永豐金控董事長．兼永豐銀行董事</text>
+
+  <path d="M255 184 V216" stroke="#5be7ff" stroke-opacity=".45" stroke-width="1.5"/>
+  <text class="f ed" x="268" y="204">配偶</text>
+
+  <rect x="130" y="216" width="250" height="46" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".2"/>
+  <text class="f lb" x="255" y="245" text-anchor="middle">張杏如</text>
+
+  <path d="M255 262 V294" stroke="#5be7ff" stroke-opacity=".45" stroke-width="1.5"/>
+  <text class="f ed" x="268" y="282">任董事 95/11–101/6</text>
+
+  <rect x="130" y="294" width="250" height="46" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".2"/>
+  <text class="f lb" x="255" y="323" text-anchor="middle">Star City International</text>
+
+  <path d="M255 340 V372" stroke="#5be7ff" stroke-opacity=".45" stroke-width="1.5"/>
+  <text class="f ed" x="268" y="360">關聯企業</text>
+
+  <rect x="130" y="372" width="250" height="46" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".2"/>
+  <text class="f lb" x="255" y="401" text-anchor="middle">Giant Crystal</text>
+
+  <rect x="60" y="440" width="390" height="100" rx="10" fill="#1a1206" stroke="#ffb157" stroke-opacity=".45"/>
+  <text class="f wr" x="80" y="466">§33-1 IV「銀行負責人之配偶為董事之企業」</text>
+  <text class="f nt" x="80" y="490">⇒ $6,000 萬授信實質為對利害關係人之間接授信</text>
+  <text class="f nt" x="80" y="512">⇒ 未經申報．未經 §33 董事會特別決議程序</text>
+  <text class="f nt" x="80" y="530">⇒ 何壽川未向永豐銀行申報此一關係</text>
+
+  <!-- ═══ 路徑 B ═══ -->
+  <text class="f st" x="540" y="110">路徑 B ／ §33-1 第 1 款</text>
+
+  <rect x="620" y="126" width="250" height="58" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".34"/>
+  <text class="f lb" x="745" y="150" text-anchor="middle">何宗達</text>
+  <text class="f sb" x="745" y="170" text-anchor="middle">永豐銀行董事（＝認定之基準點）</text>
+
+  <path d="M745 184 V214" stroke="#5be7ff" stroke-opacity=".45" stroke-width="1.5"/>
+  <text class="f ed" x="758" y="204">父</text>
+
+  <rect x="540" y="214" width="180" height="46" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".2"/>
+  <text class="f lb" x="630" y="243" text-anchor="middle">何政廷</text>
+  <rect x="770" y="214" width="180" height="46" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".2"/>
+  <text class="f lb" x="860" y="243" text-anchor="middle">何宗英</text>
+  <path d="M745 184 V200 H630 V214" stroke="#5be7ff" stroke-opacity=".45" stroke-width="1.5" fill="none"/>
+
+  <path d="M720 237 H770" stroke="#5be7ff" stroke-opacity=".45" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text class="f ed" x="745" y="230" text-anchor="middle">連襟</text>
+
+  <rect x="540" y="286" width="410" height="46" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".16"/>
+  <text class="f sb" x="745" y="315" text-anchor="middle">二人之配偶同為基隆顏家成員</text>
+  <path d="M630 260 V286" stroke="#5be7ff" stroke-opacity=".3" stroke-width="1.2"/>
+  <path d="M860 260 V286" stroke="#5be7ff" stroke-opacity=".3" stroke-width="1.2"/>
+
+  <path d="M860 260 V276 H960 V372 H870" stroke="#5be7ff" stroke-opacity=".3" stroke-width="1.2" fill="none"/>
+  <rect x="620" y="372" width="250" height="46" rx="9" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".2"/>
+  <text class="f lb" x="745" y="401" text-anchor="middle">鼎興貿易（鼎興集團）</text>
+
+  <rect x="550" y="440" width="390" height="100" rx="10" fill="#1a1206" stroke="#ffb157" stroke-opacity=".45"/>
+  <text class="f wr" x="570" y="466">§33-1 I「銀行負責人之二親等以內姻親」</text>
+  <text class="f nt" x="570" y="490">⇒ 以何宗達為基準，何宗英落入該款範圍</text>
+  <text class="f nt" x="570" y="512">⇒ 永豐銀行對鼎興授信屬利害關係人授信</text>
+  <text class="f nt" x="570" y="530">⇒ 未建檔．未落實查核．未依 §33 程序審議</text>
+
+  <!-- 結論帶 -->
+  <line x1="40" y1="570" x2="960" y2="570" stroke="#5be7ff" stroke-opacity=".22"/>
+  <text class="f lb" x="40" y="596">兩條路徑均須迂迴推導方能確認 ── 這正是集團性利害關係人控管在實務上難以落實的原因</text>
+  <text class="f dis" x="40" y="622">圖示親屬與職務關係，僅為說明銀行法 §33-1 利害關係人之認定基礎，不含對圖中任何個人之違法指涉。</text>
+  <text class="f dis" x="40" y="640">除何壽川外，圖中其他個人於本案刑事程序中並非被告。資料為報告撰寫時點之公開資料。</text>
+</svg>

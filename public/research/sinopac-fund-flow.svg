@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" role="img" aria-labelledby="ffTitle ffDesc">
+  <title id="ffTitle">三寶超貸案資金流向與分潤結構</title>
+  <desc id="ffDesc">永豐金控集團境外子公司 GC、SPC 對 Giant Crystal 核撥六千萬美元授信，永豐餘體系 YFY Global 與元太科技子公司另以預付租金名義匯入一千七百萬美元，資金指向上海一七八八大樓，何壽川依私下協議取得融資總額兩成、計一千二百萬美元之分潤基礎。</desc>
+  <defs>
+    <style>
+      .f  { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .h  { font-size: 21px; fill: #f4fbff; letter-spacing: .04em; }
+      .lb { font-size: 14.5px; fill: #f4fbff; }
+      .sb { font-size: 12.5px; fill: rgba(183,236,255,.78); }
+      .amt{ font-size: 17px; fill: #5be7ff; font-variant-numeric: tabular-nums; }
+      .st { font-size: 11.5px; fill: #5be7ff; letter-spacing: .16em; }
+      .nt { font-size: 12px; fill: rgba(183,236,255,.62); }
+      .wr { font-size: 13px; fill: #ffd2a8; }
+    </style>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5be7ff"/>
+    </marker>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#ffb157"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="700" fill="#081226"/>
+  <text class="f h" x="40" y="42">資金流向與分潤結構</text>
+  <text class="f nt" x="40" y="64">依二審判決事實認定與金管會 106 年處分書所載．金額均為美元</text>
+  <line x1="40" y1="78" x2="960" y2="78" stroke="#5be7ff" stroke-opacity=".35"/>
+
+  <!-- ── 出資端 ── -->
+  <text class="f st" x="40" y="104">SOURCE ／ 永豐體系</text>
+
+  <g>
+    <rect x="40" y="116" width="380" height="76" rx="10" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".26"/>
+    <text class="f sb" x="58" y="140">① 99/12 核准 ‧ 100/1/3 撥款</text>
+    <text class="f lb" x="58" y="162">永豐金租賃 ─ GC 公司（境外）</text>
+    <text class="f amt" x="402" y="181" text-anchor="end">$4,500 萬</text>
+  </g>
+  <g>
+    <rect x="40" y="204" width="380" height="76" rx="10" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".26"/>
+    <text class="f sb" x="58" y="228">① 100/1/3 參貸撥款</text>
+    <text class="f lb" x="58" y="250">永豐銀行 ─ SPC 公司（境外）</text>
+    <text class="f amt" x="402" y="269" text-anchor="end">$1,500 萬</text>
+  </g>
+  <g>
+    <rect x="40" y="300" width="380" height="76" rx="10" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".16"/>
+    <text class="f sb" x="58" y="324">② 100/1/3 ‧「預付租金」名義</text>
+    <text class="f lb" x="58" y="346">永豐餘投控 ─ YFY Global</text>
+    <text class="f amt" x="402" y="365" text-anchor="end">$850 萬</text>
+  </g>
+  <g>
+    <rect x="40" y="388" width="380" height="76" rx="10" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".16"/>
+    <text class="f sb" x="58" y="412">② 100/1/3 ‧「預付租金」名義</text>
+    <text class="f lb" x="58" y="434">元太科技子公司</text>
+    <text class="f amt" x="402" y="453" text-anchor="end">$850 萬</text>
+  </g>
+
+  <!-- ── 箭頭 ── -->
+  <path d="M424 154 H548" stroke="#5be7ff" stroke-opacity=".7" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+  <path d="M424 242 H548" stroke="#5be7ff" stroke-opacity=".7" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+  <path d="M424 338 H548" stroke="#5be7ff" stroke-opacity=".4" stroke-width="1.6" fill="none" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+  <path d="M424 426 H548" stroke="#5be7ff" stroke-opacity=".4" stroke-width="1.6" fill="none" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+
+  <!-- ── 受款端 ── -->
+  <text class="f st" x="560" y="104">RECIPIENT</text>
+  <rect x="560" y="116" width="400" height="348" rx="12" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".4"/>
+  <text class="f lb" x="582" y="150">Giant Crystal Universal</text>
+  <text class="f lb" x="582" y="172">Development Inc.</text>
+  <text class="f wr" x="582" y="198">⚠ 境外紙上公司‧無實際營運</text>
+  <line x1="582" y1="214" x2="938" y2="214" stroke="#5be7ff" stroke-opacity=".2"/>
+
+  <text class="f sb" x="582" y="242">授信本金合計</text>
+  <text class="f amt" x="938" y="242" text-anchor="end">$6,000 萬</text>
+  <text class="f sb" x="582" y="274">「預付租金」名目匯入</text>
+  <text class="f amt" x="938" y="274" text-anchor="end">$1,700 萬</text>
+  <line x1="582" y1="294" x2="938" y2="294" stroke="#5be7ff" stroke-opacity=".2"/>
+
+  <text class="f sb" x="582" y="322">④ 101 年起違反授信 5P 原則</text>
+  <text class="f lb" x="582" y="346">融資額度大幅提高至</text>
+  <text class="f amt" x="938" y="346" text-anchor="end">近 $1 億</text>
+
+  <text class="f sb" x="582" y="386">③ 100/6 起 ‧ 發行可交換公司債</text>
+  <text class="f nt" x="582" y="408">YFY Global 認購（董事會由何壽川一人出席決議）</text>
+  <text class="f nt" x="582" y="428">101/12 何壽川配偶具控制權之公司亦投資</text>
+  <text class="f nt" x="582" y="452">轉換標的 Star City ▸ 上海南京西路 1788 大樓</text>
+
+  <!-- ── 分潤 ── -->
+  <path d="M760 468 V520" stroke="#ffb157" stroke-opacity=".8" stroke-width="1.6" fill="none" stroke-dasharray="5 4" marker-end="url(#arw)"/>
+  <rect x="560" y="524" width="400" height="96" rx="12" fill="#1a1206" stroke="#ffb157" stroke-opacity=".5"/>
+  <text class="f sb" x="582" y="552">99/12/28 何壽川與三寶集團李俊傑私下協議</text>
+  <text class="f wr" x="582" y="578">取得融資總額兩成之分潤基礎</text>
+  <text class="f amt" x="938" y="578" text-anchor="end" fill="#ffb157">$1,200 萬</text>
+  <text class="f nt" x="582" y="602">相當於 Link Mart 股權 3.56%．未向授信公司揭露</text>
+
+  <!-- ── 後續 ── -->
+  <rect x="40" y="488" width="380" height="132" rx="10" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".16"/>
+  <text class="f st" x="60" y="514">AFTERMATH</text>
+  <text class="f nt" x="60" y="540">102/4　　$6,000 萬本金清償完畢</text>
+  <text class="f nt" x="60" y="562">113/8　　二審認定公司損害 $1,007萬9,111</text>
+  <text class="f nt" x="60" y="584">114/5　　最高法院質疑該損害認定基礎，</text>
+  <text class="f nt" x="60" y="602">　　　　　撤銷發回更審</text>
+
+  <line x1="40" y1="650" x2="960" y2="650" stroke="#5be7ff" stroke-opacity=".18"/>
+  <text class="f nt" x="40" y="672">實線＝授信撥款．虛線＝非授信之資金挹注與投資．刑事部分尚未確定</text>
+  <text class="f nt" x="960" y="672" text-anchor="end">© 2026 Yu-Hung Shih</text>
+</svg>

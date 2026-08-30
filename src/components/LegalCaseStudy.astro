@@ -1,0 +1,117 @@
+---
+import caseArticle from "./sinopac-case-study.html?raw";
+---
+
+<div class="case-study">
+	<Fragment set:html={caseArticle} />
+</div>
+
+<style>
+	.case-study {
+		padding: 0 0 var(--space-5);
+	}
+
+	.case-study :global(article) {
+		font-family: "IBM Plex Sans", "Huninn", sans-serif;
+	}
+
+	/* Hero and section cards pick up the shared HUD glow treatment. */
+	.case-study :global(.case-hero) {
+		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+		transition:
+			border-color var(--motion-base) var(--easing-standard),
+			box-shadow var(--motion-base) var(--easing-standard);
+	}
+
+	.case-study :global(.case-hero:hover) {
+		border-color: rgba(91, 231, 255, 0.24);
+		box-shadow: var(--glow-strong), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+	}
+
+	/* Per-block widths. The article is only an outer frame at 72rem (the same
+	   as .content), so nothing ever exceeds its parent — no negative margins,
+	   no grid track blow-out, and centring stays intact.
+	     .tcol      reading column, 52rem, centred
+	     .case-wide figures and tables, 70rem, centred                         */
+	.case-study :global(.tcol) {
+		width: min(52rem, 100%);
+		margin-inline: auto;
+	}
+
+	.case-study :global(.case-wide) {
+		width: min(70rem, 100%);
+		margin-inline: auto;
+	}
+
+	/* Case-identity block stays four columns regardless of container width. */
+	@media (max-width: 640px) {
+		.case-study :global(.meta-grid) {
+			grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		}
+	}
+
+	/* Index links */
+	.case-study :global(.toc-nav a) {
+		text-decoration: none;
+		transition:
+			background var(--motion-base) var(--easing-standard),
+			color var(--motion-base) var(--easing-standard);
+	}
+
+	.case-study :global(.toc-nav a:hover) {
+		background: rgba(91, 231, 255, 0.08);
+		color: #5be7ff;
+	}
+
+	@media (max-width: 560px) {
+		.case-study :global(.toc-nav) {
+			grid-template-columns: 1fr !important;
+		}
+	}
+
+	/* Diagrams */
+	.case-study :global(figure img) {
+		transition: border-color var(--motion-base) var(--easing-standard);
+	}
+
+	.case-study :global(figure img:hover) {
+		border-color: rgba(91, 231, 255, 0.3);
+	}
+
+	/* Tables */
+	.case-study :global(tbody tr:hover) {
+		background: rgba(91, 231, 255, 0.05);
+	}
+
+	/* Collapsible appendices */
+	.case-study :global(.case-details summary) {
+		list-style: none;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		transition: color var(--motion-base) var(--easing-standard);
+	}
+
+	.case-study :global(.case-details summary)::-webkit-details-marker {
+		display: none;
+	}
+
+	.case-study :global(.case-details summary)::before {
+		content: "+";
+		color: #5be7ff;
+		font-family: "Orbitron", sans-serif;
+		font-size: 0.9rem;
+	}
+
+	.case-study :global(.case-details[open]) > :global(summary)::before {
+		content: "\2212";
+	}
+
+	.case-study :global(.case-details summary:hover) {
+		color: #5be7ff;
+	}
+
+	.case-study :global(a) {
+		color: inherit;
+	}
+</style>

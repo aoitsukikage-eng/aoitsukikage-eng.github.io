@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import SharpeRatioDemo from "../../components/SharpeRatioDemo.astro";
+import LegalCaseStudy from "../../components/LegalCaseStudy.astro";
 import { siteConfig } from "../../config/site";
 import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
 
@@ -19,6 +20,7 @@ const group = RESEARCH_GROUPS.find((item) => item.key === getResearchGroup(entry
 const isEsgStudy = entry.data.slug === "executive-compensation-esg-disclosure";
 const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 const isSharpeRatioDemo = entry.data.slug === "portfolio-optimization-sharpe-ratio";
+const isLegalCaseStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 
 const currentLocale = Astro.currentLocale ?? "zh";
 const dict = currentLocale === "en" ? en : zh;
@@ -37,6 +39,8 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 	<article class="page-stack research-detail">
 		{isLocaleMatch && isSharpeRatioDemo ? (
 			<SharpeRatioDemo />
+		) : isLocaleMatch && isLegalCaseStudy ? (
+			<LegalCaseStudy />
 		) : (
 			<>
 		<header class="section-card section-shell" data-reveal style="--reveal-order: 0;">
