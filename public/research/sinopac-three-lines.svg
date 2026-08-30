@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" role="img" aria-labelledby="tlTitle tlDesc">
+  <title id="tlTitle">內部控制三道防線之系統性失靈</title>
+  <desc id="tlDesc">當違法行為之發動者為集團最高負責人時，受其指揮監督之業務單位、風險管理與法令遵循、內部稽核三道防線均無法發揮制衡功能；本案最終係由組織外部之內部吹哨行為揭發，而非由三道防線自行發現。</desc>
+  <defs>
+    <style>
+      .f  { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .h  { font-size: 21px; fill: #f4fbff; letter-spacing: .04em; }
+      .st { font-size: 11.5px; fill: #5be7ff; letter-spacing: .16em; }
+      .lb { font-size: 15px; fill: #f4fbff; }
+      .sb { font-size: 12.5px; fill: rgba(183,236,255,.75); }
+      .nt { font-size: 12px; fill: rgba(183,236,255,.6); }
+      .wr { font-size: 14px; fill: #ffd2a8; }
+      .ok { font-size: 14px; fill: #c9ffe0; }
+      .x  { font-size: 26px; fill: #ff8f8f; }
+    </style>
+    <marker id="l-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#ffb157"/>
+    </marker>
+    <marker id="l-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5fd694"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="600" fill="#081226"/>
+  <text class="f h" x="40" y="42">內部控制三道防線之系統性失靈</text>
+  <text class="f nt" x="40" y="64">99–104 年間三道防線均未發現本案．最終由組織外部之吹哨行為揭發</text>
+  <line x1="40" y1="78" x2="960" y2="78" stroke="#5be7ff" stroke-opacity=".35"/>
+
+  <!-- 發動者 -->
+  <rect x="40" y="102" width="330" height="72" rx="10" fill="#1a1206" stroke="#ffb157" stroke-opacity=".55"/>
+  <text class="f st" x="60" y="126" fill="#ffb157">違法發動者</text>
+  <text class="f wr" x="60" y="152">集團最高負責人（董事長）</text>
+  <text class="f nt" x="60" y="168">直接指示總經理．或透過中介間接指示承辦人員</text>
+
+  <!-- 貫穿箭頭 -->
+  <path d="M205 178 V500" stroke="#ffb157" stroke-opacity=".7" stroke-width="2.5" fill="none" marker-end="url(#l-ar)"/>
+
+  <!-- 三道防線 -->
+  <g>
+    <rect x="120" y="196" width="700" height="82" rx="10" fill="#0c1730" stroke="#ff8f8f" stroke-opacity=".3"/>
+    <text class="f x" x="146" y="246">✗</text>
+    <text class="f st" x="182" y="224">第一道防線</text>
+    <text class="f lb" x="182" y="248">業務單位（GC 公司承辦人員）</text>
+    <text class="f sb" x="182" y="268">面對最高負責人之指示，欠缺拒絕所需之獨立性與制度性保護</text>
+  </g>
+
+  <g>
+    <rect x="120" y="298" width="700" height="82" rx="10" fill="#0c1730" stroke="#ff8f8f" stroke-opacity=".3"/>
+    <text class="f x" x="146" y="348">✗</text>
+    <text class="f st" x="182" y="326">第二道防線</text>
+    <text class="f lb" x="182" y="350">風險管理與法令遵循</text>
+    <text class="f sb" x="182" y="370">處分書認定 4 項建檔缺失：鼎興授信．配偶任 Star City 董事．海外私募基金．資金集中</text>
+  </g>
+
+  <g>
+    <rect x="120" y="400" width="700" height="82" rx="10" fill="#0c1730" stroke="#ff8f8f" stroke-opacity=".3"/>
+    <text class="f x" x="146" y="450">✗</text>
+    <text class="f st" x="182" y="428">第三道防線</text>
+    <text class="f lb" x="182" y="452">內部稽核</text>
+    <text class="f sb" x="182" y="472">銀行法 §45-1、金控法 §51 之法定義務；99–104 年間未發現或揭發</text>
+  </g>
+
+  <!-- 揭發路徑 -->
+  <path d="M900 440 H832" stroke="#5fd694" stroke-opacity=".8" stroke-width="2.5" fill="none" marker-end="url(#l-ok)"/>
+  <path d="M900 440 V150 H836" stroke="#5fd694" stroke-opacity=".45" stroke-width="1.6" fill="none" stroke-dasharray="5 4"/>
+  <text class="f ok" x="960" y="504" text-anchor="end">↑ 唯一有效的揭發路徑</text>
+  <text class="f nt" x="960" y="524" text-anchor="end">內部吹哨（105–106）→ 金管會金融檢查</text>
+
+  <line x1="40" y1="548" x2="960" y2="548" stroke="#5be7ff" stroke-opacity=".18"/>
+  <text class="f nt" x="40" y="572">獨立董事與審計委員會（證交法 §14-2、§14-4）本應為最上層制衡機制，本案亦未發現違失──形式合規而實質失靈</text>
+  <text class="f nt" x="960" y="588" text-anchor="end">© 2026 Yu-Hung Shih</text>
+</svg>

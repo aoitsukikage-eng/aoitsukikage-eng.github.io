@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 620" role="img" aria-labelledby="dtTitle dtDesc">
+  <title id="dtTitle">行政軌與司法軌之雙軌分流時間軸</title>
+  <desc id="dtDesc">違法行為自民國九十九年延續至一百零四年共五年未被發現，經內部吹哨揭發後，金管會於一百零六年六月即作成解職處分並確定生效；同一案件之刑事程序自一百零六年起訴，歷經一審、二審，至一百一十四年五月經最高法院撤銷發回更審，迄今尚未終結。</desc>
+  <defs>
+    <style>
+      .f  { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .h  { font-size: 21px; fill: #f4fbff; letter-spacing: .04em; }
+      .st { font-size: 11.5px; fill: #5be7ff; letter-spacing: .16em; }
+      .lb { font-size: 13.5px; fill: #f4fbff; }
+      .sb { font-size: 12px; fill: rgba(183,236,255,.72); }
+      .nt { font-size: 12px; fill: rgba(183,236,255,.6); }
+      .ax { font-size: 11.5px; fill: rgba(183,236,255,.5); font-variant-numeric: tabular-nums; }
+      .wr { font-size: 13.5px; fill: #ffd2a8; }
+      .ok { font-size: 13.5px; fill: #c9ffe0; }
+    </style>
+    <marker id="t-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#ffb157"/>
+    </marker>
+  </defs>
+
+  <rect width="1120" height="620" fill="#081226"/>
+  <text class="f h" x="40" y="42">行政軌與司法軌：雙軌分流</text>
+  <text class="f nt" x="40" y="64">行政處分 6 個月內確定生效；同一案件之刑事程序歷時 8 年仍未終結</text>
+  <line x1="40" y1="78" x2="1080" y2="78" stroke="#5be7ff" stroke-opacity=".35"/>
+
+  <!-- ── 違法期間 ── -->
+  <text class="f st" x="40" y="112">違法期間與揭發</text>
+  <rect x="136" y="126" width="316" height="34" rx="6" fill="#ffb157" fill-opacity=".16" stroke="#ffb157" stroke-opacity=".45"/>
+  <text class="f wr" x="294" y="148" text-anchor="middle">違法行為持續 5 年‧內部稽核未發現</text>
+  <rect x="452" y="126" width="99" height="34" rx="6" fill="#5be7ff" fill-opacity=".14" stroke="#5be7ff" stroke-opacity=".45"/>
+  <text class="f sb" x="501" y="148" text-anchor="middle">內部吹哨</text>
+  <text class="f nt" x="136" y="180">99/12 起</text>
+  <text class="f nt" x="551" y="180" text-anchor="end">105–106 張晉源、王幗英檢舉</text>
+
+  <!-- ── 行政軌 ── -->
+  <text class="f st" x="40" y="232">行政軌 ／ 金管會</text>
+  <line x1="80" y1="272" x2="1072" y2="272" stroke="#5be7ff" stroke-opacity=".14" stroke-width="2"/>
+  <rect x="545" y="264" width="18" height="18" rx="4" fill="#5be7ff"/>
+  <rect x="936" y="264" width="18" height="18" rx="4" fill="#5be7ff" fill-opacity=".55"/>
+
+  <path d="M554 264 V236" stroke="#5be7ff" stroke-opacity=".45"/>
+  <text class="f lb" x="554" y="228" text-anchor="middle">106/6/19　三份處分同日發布</text>
+  <path d="M554 282 V306" stroke="#5be7ff" stroke-opacity=".45"/>
+  <text class="f ok" x="554" y="322" text-anchor="middle">✓ 送達次日確定生效</text>
+  <text class="f nt" x="554" y="342" text-anchor="middle">解除何壽川董事職務．游國治停職 6 月．金控糾正</text>
+
+  <path d="M945 282 V306" stroke="#5be7ff" stroke-opacity=".45"/>
+  <text class="f lb" x="1072" y="322" text-anchor="end">112/10/26　再處分 1,000 萬罰鍰</text>
+  <text class="f nt" x="1072" y="342" text-anchor="end">「未任負責人但有控制能力之大股東」</text>
+
+  <!-- ── 司法軌 ── -->
+  <text class="f st" x="40" y="400">司法軌 ／ 法院</text>
+  <line x1="80" y1="430" x2="1072" y2="430" stroke="#5be7ff" stroke-opacity=".14" stroke-width="2"/>
+  <path d="M551 430 H1040" stroke="#ffb157" stroke-opacity=".55" stroke-width="2.5" fill="none"/>
+  <path d="M1040 430 H1072" stroke="#ffb157" stroke-opacity=".55" stroke-width="2.5" fill="none" stroke-dasharray="4 4" marker-end="url(#t-ar)"/>
+
+  <circle cx="551" cy="430" r="7" fill="#ffb157"/>
+  <circle cx="756" cy="430" r="7" fill="#ffb157"/>
+  <circle cx="991" cy="430" r="7" fill="#ffb157"/>
+  <circle cx="1035" cy="430" r="7" fill="#ffb157"/>
+
+  <path d="M551 430 V466" stroke="#ffb157" stroke-opacity=".4"/>
+  <text class="f lb" x="551" y="484" text-anchor="middle">106/8 起訴</text>
+  <text class="f nt" x="551" y="502" text-anchor="middle">19 人．求刑 12 年</text>
+
+  <path d="M756 430 V396" stroke="#ffb157" stroke-opacity=".4"/>
+  <text class="f lb" x="756" y="388" text-anchor="middle">109/11 一審　8 年 6 月</text>
+
+  <path d="M991 430 V466" stroke="#ffb157" stroke-opacity=".4"/>
+  <text class="f lb" x="1072" y="484" text-anchor="end">113/8 二審　8 年 8 月</text>
+  <text class="f nt" x="1072" y="502" text-anchor="end">增列金控法 §57、證交法 §171 I ① 想像競合</text>
+
+  <path d="M1035 430 V396" stroke="#ffb157" stroke-opacity=".4"/>
+  <text class="f wr" x="1072" y="388" text-anchor="end">114/5 最高法院撤銷發回‧更審中</text>
+
+  <!-- ── 軸 ── -->
+  <line x1="80" y1="540" x2="1072" y2="540" stroke="#5be7ff" stroke-opacity=".22"/>
+  <g class="f ax" text-anchor="middle">
+    <text x="80"  y="562">民國 99</text><line x1="80"  y1="534" x2="80"  y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="204" y="562">101</text><line x1="204" y1="534" x2="204" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="328" y="562">103</text><line x1="328" y1="534" x2="328" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="452" y="562">105</text><line x1="452" y1="534" x2="452" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="576" y="562">107</text><line x1="576" y1="534" x2="576" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="700" y="562">109</text><line x1="700" y1="534" x2="700" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="824" y="562">111</text><line x1="824" y1="534" x2="824" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="948" y="562">113</text><line x1="948" y1="534" x2="948" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text x="1072" y="562">115</text><line x1="1072" y1="534" x2="1072" y2="540" stroke="#5be7ff" stroke-opacity=".3"/>
+  </g>
+
+  <text class="f nt" x="40" y="598">行政監理重在即時阻斷風險；刑事程序重在罪刑法定與證據嚴謹．二者獨立並行．刑事部分尚未確定</text>
+  <text class="f nt" x="1080" y="598" text-anchor="end">© 2026 Yu-Hung Shih</text>
+</svg>
