@@ -140,13 +140,15 @@ const indexItems = [
 </div>
 
 <style>
-	.beta-analysis { display: grid; gap: 2.25rem; padding-bottom: var(--space-5); }
+	.beta-analysis { display: grid; gap: 2.25rem; margin: 0 auto; max-width: 52rem; min-width: 0; padding-bottom: var(--space-5); width: 100%; }
+	.beta-analysis > * { min-width: 0; }
+	.beta-analysis section > * { min-width: 0; }
 	.beta-analysis h1, .beta-analysis h2, .beta-analysis h3 { color: var(--text-bright); font-family: var(--font-heading); font-weight: 400; letter-spacing: .04em; line-height: 1.32; margin: 0; }
 	.beta-analysis h1 { font-size: clamp(2rem, 4vw, 2.35rem); }
 	.beta-analysis h2 { font-size: clamp(1.35rem, 3vw, 1.55rem); }
 	.beta-analysis p, .beta-analysis li, .beta-analysis dd { color: var(--text-dim); line-height: 1.82; }
 	.beta-analysis p { margin: 0; max-width: 44rem; }
-	.beta-hero { background: linear-gradient(180deg, rgba(12, 23, 48, .9), rgba(8, 18, 38, .86)); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1.45rem; box-shadow: var(--glow-soft); display: grid; gap: 1rem; padding: clamp(2rem, 3vw, 3rem); }
+	.beta-hero { background: linear-gradient(180deg, rgba(12, 23, 48, .9), rgba(8, 18, 38, .86)); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1.45rem; box-shadow: var(--glow-soft); display: grid; gap: 1rem; padding: 1.5rem 1.6rem 1.55rem; }
 	.byline { display: flex; flex-wrap: wrap; font-family: var(--font-mono); font-size: .88rem; gap: 1.1rem; }
 	.index-card { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: grid; gap: .7rem; max-width: 44rem; padding: 1.15rem 1.35rem; }
 	.index-divider, .section-divider { background: linear-gradient(90deg, rgba(91, 231, 255, .5), rgba(91, 231, 255, 0)); height: 1px; }
