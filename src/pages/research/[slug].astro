@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import SharpeRatioDemo from "../../components/SharpeRatioDemo.astro";
 import LegalCaseStudy from "../../components/LegalCaseStudy.astro";
+import BetaPortfolioRiskAnalysis from "../../components/BetaPortfolioRiskAnalysis.astro";
 import { siteConfig } from "../../config/site";
 import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
 
@@ -21,6 +22,7 @@ const isEsgStudy = entry.data.slug === "executive-compensation-esg-disclosure";
 const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 const isSharpeRatioDemo = entry.data.slug === "portfolio-optimization-sharpe-ratio";
 const isLegalCaseStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
+const isBetaPortfolioRiskAnalysis = entry.data.slug === "beta-portfolio-risk-analysis";
 
 const currentLocale = Astro.currentLocale ?? "zh";
 const dict = currentLocale === "en" ? en : zh;
@@ -37,7 +39,9 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 
 <SiteLayout title={`${entry.data.title} | Research`} description={entry.data.summary} currentPath={Astro.url.pathname}>
 	<article class="page-stack research-detail">
-		{isLocaleMatch && isSharpeRatioDemo ? (
+		{isLocaleMatch && isBetaPortfolioRiskAnalysis ? (
+			<BetaPortfolioRiskAnalysis entry={entry} pageUrl={Astro.url.href} backHubUrl={backHubUrl} />
+		) : isLocaleMatch && isSharpeRatioDemo ? (
 			<SharpeRatioDemo />
 		) : isLocaleMatch && isLegalCaseStudy ? (
 			<LegalCaseStudy />

@@ -1,0 +1,218 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+	entry: CollectionEntry<"researchItems">;
+	pageUrl: string;
+	backHubUrl: string;
+}
+
+const { entry, pageUrl, backHubUrl } = Astro.props as Props;
+
+const betaRows = [
+	["CITI", "25%", "0.9202", "0.000191877", "387.93%"],
+	["GRMN", "20%", "0.7563", "0.000232558", "470.18%"],
+	["LOGI", "20%", "0.8284", "0.000410037", "829.00%"],
+	["TM", "25%", "0.7343", "0.000241545", "488.35%"],
+	["UA", "10%", "1.2800", "0.000540096", "1,091.95%"],
+	["五檔投組", "100%", "0.8586", "0.000096871", "195.85%"],
+];
+
+const capmRows = [
+	["CITI", "24.614%", "44.721%", "20.107%", "Above SML", false],
+	["GRMN", "21.081%", "59.842%", "38.761%", "Above SML", false],
+	["LOGI", "22.636%", "51.726%", "29.090%", "Above SML", false],
+	["TM", "20.606%", "27.915%", "7.309%", "Above SML", false],
+	["UA", "32.369%", "−6.958%", "−39.327%", "Below SML", true],
+];
+
+const indexItems = [
+	["01", "研究概要", "sec-summary"],
+	["02", "研究方法與主要發現", "sec-method"],
+	["03", "研究定位與名詞速查", "sec-terms"],
+	["04", "Beta 計算與分散化檢驗", "sec-beta"],
+	["05", "CAPM 與證券市場線", "sec-capm"],
+	["06", "兩段結論的交叉閱讀", "sec-cross"],
+	["07", "公開版本邊界", "sec-limits"],
+	["08", "引用與版權", "sec-rights"],
+];
+---
+
+<div class="beta-analysis">
+	<header class="beta-hero" data-reveal style="--reveal-order: 0;">
+		<p class="section-kicker">[RESEARCH / 量化研究]</p>
+		<h1>{entry.data.title}</h1>
+		<div class="hud-divider" aria-hidden="true"></div>
+		<p class="byline"><span>Yuhung Shih</span><span>{entry.data.year}</span><span>公開版本</span></p>
+	</header>
+
+	<nav class="index-card" aria-label="Beta portfolio risk analysis index" data-reveal style="--reveal-order: 1;">
+		<p class="section-kicker">[INDEX]</p>
+		<div class="index-divider" aria-hidden="true"></div>
+		<div class="index-nav">
+			{indexItems.map(([number, label, id]) => <a href={`#${id}`} class:list={["index-link", { extension: number === "05" || number === "06" }]}><span>{number}</span>{label}</a>)}
+		</div>
+	</nav>
+
+	<section class="abstract" data-reveal style="--reveal-order: 2;">
+		<p class="section-kicker">[ABSTRACT]</p>
+		<p>{entry.data.summary}</p>
+		<div class="tag-list">{entry.data.tags.map((tag) => <span>{tag}</span>)}</div>
+	</section>
+
+	<section class="metadata" aria-label="Research metadata" data-reveal style="--reveal-order: 3;">
+		<p class="section-kicker">[METADATA]</p>
+		<div class="metadata-grid">
+			<div><span>年份</span><strong>{entry.data.year}</strong></div>
+			<div><span>資料期間</span><strong>2023-07-12 – 2024-07-11</strong></div>
+			<div><span>投組 Beta</span><strong>0.8586</strong></div>
+			<div class="extension-card"><span>無風險利率（延伸段）</span><strong>4.781%</strong></div>
+		</div>
+		<p class="metadata-note">本頁的數字取自作者的財務管理課程作業與分析工作簿，公開版不重新求解、不補算原始資料沒有的數字。標示 <em>[EXTENSION]</em> 的章節為繳交後自行加做的延伸分析，非原始課程要求。</p>
+	</section>
+
+	<div class="section-divider" aria-hidden="true"></div>
+
+	<section id="sec-summary" data-reveal style="--reveal-order: 4;">
+		<div class="section-heading"><span>01</span><h2>研究概要</h2><b>ASSIGNMENT</b></div>
+		<div class="highlight-grid">
+			{entry.data.highlights.map((highlight) => <article><span>{highlight.label}</span><strong>{highlight.value}</strong><p>{highlight.detail}</p></article>)}
+		</div>
+	</section>
+
+	<section id="sec-method" data-reveal style="--reveal-order: 5;">
+		<div class="section-heading"><span>02</span><h2>研究方法與主要發現</h2><b>ASSIGNMENT</b></div>
+		<div class="two-column">
+			<div><h3>研究方法</h3><ol>{entry.data.methods.map((method) => <li>{method}</li>)}</ol></div>
+			<div><h3>主要發現</h3><ul>{entry.data.findings.map((finding) => <li>{finding}</li>)}</ul></div>
+		</div>
+	</section>
+
+	<section id="sec-terms" data-reveal style="--reveal-order: 6;">
+		<div class="section-heading"><span>03</span><h2>研究定位與名詞速查</h2></div>
+		<p>本研究以五檔美股（CITI、GRMN、LOGI、TM、UA）在 2023-07-12 至 2024-07-11 的日報酬資料為基礎，回答「分散持股能不能降低風險、能降低多少」這個問題。</p>
+		<dl class="terms-grid">
+			<div><dt>Beta（系統性風險係數）</dt><dd>衡量一檔股票（或投組）的報酬跟著大盤（S&P 500）一起波動的程度。Beta 大於 1 代表比大盤更敏感，小於 1 代表比大盤更穩定。</dd></div>
+			<div><dt>系統性風險 vs. 非系統性風險</dt><dd>系統性風險無法靠分散持股消除；單一公司或產業特有的非系統性風險，則可藉持有多檔不同股票降低。</dd></div>
+			<div><dt>CAPM（資本資產定價模型）</dt><dd>用一檔股票的 Beta，推算承擔該風險程度時合理應有的報酬。</dd></div>
+			<div><dt>SML 與 Alpha</dt><dd>SML 對照 Beta 與合理報酬；實際報酬減去合理報酬為 Alpha，正值代表超過合理水準。</dd></div>
+		</dl>
+	</section>
+
+	<section id="sec-beta" data-reveal style="--reveal-order: 7;">
+		<div class="section-heading"><span>04</span><h2>Beta 計算與分散化檢驗</h2><b>ASSIGNMENT</b></div>
+		<p>原始財管作業以各資產的相鄰收盤價計算日報酬，以 <code>COVARIANCE.S(資產日報酬, 市場日報酬) / VAR.S(市場日報酬)</code> 取得 Beta；投組日報酬依既定權重加總。此部分比較個別資產與投組相對市場的敏感度，並觀察分散化對風險的影響。</p>
+		<div class="table-label">TABLE 01 <span>各股 Beta、權重與風險比較</span></div>
+		<div class="table-scroll"><table><thead><tr><th>股票</th><th>權重</th><th>Beta</th><th>個股變異數</th><th>相對 S&P 500 變異數</th></tr></thead><tbody>{betaRows.map((row) => <tr class:list={{ emphasis: row[0] === "五檔投組", warning: row[0] === "UA" }}>{row.map((cell, index) => <td class:list={{ numeric: index > 0 }}>{cell}</td>)}</tr>)}</tbody></table></div>
+		<figure><div class="figure-label">FIG 01 <span>Beta 與投資組合風險比較</span></div><img src="/research/beta-risk-comparison.svg" alt="Beta 與投資組合風險比較長條圖。" loading="lazy" /><figcaption>資料期間 2023-07-12 – 2024-07-11，作者自製。</figcaption></figure>
+		<p>同一樣本的 S&P 500 日報酬變異數為 0.000049462。投組的變異數低於每一檔個股，但仍高於市場指數；所以我會說「分散化降低了部分非系統性風險」，但不會說風險已經完全消失。</p>
+		<aside class="reading-note"><span>白話讀法</span><p>UA 雖然只佔投組 10% 的權重，但它的 Beta（1.28）與變異數（是大盤的 10.9 倍）都是五檔裡最高的；TM 與 GRMN 的 Beta 都低於 0.8。五檔按權重合起來後，投組的 Beta 降到 0.8586、變異數降到大盤的 195.85%——比任何一檔單獨持有都更穩，但仍高於大盤自己的 100%。</p></aside>
+	</section>
+
+	<section id="sec-capm" class="extension-section" data-reveal style="--reveal-order: 8;">
+		<div class="section-heading"><span>05</span><h2>CAPM 與證券市場線</h2><b>EXTENSION</b></div>
+		<p>交完作業後，我想親自實踐一次課堂上學到的 CAPM 與 SML 理論，所以自己加了一段延伸分析：用 2024 年 7 月的一年期美國國庫券利率 4.781%、S&P 500 價格報酬 24.8734% 與平均股利殖利率 1.46% 建構 CAPM/SML，再列出每一檔股票的實際報酬與 Alpha。這段不是老師原始作業要求，也不改寫前面的 Beta 與分散化結論。</p>
+		<div class="table-label">TABLE 02 <span>CAPM 合理報酬、實際報酬與 Alpha</span></div>
+		<div class="table-scroll"><table><thead><tr><th>股票</th><th>CAPM 預期報酬</th><th>實際報酬</th><th>Alpha</th><th>SML 結果</th></tr></thead><tbody>{capmRows.map((row) => <tr class:list={{ warning: row[5] }}>{row.slice(0, 5).map((cell, index) => <td class:list={{ numeric: index > 0 && index < 4 }}>{cell}</td>)}</tr>)}</tbody></table></div>
+		<figure><div class="figure-label">FIG 02 <span>證券市場線與各股 Alpha</span></div><img src="/research/beta-sml-analysis.svg" alt="證券市場線與 Alpha 分析圖：各股實際報酬對照 CAPM 合理報酬，並列出各股 Alpha。" loading="lazy" /><figcaption>無風險利率 4.781%、市場報酬 24.8734%、股利殖利率 1.46%，作者自製。</figcaption></figure>
+		<aside class="reading-note"><span>白話讀法</span><p>CITI、GRMN、LOGI、TM 的實際報酬都超過 CAPM 算出的合理水準，其中 GRMN 的 Alpha 為 38.761%。唯一落後的是 UA：它的 Beta 最高（1.28），合理報酬為 32.369%，實際卻是 −6.958%，Alpha 為 −39.327%。</p></aside>
+	</section>
+
+	<section id="sec-cross" data-reveal style="--reveal-order: 9;">
+		<div class="section-heading"><span>06</span><h2>兩段結論的交叉閱讀</h2></div>
+		<p>UA 不只是波動最大的一檔（Beta 與變異數都是五檔最高），也是唯一表現落後合理報酬水準的一檔——高風險不保證高報酬。投組即使納入 UA、整體 Beta 仍能維持在 0.8586（低於 1），因為它的高波動被其他四檔較穩定、且表現優於合理水準的持股中和掉了。</p>
+		<div class="cross-grid"><div class="warning-card"><span>UA · Beta</span><strong>1.2800</strong><small>五檔最高</small></div><div class="warning-card"><span>UA · Alpha</span><strong>−39.327%</strong><small>五檔唯一 Below SML</small></div><div><span>投組 · Beta</span><strong>0.8586</strong><small>仍低於 1</small></div></div>
+	</section>
+
+	<section id="sec-limits" data-reveal style="--reveal-order: 10;">
+		<div class="section-heading"><span>07</span><h2>公開版本邊界</h2></div>
+		<p>{entry.data.reflection}</p>
+		<p>兩張圖表都保留在本頁供直接閱讀：<code>/research/beta-risk-comparison.svg</code>（原始作業的 Beta／風險比較）與 <code>/research/beta-sml-analysis.svg</code>（繳交後自行加做的延伸）。原始課堂報告和試算表未公開，這裡呈現的都是作者自己整理、可直接對照的數字。</p>
+	</section>
+
+	<section id="sec-rights" class="rights" data-reveal style="--reveal-order: 11;">
+		<div class="section-heading"><span>08</span><h2>引用與版權</h2></div>
+		<p><strong>Yuhung Shih</strong> · © 2026 · All Rights Reserved</p>
+		<p>Fixed page URL: <a href={pageUrl}>{pageUrl}</a></p>
+		<p>歡迎合理引用，請清楚標示作者與本來源頁面。</p>
+		<a class="cta-link secondary" href={backHubUrl}>Back to Research Hub</a>
+	</section>
+</div>
+
+<style>
+	.beta-analysis { display: grid; gap: 2.25rem; padding-bottom: var(--space-5); }
+	.beta-analysis h1, .beta-analysis h2, .beta-analysis h3 { color: var(--text-bright); font-family: var(--font-heading); font-weight: 400; letter-spacing: .04em; line-height: 1.32; margin: 0; }
+	.beta-analysis h1 { font-size: clamp(2rem, 4vw, 2.35rem); }
+	.beta-analysis h2 { font-size: clamp(1.35rem, 3vw, 1.55rem); }
+	.beta-analysis p, .beta-analysis li, .beta-analysis dd { color: var(--text-dim); line-height: 1.82; }
+	.beta-analysis p { margin: 0; max-width: 44rem; }
+	.beta-hero { background: linear-gradient(180deg, rgba(12, 23, 48, .9), rgba(8, 18, 38, .86)); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1.45rem; box-shadow: var(--glow-soft); display: grid; gap: 1rem; padding: clamp(2rem, 3vw, 3rem); }
+	.byline { display: flex; flex-wrap: wrap; font-family: var(--font-mono); font-size: .88rem; gap: 1.1rem; }
+	.index-card { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: grid; gap: .7rem; max-width: 44rem; padding: 1.15rem 1.35rem; }
+	.index-divider, .section-divider { background: linear-gradient(90deg, rgba(91, 231, 255, .5), rgba(91, 231, 255, 0)); height: 1px; }
+	.section-divider { background: linear-gradient(90deg, rgba(91, 231, 255, 0), rgba(91, 231, 255, .5), rgba(91, 231, 255, 0)); }
+	.index-nav { display: grid; gap: .15rem .9rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.index-link { border-radius: .4rem; color: rgba(211, 230, 242, .82); display: flex; font-size: .9rem; gap: .6rem; line-height: 1.5; padding: .48rem .3rem; text-decoration: none; }
+	.index-link:hover { background: rgba(91, 231, 255, .08); color: var(--accent); }
+	.index-link span { color: var(--accent); font-family: var(--font-display); font-size: .66rem; padding-top: .2rem; }
+	.index-link.extension span { color: #ffb157; }
+	.abstract, .metadata { display: grid; gap: .9rem; }
+	.abstract > p { color: var(--text-bright); font-size: 1.02rem; }
+	.tag-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+	.tag-list span { background: rgba(91, 231, 255, .07); border: 1px solid rgba(91, 231, 255, .22); border-radius: 999px; color: rgba(244, 251, 255, .82); font-size: .74rem; letter-spacing: .05em; padding: .26rem .68rem; }
+	.metadata-grid, .highlight-grid, .cross-grid { display: grid; gap: .85rem; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); }
+	.metadata-grid > div, .highlight-grid article, .cross-grid > div, .terms-grid > div { background: rgba(8, 18, 38, .48); border: 1px solid rgba(91, 231, 255, .12); border-radius: .9rem; display: grid; gap: .35rem; padding: .9rem 1rem; }
+	.metadata-grid span, .cross-grid span { color: rgba(91, 231, 255, .85); font-family: var(--font-display); font-size: .6rem; letter-spacing: .14em; }
+	.metadata-grid strong, .cross-grid strong { color: var(--text-bright); font-family: var(--font-mono); font-size: .95rem; font-variant-numeric: tabular-nums; font-weight: 400; }
+	.extension-card { border-color: rgba(255, 177, 87, .2) !important; }
+	.extension-card span { color: rgba(255, 210, 168, .9) !important; }
+	.metadata-note { color: var(--text-muted) !important; font-size: .92rem; }
+	.metadata-note em { color: #ffb157; font-family: var(--font-display); font-size: .75rem; font-style: normal; }
+	.beta-analysis section { display: grid; gap: 1.1rem; scroll-margin-top: 1.25rem; }
+	.section-heading { align-items: baseline; display: flex; flex-wrap: wrap; gap: 1rem; }
+	.section-heading > span { color: rgba(91, 231, 255, .28); font-family: var(--font-display); font-size: 2.4rem; line-height: 1; }
+	.section-heading b { background: rgba(91, 231, 255, .07); border: 1px solid rgba(91, 231, 255, .22); border-radius: 999px; color: var(--accent); font-family: var(--font-display); font-size: .58rem; font-weight: 500; letter-spacing: .14em; padding: .22rem .6rem; }
+	.highlight-grid { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }
+	.highlight-grid article > span { color: var(--accent); font-size: .82rem; }
+	.highlight-grid article > strong { color: var(--text-bright); font-weight: 500; line-height: 1.62; }
+	.highlight-grid article p { color: var(--text-muted); font-size: .9rem; }
+	.two-column { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.two-column > div { background: rgba(8, 18, 38, .3); border-left: 2px solid rgba(91, 231, 255, .5); padding: .3rem 1rem .3rem 1.15rem; }
+	.two-column h3 { font-size: 1.08rem; }
+	.two-column ol, .two-column ul { display: grid; gap: .8rem; margin: 1rem 0 0; padding-left: 1.3rem; }
+	.terms-grid { display: grid; gap: .85rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); margin: 0; }
+	.terms-grid dt { color: var(--accent); font-size: .9rem; }
+	.terms-grid dd { color: var(--text-muted); font-size: .9rem; margin: .45rem 0 0; }
+	.table-label, .figure-label { align-items: center; color: var(--accent); display: flex; flex-wrap: wrap; font-family: var(--font-display); font-size: .62rem; gap: .6rem; letter-spacing: .14em; }
+	.table-label span, .figure-label span { color: rgba(211, 230, 242, .78); font-family: var(--font-body); font-size: .9rem; font-weight: 400; letter-spacing: 0; }
+	.table-scroll { max-width: 100%; overflow-x: auto; }
+	table { border-collapse: collapse; font-family: var(--font-mono); font-size: .88rem; min-width: 34rem; width: 100%; }
+	th, td { border: 1px solid rgba(91, 231, 255, .22); padding: .6rem .75rem; text-align: left; white-space: nowrap; }
+	th { background: rgba(91, 231, 255, .1); color: var(--text-bright); font-family: var(--font-display); font-size: .68rem; font-weight: 500; letter-spacing: .05em; }
+	td { color: var(--text-dim); }
+	td.numeric { text-align: right; }
+	tr.emphasis td { background: rgba(91, 231, 255, .07); color: var(--text-bright); }
+	tr.warning td { background: rgba(255, 177, 87, .08); border-color: rgba(255, 177, 87, .34); color: #ffd2a8; }
+	figure { display: grid; gap: .7rem; margin: .25rem 0 0; }
+	figure img { background: rgba(8, 18, 38, .4); border: 1px solid rgba(91, 231, 255, .12); border-radius: 1rem; display: block; height: auto; width: 100%; }
+	figcaption { color: var(--text-muted); font-size: .84rem; }
+	.reading-note { background: rgba(8, 18, 38, .56); border: 1px solid rgba(91, 231, 255, .16); border-left: 3px solid rgba(91, 231, 255, .5); border-radius: .9rem; display: grid; gap: .5rem; max-width: 46rem; padding: 1.1rem 1.3rem; }
+	.reading-note > span { color: var(--accent); font-family: var(--font-display); font-size: .6rem; letter-spacing: .16em; }
+	.extension-section { border-left: 2px solid rgba(255, 177, 87, .34); padding-left: 1.4rem; }
+	.extension-section .section-heading > span { color: rgba(255, 177, 87, .34); }
+	.extension-section .section-heading b, .extension-section .table-label, .extension-section .figure-label, .extension-section .reading-note > span { color: #ffb157; }
+	.extension-section .section-heading b { background: rgba(255, 177, 87, .12); border-color: rgba(255, 177, 87, .4); }
+	.extension-section th { background: rgba(255, 177, 87, .1); border-color: rgba(255, 177, 87, .22); }
+	.extension-section td { border-color: rgba(255, 177, 87, .22); }
+	.extension-section figure img { border-color: rgba(255, 177, 87, .16); }
+	.extension-section .reading-note { border-color: rgba(255, 177, 87, .2); border-left-color: rgba(255, 177, 87, .55); }
+	.cross-grid { max-width: 46rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+	.cross-grid strong { font-size: 1.08rem; }
+	.cross-grid small { color: var(--text-muted); font-size: .8rem; }
+	.cross-grid .warning-card { border-color: rgba(255, 177, 87, .24); }
+	.cross-grid .warning-card span, .cross-grid .warning-card strong { color: #ffb157; }
+	.rights { border-left: 3px solid rgba(91, 231, 255, .45); padding-left: 1.4rem; }
+	.rights p { color: var(--text-muted); }
+	.rights a:not(.cta-link) { overflow-wrap: anywhere; }
+	@media (max-width: 620px) { .index-nav, .two-column { grid-template-columns: 1fr; } .extension-section, .rights { padding-left: 1rem; } }
+</style>
