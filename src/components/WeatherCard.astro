@@ -181,16 +181,16 @@ const payload = regions.map((r) => ({
 
 		<div class="weather-card__icon">
 			<div class="weather-card__halo" aria-hidden="true"></div>
-			<svg class="weather-card__glyph" data-wc-icon="sun" hidden={active.icon !== "sun"} viewBox="0 0 58 58" fill="none">
+			<svg class="weather-card__glyph" data-wc-icon="sun" data-hidden={active.icon !== "sun"} viewBox="0 0 58 58" fill="none">
 				<circle cx="24" cy="22" r="9" stroke="var(--wc-accent)" stroke-width="1.5"></circle>
 				<path d="M24 5v5M9 22h-4M12 11l3 3M36 10l-3 3" stroke="var(--wc-brand)" stroke-width="1.4" stroke-linecap="round"></path>
 				<path d="M22 42a8 8 0 0 1 .6-15.9A11.5 11.5 0 0 1 44 31a7 7 0 0 1-.4 11H22Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
 			</svg>
-			<svg class="weather-card__glyph" data-wc-icon="cloud" hidden={active.icon !== "cloud"} viewBox="0 0 58 58" fill="none">
+			<svg class="weather-card__glyph" data-wc-icon="cloud" data-hidden={active.icon !== "cloud"} viewBox="0 0 58 58" fill="none">
 				<circle cx="21" cy="20" r="7.5" stroke="var(--wc-brand)" stroke-width="1.4"></circle>
 				<path d="M18 41a8.5 8.5 0 0 1 .6-16.9A12 12 0 0 1 41.4 28a7.5 7.5 0 0 1-.4 13H18Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
 			</svg>
-			<svg class="weather-card__glyph" data-wc-icon="rain" hidden={active.icon !== "rain"} viewBox="0 0 58 58" fill="none">
+			<svg class="weather-card__glyph" data-wc-icon="rain" data-hidden={active.icon !== "rain"} viewBox="0 0 58 58" fill="none">
 				<path d="M17 32a8.5 8.5 0 0 1 .6-16.9A12 12 0 0 1 40.4 19a7.5 7.5 0 0 1-.4 13H17Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
 				<path d="M20 39l-2.5 7M29 39l-2.5 7M38 39l-2.5 7" stroke="var(--wc-brand)" stroke-width="1.5" stroke-linecap="round"></path>
 			</svg>
@@ -322,7 +322,7 @@ const payload = regions.map((r) => ({
 			q("[data-wc-aqi-mark]").style.left = `${r.aqiPct}%`;
 
 			card.querySelectorAll("[data-wc-icon]").forEach((node) => {
-				node.hidden = node.dataset.wcIcon !== r.icon;
+				node.toggleAttribute("data-hidden", node.dataset.wcIcon !== r.icon);
 			});
 
 			card.querySelectorAll("[data-wc-tab]").forEach((tab) => {
@@ -642,6 +642,10 @@ const payload = regions.map((r) => ({
 		height: 76px;
 		position: relative;
 		width: 76px;
+	}
+
+	.weather-card [data-wc-icon][data-hidden] {
+		display: none;
 	}
 
 	.weather-card__glyph--night,
