@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" role="img" aria-labelledby="wlTitle wlDesc">
+  <title id="wlTitle">ESG 薪酬權重階梯與具體度比較</title>
+  <desc id="wlDesc">分析四家臺灣上市公司於董事層級、最高經營層與次層管理者之 ESG 薪酬權重及指標具體度。分三帶獨立呈現，強調分母不同不可跨帶比較。</desc>
+  <defs>
+    <style>
+      .f  { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .mono { font-family: "IBM Plex Mono",monospace,"IBM Plex Sans",sans-serif; }
+      .h  { font-size: 21px; fill: #5be7ff; font-weight: bold; letter-spacing: .02em; }
+      .sub { font-size: 13px; fill: #8fa3bf; }
+      .btitle { font-size: 15px; fill: #5be7ff; font-weight: bold; }
+      .bsub { font-size: 12px; fill: #8fa3bf; }
+      .cname { font-size: 14px; fill: #c8d6ea; font-weight: bold; }
+      .lbl { font-size: 12px; fill: #c8d6ea; }
+      .val-conc { font-size: 13px; fill: #5fd694; font-weight: bold; }
+      .val-abst { font-size: 13px; fill: #ffb157; font-weight: bold; }
+      .val-none { font-size: 12px; fill: #8fa3bf; }
+      .warn-title { font-size: 13px; fill: #ffb157; font-weight: bold; }
+      .warn-txt { font-size: 12px; fill: #c8d6ea; }
+      .lgd { font-size: 12px; fill: #8fa3bf; }
+    </style>
+    <pattern id="hatch-amber" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="#0c1730"/>
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#ffb157" stroke-width="3" opacity="0.8"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="800" fill="#081226"/>
+
+  <!-- Title block -->
+  <text class="f h" x="40" y="40">ESG 薪酬權重階梯與具體度比較</text>
+  <text class="f sub" x="40" y="62">分三個獨立層級帶（Band）呈現．帶與帶之間分母不同，不可共用同一可比軸</text>
+
+  <!-- Legend -->
+  <g transform="translate(620, 26)">
+    <rect x="0" y="0" width="16" height="14" rx="2" fill="#5fd694"/>
+    <text class="f lgd" x="22" y="12">具體（拆解子項）</text>
+    <rect x="130" y="0" width="16" height="14" rx="2" fill="url(#hatch-amber)" stroke="#ffb157" stroke-width="1"/>
+    <text class="f lgd" x="152" y="12">抽象（綜合詞）</text>
+    <rect x="250" y="0" width="16" height="14" rx="2" fill="none" stroke="#8fa3bf" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <text class="f lgd" x="272" y="12">未揭露</text>
+  </g>
+
+  <line x1="40" y1="75" x2="960" y2="75" stroke="#5be7ff" stroke-opacity=".25"/>
+
+  <!-- ================= Band A: 董事層級 ================= -->
+  <g transform="translate(40, 90)">
+    <rect width="920" height="175" rx="8" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".25"/>
+    <text class="f btitle" x="20" y="28">Band A：董事層級</text>
+    <text class="f bsub" x="160" y="28">（基準：佔董事會績效評估辦法之比例）</text>
+
+    <!-- Row 1: 國喬 75% -->
+    <text class="f cname" x="20" y="62">國喬石化 (1312)</text>
+    <rect x="170" y="46" width="450" height="22" rx="3" fill="url(#hatch-amber)" stroke="#ffb157" stroke-width="1"/>
+    <text class="f mono val-abst" x="630" y="62">75%</text>
+    <text class="f lbl" x="675" y="62">抽象：永續績效 25% + 永續承諾目標 25% + 外部評比 25%</text>
+
+    <!-- Row 2: 中保科 未揭露 -->
+    <text class="f cname" x="20" y="94">中興保全科技 (9917)</text>
+    <rect x="170" y="80" width="120" height="20" rx="3" fill="none" stroke="#8fa3bf" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text class="f val-none" x="300" y="94">未揭露</text>
+
+    <!-- Row 3: 強盛新 未揭露 -->
+    <text class="f cname" x="20" y="124">強盛新 (1463)</text>
+    <rect x="170" y="110" width="120" height="20" rx="3" fill="none" stroke="#8fa3bf" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text class="f val-none" x="300" y="124">未揭露（年報未提，永續書僅原則性描述）</text>
+
+    <!-- Row 4: 嘉里大榮 未揭露 -->
+    <text class="f cname" x="20" y="154">嘉里大榮物流 (2608)</text>
+    <rect x="170" y="140" width="120" height="20" rx="3" fill="none" stroke="#8fa3bf" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text class="f val-none" x="300" y="154">未揭露（僅原則性描述，無權重數字）</text>
+  </g>
+
+  <!-- ================= Band B: 最高經營層 ================= -->
+  <g transform="translate(40, 280)">
+    <rect width="920" height="195" rx="8" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".25"/>
+    <text class="f btitle" x="20" y="28">Band B：最高經營層（總執行長／總經理／高階主管）</text>
+    <text class="f bsub" x="410" y="28">（基準：ESG 佔年度績效獎金權重）</text>
+
+    <!-- Row 1: 國喬 20% -->
+    <text class="f cname" x="20" y="62">國喬石化</text>
+    <rect x="170" y="46" width="200" height="22" rx="3" fill="url(#hatch-amber)" stroke="#ffb157" stroke-width="1"/>
+    <text class="f mono val-abst" x="380" y="62">20%</text>
+    <text class="f lbl" x="425" y="62">抽象：高階經理人；該公司揭露之最高經理人層級</text>
+
+    <!-- Row 2: 中保科 15% -->
+    <text class="f cname" x="20" y="94">中興保全科技</text>
+    <rect x="170" y="78" width="150" height="22" rx="3" fill="#5fd694"/>
+    <text class="f mono val-conc" x="330" y="94">15%</text>
+    <text class="f lbl" x="375" y="94">具體：總執行長暨執行長</text>
+
+    <!-- Row 3: 強盛新 15% -->
+    <text class="f cname" x="20" y="126">強盛新</text>
+    <rect x="170" y="110" width="150" height="22" rx="3" fill="#5fd694"/>
+    <text class="f mono val-conc" x="330" y="126">15%</text>
+    <text class="f lbl" x="375" y="126">具體：總經理（依年報揭露）</text>
+
+    <!-- Row 4: 嘉里大榮 至少 15% -->
+    <text class="f cname" x="20" y="158">嘉里大榮物流</text>
+    <rect x="170" y="142" width="150" height="22" rx="3" fill="url(#hatch-amber)" stroke="#ffb157" stroke-width="1"/>
+    <text class="f mono val-abst" x="330" y="158">至少 15%</text>
+    <text class="f lbl" x="405" y="158">抽象：高階主管，自 114 年（2025）起</text>
+  </g>
+
+  <!-- ================= Band C: 次層管理者 ================= -->
+  <g transform="translate(40, 490)">
+    <rect width="920" height="175" rx="8" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".25"/>
+    <text class="f btitle" x="20" y="28">Band C：次層管理者</text>
+    <text class="f bsub" x="180" y="28">（基準：ESG 佔年度績效獎金權重）</text>
+
+    <!-- Row 1: 中保科 6% / 5% -->
+    <text class="f cname" x="20" y="62">中興保全科技</text>
+    <rect x="170" y="46" width="60" height="22" rx="3" fill="#5fd694"/>
+    <rect x="235" y="46" width="50" height="22" rx="3" fill="#5fd694" opacity="0.8"/>
+    <text class="f mono val-conc" x="295" y="62">6% / 5%</text>
+    <text class="f lbl" x="360" y="62">具體：高階經理人 6%／本部單位主管 5%</text>
+
+    <!-- Row 2: 強盛新 6% / 5% -->
+    <text class="f cname" x="20" y="94">強盛新</text>
+    <rect x="170" y="78" width="60" height="22" rx="3" fill="#5fd694"/>
+    <rect x="235" y="78" width="50" height="22" rx="3" fill="#5fd694" opacity="0.8"/>
+    <text class="f mono val-conc" x="295" y="94">6% / 5%</text>
+    <text class="f lbl" x="360" y="94">具體：高階經理人 6%／單位主管 5%</text>
+
+    <!-- Row 3: 國喬 未揭露 -->
+    <text class="f cname" x="20" y="126">國喬石化</text>
+    <rect x="170" y="112" width="120" height="20" rx="3" fill="none" stroke="#8fa3bf" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text class="f val-none" x="300" y="126">未揭露</text>
+
+    <!-- Row 4: 嘉里大榮 未揭露 -->
+    <text class="f cname" x="20" y="156">嘉里大榮物流</text>
+    <rect x="170" y="142" width="120" height="20" rx="3" fill="none" stroke="#8fa3bf" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text class="f val-none" x="300" y="156">未揭露</text>
+  </g>
+
+  <!-- ================= Warning Footer ================= -->
+  <g transform="translate(40, 680)">
+    <rect width="920" height="95" rx="8" fill="#1a1206" stroke="#ffb157" stroke-opacity=".6"/>
+    <text class="f warn-title" x="20" y="28">⚠️ 警告：三帶分母不同，不可跨帶比較</text>
+    <text class="f warn-txt" x="20" y="52">Band A 的 75% 是「永續相關項目佔董事會績效評估辦法之比例」；</text>
+    <text class="f warn-txt" x="20" y="74">Band B／C 的百分比是「ESG 佔該層級年度績效獎金之權重」。</text>
+  </g>
+</svg>
