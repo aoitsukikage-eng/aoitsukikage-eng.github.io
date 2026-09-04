@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 500" role="img" aria-labelledby="title desc">
+  <title id="title">SOUNDNESS BENCHMARKS</title>
+  <desc id="desc">健全性同業對照</desc>
+  <rect width="1100" height="500" fill="#071225"/>
+  <text x="60" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">SOUNDNESS BENCHMARKS / 2025/3</text>
+  
+  <!-- Row 1: 自己資本比率 0-12% -->
+  <text x="60" y="110" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">自己資本比率 (0-12%)</text>
+  <!-- Background bar -->
+  <rect x="250" y="95" width="600" height="24" fill="#1e2c45"/>
+  <!-- Main bar: 10.95/12 * 600 = 547.5 -->
+  <rect x="250" y="95" width="547.5" height="24" fill="#2b9ec0"/>
+  <text x="807.5" y="113" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16" font-weight="700">10.95%</text>
+  
+  <!-- Marker: 4% (4/12 * 600 = 200) -->
+  <line x1="450" y1="85" x2="450" y2="129" stroke="#9eb5d7" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="450" y="145" fill="#9eb5d7" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">國內基準 4%</text>
+  
+  <!-- Marker: 9.58% (9.58/12 * 600 = 479) -->
+  <line x1="729" y1="85" x2="729" y2="129" stroke="#9eb5d7" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="729" y="145" fill="#9eb5d7" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">東京都內23信金平均 (2019/3)</text>
+  
+  <text x="860" y="113" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">軸上限: 12%</text>
+
+  <!-- Row 2: 預貸率 0-60% -->
+  <text x="60" y="240" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">預貸率 (0-60%)</text>
+  <!-- Main bar: 47.22/60 * 600 = 472.2 -->
+  <rect x="250" y="225" width="600" height="24" fill="#1e2c45"/>
+  <rect x="250" y="225" width="472.2" height="24" fill="#2b9ec0"/>
+  <text x="732.2" y="243" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16" font-weight="700">47.22%</text>
+  
+  <!-- Marker: 47.44% (47.44/60 * 600 = 474.4) -->
+  <line x1="724.4" y1="215" x2="724.4" y2="259" stroke="#9eb5d7" stroke-width="2" stroke-dasharray="4 2"/>
+  <text x="724.4" y="275" fill="#9eb5d7" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">業界平均 47.44%</text>
+  <text x="860" y="243" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">軸上限: 60%</text>
+
+  <!-- Row 3: 不良債權比率 0-10% -->
+  <text x="60" y="370" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">不良債權比率 (0-10%)</text>
+  <!-- Main bar: 3.35/10 * 600 = 201 -->
+  <rect x="250" y="355" width="600" height="24" fill="#1e2c45"/>
+  <rect x="250" y="355" width="201" height="24" fill="#2b9ec0"/>
+  <text x="461" y="373" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16" font-weight="700">3.35%</text>
+  
+  <text x="860" y="365" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">保全率 96.96%</text>
+  <text x="860" y="385" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">查無公開業界平均，個別信金分布約 1%-10%+</text>
+  <text x="860" y="405" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">軸上限: 10%</text>
+
+  <text x="1080" y="480" fill="#5be7ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="end">© 2026 Yuhung Shih · aoitsukikage-eng.github.io</text>
+</svg>

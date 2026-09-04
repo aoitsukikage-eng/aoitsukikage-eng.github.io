@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 640" role="img" aria-labelledby="title desc">
+  <title id="title">THREE PILLARS LOOP</title>
+  <desc id="desc">三支柱正向循環</desc>
+  <rect width="1020" height="640" fill="#071225"/>
+  <text x="60" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">THREE PILLARS VIRTUOUS LOOP</text>
+  
+  <!-- Center -->
+  <circle cx="510" cy="320" r="40" fill="#071225" stroke="#5be7ff" stroke-width="2"/>
+  <text x="510" y="325" fill="#5be7ff" font-family="IBM Plex Sans, sans-serif" font-size="16" text-anchor="middle" font-weight="700">年輪経営</text>
+
+  <!-- Nodes (Top, Right, Bottom, Left) -->
+  <!-- Top: 地域密著型經營 -->
+  <rect x="360" y="100" width="300" height="80" rx="8" fill="#071225" stroke="#2b9ec0" stroke-width="2"/>
+  <text x="510" y="125" fill="#d9f9ff" font-family="IBM Plex Sans, sans-serif" font-size="16" text-anchor="middle" font-weight="700">① 地域密著型經營</text>
+  <text x="510" y="145" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">訪問式營業・商店街連結</text>
+  <text x="510" y="165" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">行政協定・S-biz</text>
+
+  <!-- Right: 深度理解高齡客群 -->
+  <rect x="700" y="280" width="260" height="80" rx="8" fill="#071225" stroke="#bb8c30" stroke-width="2"/>
+  <text x="830" y="315" fill="#d9f9ff" font-family="IBM Plex Sans, sans-serif" font-size="16" text-anchor="middle" font-weight="700">② 深度理解高齡客群</text>
+  
+  <!-- Bottom: 高齡金融服務 -->
+  <rect x="360" y="460" width="300" height="80" rx="8" fill="#071225" stroke="#d75f93" stroke-width="2"/>
+  <text x="510" y="485" fill="#d9f9ff" font-family="IBM Plex Sans, sans-serif" font-size="16" text-anchor="middle" font-weight="700">③ 高齡金融服務與基礎建設</text>
+  <text x="510" y="505" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">ゆとり定期・ベテランクラブ</text>
+  <text x="510" y="525" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">見守り協定・全店 AED 與無障礙</text>
+
+  <!-- Left: 品牌差異化 -->
+  <rect x="60" y="280" width="260" height="80" rx="8" fill="#071225" stroke="#8a6df2" stroke-width="2"/>
+  <text x="190" y="305" fill="#d9f9ff" font-family="IBM Plex Sans, sans-serif" font-size="16" text-anchor="middle" font-weight="700">④ 品牌差異化</text>
+  <text x="190" y="325" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">Emmanuelle Moureaux 建築</text>
+  <text x="190" y="345" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">ホスピタリティ商標</text>
+
+  <!-- Arrows -->
+  <g fill="none" stroke="#9eb5d7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Top to Right -->
+    <path d="M680 140 Q 830 140 830 260" marker-end="url(#arrow)"/>
+    <!-- Right to Bottom -->
+    <path d="M830 380 Q 830 500 680 500" marker-end="url(#arrow)"/>
+    <!-- Bottom to Left -->
+    <path d="M340 500 Q 190 500 190 380" marker-end="url(#arrow)"/>
+    <!-- Left to Top -->
+    <path d="M190 260 Q 190 140 340 140" marker-end="url(#arrow)"/>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,1 L9,5 L0,9" fill="none" stroke="#9eb5d7" stroke-width="2"/>
+    </marker>
+  </defs>
+  
+  <text x="265" y="200" fill="#d9f9ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle" transform="rotate(45 265 200)">新客流入・強化在地連結</text>
+
+  <!-- Evidence Box -->
+  <rect x="740" y="550" width="260" height="60" fill="#1e2c45" stroke="#5be7ff" stroke-width="1"/>
+  <text x="870" y="575" fill="#d9f9ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle" font-weight="700">實證：新座支店 改裝後1年</text>
+  <text x="870" y="595" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">預金 +40% / 貸出 +10%</text>
+
+  <text x="1000" y="620" fill="#5be7ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="end">© 2026 Yuhung Shih · aoitsukikage-eng.github.io</text>
+</svg>

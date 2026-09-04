@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 400" role="img" aria-labelledby="title desc">
+  <title id="title">LOAN MIX / 2025/3</title>
+  <desc id="desc">放款結構</desc>
+  <rect width="1020" height="400" fill="#071225"/>
+  <text x="60" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">LOAN MIX / 2025/3</text>
+  
+  <!-- Legend Row 1 -->
+  <rect x="60" y="80" width="16" height="16" fill="#2b9ec0"/>
+  <text x="84" y="94" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">不動產業</text>
+  <rect x="180" y="80" width="16" height="16" fill="#bb8c30"/>
+  <text x="204" y="94" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">個人(住宅等)</text>
+  <rect x="330" y="80" width="16" height="16" fill="#d75f93"/>
+  <text x="354" y="94" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">建設業</text>
+  <rect x="430" y="80" width="16" height="16" fill="#8a6df2"/>
+  <text x="454" y="94" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">其他業種</text>
+  
+  <!-- Row 1: 業種別 -->
+  <text x="60" y="165" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">業種別</text>
+  <!-- 40.99, 20.60, 9.52, 28.89. Total 100. Scale to 800px. -->
+  <!-- w1 = 327.92, w2 = 164.8, w3 = 76.16, w4 = 231.12 -->
+  <!-- gap 2px between segments (3 gaps = 6px). 800 - 6 = 794. -->
+  <!-- w1 = 40.99% of 794 = 325.46 -->
+  <!-- Or just draw without gap, but use stroke to separate? The rule says "留 2px 底色縫隙". So just use x offsets. -->
+  <g font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#071225">
+    <rect x="150" y="140" width="327.92" height="36" fill="#2b9ec0"/>
+    <text x="313.96" y="163" text-anchor="middle">40.99%</text>
+    
+    <rect x="479.92" y="140" width="164.8" height="36" fill="#bb8c30"/>
+    <text x="562.32" y="163" text-anchor="middle">20.60%</text>
+    
+    <rect x="646.72" y="140" width="76.16" height="36" fill="#d75f93"/>
+    <text x="684.8" y="163" text-anchor="middle">9.52%</text>
+    
+    <rect x="724.88" y="140" width="231.12" height="36" fill="#8a6df2"/>
+    <text x="840.44" y="163" text-anchor="middle">28.89%</text>
+  </g>
+
+  <!-- Legend Row 2 -->
+  <rect x="60" y="210" width="16" height="16" fill="#2b9ec0"/>
+  <text x="84" y="224" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">設備資金</text>
+  <rect x="180" y="210" width="16" height="16" fill="#bb8c30"/>
+  <text x="204" y="224" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">運轉資金</text>
+
+  <!-- Row 2: 資金用途 -->
+  <text x="60" y="285" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">資金用途</text>
+  <!-- 65.35, 34.64. Total 99.99. w1 = 522.8, w2 = 277.12 -->
+  <g font-family="IBM Plex Sans, sans-serif" font-size="14" fill="#071225">
+    <rect x="150" y="260" width="522.8" height="36" fill="#2b9ec0"/>
+    <text x="411.4" y="283" text-anchor="middle">65.35%</text>
+    
+    <rect x="674.8" y="260" width="277.12" height="36" fill="#bb8c30"/>
+    <text x="813.36" y="283" text-anchor="middle">34.64%</text>
+  </g>
+
+  <!-- Notes -->
+  <text x="60" y="340" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">其他業種 28.89% 為 100 減前三者之推導值</text>
+  <text x="60" y="360" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">資金用途合計 99.99%，差額為四捨五入</text>
+  
+  <text x="1000" y="380" fill="#5be7ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="end">© 2026 Yuhung Shih · aoitsukikage-eng.github.io</text>
+</svg>
