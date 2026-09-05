@@ -121,7 +121,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 // 交給 client script 做切換，避免重複打 API
 ---
 
-<article class="weather-card" aria-busy="true" data-state={state} data-wc-locale={locale} data-wc-phase="loading" data-weather-card>
+<article class="weather-card" aria-busy="true" data-state={state} data-wc-demo-regions={JSON.stringify(regions)} data-wc-locale={locale} data-wc-phase="loading" data-weather-card>
 	<div class="weather-card__glow" aria-hidden="true"></div>
 
 	<svg class="weather-card__moonscape" viewBox="0 0 24 24" aria-hidden="true">
@@ -331,7 +331,45 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 		};
 		const formatTime = (iso: string): string => new Intl.DateTimeFormat(locale === "zh" ? "zh-TW" : locale === "ja" ? "ja-JP" : "en-GB", { timeZone: "Asia/Taipei", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(iso));
 
+		type DemoRegion = Pick<TripWeatherRegion, "key" | "tab" | "name" | "hi" | "lo" | "cond" | "icon" | "pop" | "uv" | "aqi" | "advice">;
+		const fallbackRegions: DemoRegion[] = (() => {
+			try {
+				const parsed: unknown = JSON.parse(card.dataset.wcDemoRegions ?? "[]");
+				return Array.isArray(parsed) ? parsed as DemoRegion[] : [];
+			} catch {
+				return [];
+			}
+		})();
 		const byKey = new Map<string, TripWeatherRegion>();
+		const enableAvailableTabs = (): void => {
+			card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => {
+				const available = byKey.has(tab.dataset.wcTab || "");
+				tab.disabled = !available;
+				tab.setAttribute("aria-disabled", String(!available));
+			});
+		};
+		const useOfflineFallback = (): void => {
+			fallbackRegions.forEach((region) => byKey.set(region.key, {
+				...region,
+				townCode: "",
+				weatherCode: null,
+				uvLevel: null,
+				uvSource: null,
+				aqiLevel: null,
+				aqiSource: copy.demo,
+				isDemoAqi: true,
+				warnings: [],
+				sunriseSunset: null,
+				moon: null,
+				fetchedAt: "",
+			}));
+			enableAvailableTabs();
+			if (fallbackRegions[0]) paint(fallbackRegions[0].key);
+			card.dataset.state = "offline";
+			card.dataset.wcPhase = "offline";
+			card.setAttribute("aria-busy", "false");
+			setText("[data-wc-status]", copy.offline);
+		};
 		const paint = (key: string): void => {
 			const region = byKey.get(key);
 			if (!region) return;
@@ -376,14 +414,14 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 
 		card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => tab.addEventListener("click", () => { const key = tab.dataset.wcTab; if (key && !tab.disabled) paint(key); }));
 		void loadHomepageWeather({ locale }).then((result) => {
-			if (result.regions.length === 0) { card.dataset.state = "offline"; card.dataset.wcPhase = "offline"; card.setAttribute("aria-busy", "false"); setText("[data-wc-status]", copy.offline); return; }
+			if (result.regions.length === 0) { useOfflineFallback(); return; }
 			result.regions.forEach((region) => byKey.set(region.key, region));
-			card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => { const available = byKey.has(tab.dataset.wcTab || ""); tab.disabled = !available; tab.setAttribute("aria-disabled", String(!available)); });
+			enableAvailableTabs();
 			paint(result.regions[0].key);
 			card.dataset.wcPhase = result.isPartial ? "partial" : "live";
 			card.setAttribute("aria-busy", "false");
 			setText("[data-wc-status]", `${result.isPartial ? copy.partial : copy.live} · ${formatTime(result.fetchedAt)}`);
-		}).catch(() => { card.dataset.state = "offline"; card.dataset.wcPhase = "offline"; card.setAttribute("aria-busy", "false"); setText("[data-wc-status]", copy.offline); });
+		}).catch(() => { useOfflineFallback(); });
 	}
 </script>
 
