@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 320" role="img" aria-labelledby="title desc">
+  <title id="title">SHIKIRI CONCEPT</title>
+  <desc id="desc">色切（shikiri）概念示意</desc>
+  <rect width="1020" height="320" fill="#071225"/>
+  <text x="60" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">SHIKIRI / 色切 — colour as spatial element</text>
+
+  <!-- Abstract bands -->
+  <g stroke-width="0">
+    <rect x="100" y="80" width="500" height="12" fill="#E74C3C"/>
+    <rect x="120" y="96" width="520" height="12" fill="#E67E22"/>
+    <rect x="140" y="112" width="480" height="12" fill="#F1C40F"/>
+    <rect x="160" y="128" width="550" height="12" fill="#2ECC71"/>
+    <rect x="180" y="144" width="460" height="12" fill="#1ABC9C"/>
+    <rect x="200" y="160" width="510" height="12" fill="#3498DB"/>
+    <rect x="220" y="176" width="540" height="12" fill="#9B59B6"/>
+    <rect x="240" y="192" width="450" height="12" fill="#8E44AD"/>
+    <rect x="260" y="208" width="520" height="12" fill="#C0392B"/>
+    <rect x="280" y="224" width="490" height="12" fill="#D35400"/>
+    <rect x="300" y="240" width="530" height="12" fill="#27AE60"/>
+    <rect x="320" y="256" width="470" height="12" fill="#2980B9"/>
+  </g>
+
+  <!-- Hint of building volumes -->
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.1" stroke-width="2">
+    <rect x="700" y="120" width="80" height="120"/>
+    <rect x="730" y="100" width="80" height="120"/>
+    <rect x="760" y="140" width="80" height="120"/>
+  </g>
+
+  <text x="1000" y="300" fill="#5be7ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="end">© 2026 Yuhung Shih · aoitsukikage-eng.github.io</text>
+</svg>

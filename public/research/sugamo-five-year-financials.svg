@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 640" role="img" aria-labelledby="title desc">
+  <title id="title">FIVE-YEAR FINANCIAL TRACK / 2021-2025</title>
+  <desc id="desc">五年財務軌跡</desc>
+  <rect width="1100" height="640" fill="#071225"/>
+  <text x="80" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">FIVE-YEAR FINANCIAL TRACK / 2021-2025</text>
+
+  <!-- Legend -->
+  <rect x="80" y="60" width="16" height="16" fill="#2b9ec0"/>
+  <text x="104" y="74" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">預金餘額 (預金)</text>
+  <rect x="240" y="60" width="16" height="16" fill="#bb8c30"/>
+  <text x="264" y="74" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">貸出金餘額</text>
+  <rect x="780" y="60" width="16" height="16" fill="#d75f93"/>
+  <text x="804" y="74" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">當期純利益</text>
+
+  <!-- Grids Left -->
+  <g stroke="#5be7ff" stroke-opacity=".16" stroke-width="1">
+    <path d="M80 560H700M80 460H700M80 360H700M80 260H700M80 160H700"/>
+  </g>
+  <!-- Grids Right -->
+  <g stroke="#5be7ff" stroke-opacity=".16" stroke-width="1">
+    <path d="M780 560H1050M780 450H1050M780 340H1050M780 230H1050M780 120H1050"/>
+  </g>
+
+  <!-- Axis lines -->
+  <g fill="none" stroke="#9eb5d7" stroke-width="2">
+    <path d="M80 120V560H700"/>
+    <path d="M780 120V560H1050"/>
+  </g>
+
+  <!-- Y-axis Left -->
+  <g fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="end">
+    <text x="70" y="565">0</text>
+    <text x="70" y="465">5,000</text>
+    <text x="70" y="365">10,000</text>
+    <text x="70" y="265">15,000</text>
+    <text x="70" y="165">20,000</text>
+    <text x="70" y="110" font-weight="700">單位：億日圓</text>
+  </g>
+
+  <!-- Y-axis Right -->
+  <g fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="end">
+    <text x="770" y="565">0</text>
+    <text x="770" y="455">10</text>
+    <text x="770" y="345">20</text>
+    <text x="770" y="235">30</text>
+    <text x="770" y="125">40</text>
+    <text x="770" y="110" font-weight="700">單位：億日圓</text>
+  </g>
+
+  <!-- Left Bars -->
+  <!-- 2021: 19987, 9788 -->
+  <rect x="102" y="160.26" width="36" height="399.74" fill="#2b9ec0"/>
+  <rect x="146" y="364.24" width="36" height="195.76" fill="#bb8c30"/>
+  <!-- 2022: 20007, 9325 -->
+  <rect x="226" y="159.86" width="36" height="400.14" fill="#2b9ec0"/>
+  <rect x="270" y="373.5" width="36" height="186.5" fill="#bb8c30"/>
+  <!-- 2023: 19933, 9260 -->
+  <rect x="350" y="161.34" width="36" height="398.66" fill="#2b9ec0"/>
+  <rect x="394" y="374.8" width="36" height="185.2" fill="#bb8c30"/>
+  <!-- 2024: 20011, 9357 -->
+  <rect x="474" y="159.78" width="36" height="400.22" fill="#2b9ec0"/>
+  <rect x="518" y="372.86" width="36" height="187.14" fill="#bb8c30"/>
+  <!-- 2025: 20088, 9487 -->
+  <rect x="598" y="158.24" width="36" height="401.76" fill="#2b9ec0"/>
+  <rect x="642" y="370.26" width="36" height="189.74" fill="#bb8c30"/>
+
+  <!-- Note on 2023 -->
+  <text x="412" y="340" fill="#d9f9ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">2023/3 谷底 9,260 → 連續兩年回升</text>
+  <path d="M412 345 L412 370" fill="none" stroke="#d9f9ff" stroke-width="1" stroke-dasharray="2 2"/>
+
+  <!-- Right Bars & Values -->
+  <rect x="789" y="296" width="36" height="264" fill="#d75f93"/>
+  <text x="807" y="286" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">24</text>
+  <rect x="843" y="230" width="36" height="330" fill="#d75f93"/>
+  <text x="861" y="220" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">30</text>
+  <rect x="897" y="175" width="36" height="385" fill="#d75f93"/>
+  <text x="915" y="165" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">35</text>
+  <rect x="951" y="186" width="36" height="374" fill="#d75f93"/>
+  <text x="969" y="176" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">34</text>
+  <rect x="1005" y="142" width="36" height="418" fill="#d75f93"/>
+  <text x="1023" y="132" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="middle">38</text>
+
+  <!-- X-axis Labels -->
+  <g fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16" text-anchor="middle">
+    <text x="142" y="585">2021/3</text>
+    <text x="266" y="585">2022/3</text>
+    <text x="390" y="585">2023/3</text>
+    <text x="514" y="585">2024/3</text>
+    <text x="638" y="585">2025/3</text>
+    <text x="807" y="585">2021/3</text>
+    <text x="861" y="585">2022/3</text>
+    <text x="915" y="585">2023/3</text>
+    <text x="969" y="585">2024/3</text>
+    <text x="1023" y="585">2025/3</text>
+  </g>
+
+  <text x="1080" y="620" fill="#5be7ff" font-family="IBM Plex Sans, sans-serif" font-size="14" text-anchor="end">© 2026 Yuhung Shih · aoitsukikage-eng.github.io</text>
+</svg>

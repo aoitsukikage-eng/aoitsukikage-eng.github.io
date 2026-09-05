@@ -39,6 +39,9 @@ non-final notice at the top and in the publication-boundary section.
 | SinoPac / Sambo overloan governance | Research question, the regulation-completeness-versus-enforcement-gap argument, and the four-stage fund flow with amounts and dates | `這份研究在問什麼`; `錢是怎麼流的` |
 | SinoPac / Sambo overloan governance | Three same-day 2017 orders, the five findings of fault, the two related-party derivation paths, and the three-instance criminal record with the Supreme Court's legal issues | `行政責任：三份同日處分`; `利害關係人為什麼這麼難認定`; `刑事責任：三個審級與三個爭點` |
 | SinoPac / Sambo overloan governance | Four-statute overlap matrix, three-lines-of-defence failure, role conflict, whistleblower protection, substantive control, dual-track comparison, and publication boundary | `四法為什麼會交疊`; `治理為什麼失靈`; `行政軌與司法軌`; `附錄與來源` |
+| Sugamo Shinkin community finance | Context, demographic indicators, deposit structure, and five-year financial metrics | `[01] 為什麼是巢鴨？`; `[02] 業務結構：資金從哪來、往哪去`; `[03] 五年財務軌跡` |
+| Sugamo Shinkin community finance | Soundness benchmarks, structural decline data, the three pillars loop, and Shikiri spatial design concept | `[04] 健全性與結構性隱憂`; `[05] 三支柱、設計策略與台灣的借鏡` |
+| Sugamo Shinkin community finance | Policy boundary explaining the exclusion of third-party architectural photography and posters | `可追溯來源與公開方式` |
 
 The review confirms that every public-edition research question, method, core
 data, chart explanation, limitation, and source statement is readable in the
