@@ -3,7 +3,7 @@
   <desc id="desc">五年財務軌跡</desc>
   <rect width="1100" height="640" fill="#071225"/>
   <text x="80" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">FIVE-YEAR FINANCIAL TRACK / 2021-2025</text>
-  
+
   <!-- Legend -->
   <rect x="80" y="60" width="16" height="16" fill="#2b9ec0"/>
   <text x="104" y="74" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">預金餘額 (預金)</text>

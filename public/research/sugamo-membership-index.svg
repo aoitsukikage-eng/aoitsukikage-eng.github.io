@@ -4,7 +4,7 @@
   <rect width="950" height="560" fill="#071225"/>
   <text x="80" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">MEMBERSHIP &amp; STAFFING INDEX / 2021-2025</text>
   <text x="80" y="65" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="14">指數化到 2021/3 = 100；僅有兩期端點資料，中間年度未揭露</text>
-  
+
   <!-- Legend -->
   <rect x="80" y="90" width="16" height="16" fill="#2b9ec0"/>
   <text x="104" y="104" fill="#b7c8e4" font-family="IBM Plex Sans, sans-serif" font-size="16">社員數</text>

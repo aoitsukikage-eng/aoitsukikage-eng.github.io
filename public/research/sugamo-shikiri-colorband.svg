@@ -3,7 +3,7 @@
   <desc id="desc">色切（shikiri）概念示意</desc>
   <rect width="1020" height="320" fill="#071225"/>
   <text x="60" y="40" fill="#5be7ff" font-family="Orbitron, sans-serif" font-size="22" letter-spacing="2">SHIKIRI / 色切 — colour as spatial element</text>
-  
+
   <!-- Abstract bands -->
   <g stroke-width="0">
     <rect x="100" y="80" width="500" height="12" fill="#E74C3C"/>
@@ -19,7 +19,7 @@
     <rect x="300" y="240" width="530" height="12" fill="#27AE60"/>
     <rect x="320" y="256" width="470" height="12" fill="#2980B9"/>
   </g>
-  
+
   <!-- Hint of building volumes -->
   <g fill="none" stroke="#ffffff" stroke-opacity="0.1" stroke-width="2">
     <rect x="700" y="120" width="80" height="120"/>
