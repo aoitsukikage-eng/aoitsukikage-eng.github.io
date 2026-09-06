@@ -4,6 +4,35 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-09-06 — WeatherCard Live integration
+
+The homepage WeatherCard now reuses the existing Trip Weather Azure backend;
+GitHub Pages does not add a separate backend. The browser client, rather than
+Astro's build step, initializes the approved data layer for the fixed North,
+Central, South, and East regions (N/C/S/E), with zh, en, and ja locale support.
+The related worktree commits are `63c7faf` (data layer and tests), `26b49c1`
+(SVG hidden-attribute fix), `04abfa6` (client-side Live wiring), and `c4ab5e2`
+(offline tab fallback).
+
+The runtime keeps successful regions visible on a partial failure and presents
+an honest offline/demo fallback on a total failure. Nullable UV and AQI values
+render safely; demo AQI is explicitly labelled; and warnings, day/night
+presentation, and moon information update from the currently selected region.
+Selecting a tab does not refetch data. The data-layer evidence records 11/11
+tests passing, while the accepted UI and fallback work records successful
+17-page production builds and Astro checks with 0 errors and 0 warnings
+(alongside 68 pre-existing hints).
+
+Initial acceptance of `04abfa6` was changes_required because the enabled
+offline fallback tabs did not update their demo content. Commit `c4ab5e2`
+resolved that finding: independent browser verification confirmed N/C/S/E
+switching, no added requests on tab clicks, and no console warnings or errors;
+the final result was approved. This is worktree-and-branch acceptance only.
+As of this record, it has not been integrated into latest main, pushed, or
+deployed to public GitHub Pages, so the public homepage is not claimed to be
+Live. Azure CORS and the three-language core remain existing backend/runtime
+prerequisites; this record makes no unverified deployment or version claim.
+
 ## 2026-07-31 — Discord Multi-Bot Showcase publication
 
 Commits `3fcd929` (feat: add Discord Bot Showcase project entry) and `dd127a0`
