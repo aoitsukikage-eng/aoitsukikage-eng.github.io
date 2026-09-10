@@ -4,6 +4,22 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-09-10 — WeatherCard Live main integration & pre-release verification
+
+The approved WeatherCard Live feature has been cleanly integrated onto the latest `origin/main` (base `bba75cd5f0775babaca71346bcea114f6a024404`) in an isolated worktree `task-20260910-portfolio-weather-live-integration`.
+The source feature commits `63c7faf`, `26b49c1`, `04abfa6`, `c4ab5e2`, and `3fbb7f7` were applied in order without merge conflicts.
+
+Azure Production API smoke verification confirmed complete live API availability and CORS compliance for `Origin: https://aoitsukikage-eng.github.io`. Both GET and OPTIONS preflight requests for `/api/health` and `/api/forecast` returned HTTP 200 OK with `Access-Control-Allow-Origin: https://aoitsukikage-eng.github.io`. Forecast payloads across all four regions (North `cwa-63000020`, Central `cwa-66000060`, South `cwa-67000370`, East `cwa-10015010`) and locales (zh, en, ja) were verified with valid temperatures, hourly forecasts, sunrise/sunset, moon phases, UV index, and AQI readings.
+
+Verification results on the integration worktree:
+- Node unit tests: 11/11 passed (2 suites).
+- Production build: 17 static pages built cleanly in 2.06s.
+- Astro check: 0 errors, 0 warnings (68 hints).
+- Git diff check: Clean formatting and zero trailing whitespace issues.
+- Scope control: Modified files strictly restricted to the 4 allowed files (`src/components/WeatherCard.astro`, `src/lib/tripWeather.ts`, `src/lib/tripWeather.test.ts`, `document/developer_log.md`).
+
+This integration is prepared for independent acceptance (`READY_FOR_INDEPENDENT_ACCEPTANCE`). As of this entry, changes remain unpushed and undeployed.
+
 ## 2026-09-06 — WeatherCard Live integration
 
 The homepage WeatherCard now reuses the existing Trip Weather Azure backend;
