@@ -53,7 +53,7 @@
     <text class="f cname" x="20" y="62">國喬石化 (1312)</text>
     <rect x="170" y="46" width="450" height="22" rx="3" fill="url(#hatch-amber)" stroke="#ffb157" stroke-width="1"/>
     <text class="f mono val-abst" x="630" y="62">75%</text>
-    <text class="f lbl" x="675" y="62">抽象：永續績效 25% + 永續承諾目標 25% + 外部評比 25%</text>
+    <text class="f lbl" x="665" y="62">抽象：永續績效／永續承諾目標／外部評比 各 25%</text>
 
     <!-- Row 2: 中保科 未揭露 -->
     <text class="f cname" x="20" y="94">中興保全科技 (9917)</text>
