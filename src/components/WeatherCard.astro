@@ -86,14 +86,20 @@ const defaultRegions: WeatherRegion[] = [
 const {
 	state = "day",
 	regions = defaultRegions,
-	href = "https://github.com/aoitsukikage-eng/trip-weather-planner",
-	locale = "zh",
+	href: suppliedHref,
+	locale: suppliedLocale = "zh",
 } = Astro.props;
+
+const locale = suppliedLocale === "en" || suppliedLocale === "ja" ? suppliedLocale : "zh";
+const defaultHref = "https://twpfe5ce0.z23.web.core.windows.net/";
+const href = suppliedHref ?? (locale === "zh" ? defaultHref : `${defaultHref}?lang=${locale}`);
 
 const t =
 	locale === "en"
-		? { pop: "Rain", uv: "UV", aqi: "AQI", cta: "View full forecast", live: "Live" }
-		: { pop: "降雨", uv: "紫外線", aqi: "空品", cta: "查看完整天氣預覽", live: "Live" };
+		? { pop: "Rain", uv: "UV", aqi: "AQI", cta: "View full forecast", loading: "Loading weather…" }
+		: locale === "ja"
+			? { pop: "降水", uv: "UV", aqi: "AQI", cta: "詳細な天気を見る", loading: "天気を読み込み中…" }
+			: { pop: "降雨", uv: "紫外線", aqi: "空品", cta: "查看完整天氣預覽", loading: "正在載入天氣…" };
 
 const uvBands = [
 	{ max: 2, color: "#5fd694", label: "低量級" },
@@ -113,18 +119,9 @@ const uvPct = Math.min(100, (active.uv / 12) * 100);
 const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 
 // 交給 client script 做切換，避免重複打 API
-const payload = regions.map((r) => ({
-	...r,
-	uvPct: Math.min(100, (r.uv / 12) * 100),
-	uvColor: bandFor(r.uv).color,
-	uvLabel: bandFor(r.uv).label,
-	aqiPct: Math.min(100, (r.aqi / 200) * 100),
-	aqiLabel: aqiLabel(r.aqi),
-	aqiColor: aqiColor(r.aqi),
-}));
 ---
 
-<article class="weather-card" data-state={state} data-weather-card>
+<article class="weather-card" aria-busy="true" data-state={state} data-wc-demo-regions={JSON.stringify(regions)} data-wc-locale={locale} data-wc-phase="loading" data-weather-card>
 	<div class="weather-card__glow" aria-hidden="true"></div>
 
 	<svg class="weather-card__moonscape" viewBox="0 0 24 24" aria-hidden="true">
@@ -136,7 +133,7 @@ const payload = regions.map((r) => ({
 		<p class="weather-card__brand">Trip Weather Planner</p>
 		<p class="weather-card__status">
 			<span class="weather-card__dot" aria-hidden="true"></span>
-			<span data-wc-status>{t.live} · 13:40 更新</span>
+			<span data-wc-status>{t.loading}</span>
 		</p>
 	</header>
 
@@ -156,15 +153,15 @@ const payload = regions.map((r) => ({
 		}
 	</div>
 
-	<div class="weather-card__alert" data-wc-alert>
+	<div class="weather-card__alert" data-wc-alert hidden role="alert">
 		<svg viewBox="0 0 17 17" fill="none" aria-hidden="true">
 			<path d="M8.5 1.8 16 15H1L8.5 1.8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
 			<path d="M8.5 6.4v3.9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
 			<circle cx="8.5" cy="12.5" r=".85" fill="currentColor"></circle>
 		</svg>
 		<div>
-			<p class="weather-card__alert-title">大雨特報</p>
-			<p class="weather-card__alert-note">2 則生效中 · 中央氣象署</p>
+			<p class="weather-card__alert-title" data-wc-alert-title></p>
+			<p class="weather-card__alert-note" data-wc-alert-note></p>
 		</div>
 	</div>
 
@@ -181,16 +178,16 @@ const payload = regions.map((r) => ({
 
 		<div class="weather-card__icon">
 			<div class="weather-card__halo" aria-hidden="true"></div>
-			<svg class="weather-card__glyph" data-wc-icon="sun" hidden={active.icon !== "sun"} viewBox="0 0 58 58" fill="none">
+			<svg class="weather-card__glyph" data-wc-icon="sun" data-hidden={active.icon !== "sun"} viewBox="0 0 58 58" fill="none">
 				<circle cx="24" cy="22" r="9" stroke="var(--wc-accent)" stroke-width="1.5"></circle>
 				<path d="M24 5v5M9 22h-4M12 11l3 3M36 10l-3 3" stroke="var(--wc-brand)" stroke-width="1.4" stroke-linecap="round"></path>
 				<path d="M22 42a8 8 0 0 1 .6-15.9A11.5 11.5 0 0 1 44 31a7 7 0 0 1-.4 11H22Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
 			</svg>
-			<svg class="weather-card__glyph" data-wc-icon="cloud" hidden={active.icon !== "cloud"} viewBox="0 0 58 58" fill="none">
+			<svg class="weather-card__glyph" data-wc-icon="cloud" data-hidden={active.icon !== "cloud"} viewBox="0 0 58 58" fill="none">
 				<circle cx="21" cy="20" r="7.5" stroke="var(--wc-brand)" stroke-width="1.4"></circle>
 				<path d="M18 41a8.5 8.5 0 0 1 .6-16.9A12 12 0 0 1 41.4 28a7.5 7.5 0 0 1-.4 13H18Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
 			</svg>
-			<svg class="weather-card__glyph" data-wc-icon="rain" hidden={active.icon !== "rain"} viewBox="0 0 58 58" fill="none">
+			<svg class="weather-card__glyph" data-wc-icon="rain" data-hidden={active.icon !== "rain"} viewBox="0 0 58 58" fill="none">
 				<path d="M17 32a8.5 8.5 0 0 1 .6-16.9A12 12 0 0 1 40.4 19a7.5 7.5 0 0 1-.4 13H17Z" stroke="var(--wc-accent)" stroke-width="1.5" stroke-linejoin="round"></path>
 				<path d="M20 39l-2.5 7M29 39l-2.5 7M38 39l-2.5 7" stroke="var(--wc-brand)" stroke-width="1.5" stroke-linecap="round"></path>
 			</svg>
@@ -249,8 +246,8 @@ const payload = regions.map((r) => ({
 				<circle cx="12" cy="12" r="9.4" fill="none" stroke="rgba(201,184,255,.35)" stroke-width=".7"></circle>
 			</svg>
 			<p class="weather-card__moon-copy">
-				<span class="weather-card__moon-value">47<span>%</span></span>
-				<span class="weather-card__moon-label">上弦月</span>
+				<span class="weather-card__moon-value" data-wc-moon-value>—</span>
+				<span class="weather-card__moon-label" data-wc-moon-label>—</span>
 			</p>
 		</div>
 
@@ -283,57 +280,149 @@ const payload = regions.map((r) => ({
 	</a>
 </article>
 
-<script is:inline define:vars={{ payload }}>
-	(() => {
-		const card = document.querySelector("[data-weather-card]");
-		if (!card) return;
+<script>
+	import { loadHomepageWeather, type TripWeatherRegion, type WeatherLocale } from "../lib/tripWeather";
 
-		const q = (sel) => card.querySelector(sel);
-		const byKey = Object.fromEntries(payload.map((r) => [r.key, r]));
+	const card = document.querySelector<HTMLElement>("[data-weather-card]");
+	if (card) {
+		const locale: WeatherLocale = card.dataset.wcLocale === "en" || card.dataset.wcLocale === "ja" ? card.dataset.wcLocale : "zh";
+		const copy = {
+			zh: { live: "即時更新", partial: "部分即時更新", offline: "離線示範資料，無法更新", unavailable: "暫無資料", demo: "示範", active: "則生效中" },
+			en: { live: "Live", partial: "Partial live update", offline: "Offline demo data — unable to update", unavailable: "Unavailable", demo: "Demo", active: "active" },
+			ja: { live: "ライブ更新", partial: "一部ライブ更新", offline: "オフラインのデモデータ — 更新できません", unavailable: "利用不可", demo: "デモ", active: "件有効" },
+		}[locale];
+		const q = <T extends Element>(selector: string): T | null => card.querySelector<T>(selector);
+		const setText = (selector: string, value: string): void => {
+			const element = q<HTMLElement>(selector);
+			if (element) element.textContent = value;
+		};
+		const clamp = (value: number, max: number): number => Math.min(max, Math.max(0, value));
+		const numberOrNull = (value: number | null): number | null =>
+			typeof value === "number" && Number.isFinite(value) ? value : null;
+		const pct = (value: number | null, divisor: number): number => (value === null ? 0 : clamp((value / divisor) * 100, 100));
+		const uvBand = (uv: number | null): { color: string; label: string } => {
+			if (uv === null) return { color: "#8fa6ba", label: copy.unavailable };
+			if (uv <= 2) return { color: "#5fd694", label: locale === "en" ? "Low" : locale === "ja" ? "低い" : "低量級" };
+			if (uv <= 5) return { color: "#ffd166", label: locale === "en" ? "Moderate" : locale === "ja" ? "中程度" : "中量級" };
+			if (uv <= 7) return { color: "#ff9f43", label: locale === "en" ? "High" : locale === "ja" ? "高い" : "高量級" };
+			return { color: "#ff6b6b", label: locale === "en" ? "Very high" : locale === "ja" ? "非常に高い" : "過量級" };
+		};
+		const aqiTier = (aqi: number | null, isDemo: boolean): { color: string; label: string } => {
+			if (aqi === null) return { color: "#8fa6ba", label: copy.unavailable };
+			if (isDemo) return { color: "#ffd76a", label: copy.demo };
+			return { color: aqi <= 50 ? "#5fd694" : "#ffd76a", label: aqi <= 50 ? (locale === "en" ? "Good" : locale === "ja" ? "良好" : "良好") : (locale === "en" ? "Moderate" : locale === "ja" ? "普通" : "普通") };
+		};
+		const taipeiMinutes = (): number => {
+			const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Taipei", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
+			const hour = Number(parts.find((part) => part.type === "hour")?.value ?? 12);
+			const minute = Number(parts.find((part) => part.type === "minute")?.value ?? 0);
+			return hour * 60 + minute;
+		};
+		const timeMinutes = (value: string | null | undefined): number | null => {
+			const match = /^(?:[01]\d|2[0-3]):[0-5]\d$/.exec(value ?? "");
+			return match ? Number(match[0].slice(0, 2)) * 60 + Number(match[0].slice(3)) : null;
+		};
+		const isNight = (region: TripWeatherRegion): boolean => {
+			const sunrise = timeMinutes(region.sunriseSunset?.sunrise_time);
+			const sunset = timeMinutes(region.sunriseSunset?.sunset_time);
+			if (sunrise === null || sunset === null || sunrise >= sunset) return false;
+			const now = taipeiMinutes();
+			return now < sunrise || now >= sunset;
+		};
+		const formatTime = (iso: string): string => new Intl.DateTimeFormat(locale === "zh" ? "zh-TW" : locale === "ja" ? "ja-JP" : "en-GB", { timeZone: "Asia/Taipei", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(iso));
 
-		const paint = (key) => {
-			const r = byKey[key];
-			if (!r) return;
-
-			q("[data-wc-place]").textContent = r.name;
-			q("[data-wc-hi]").textContent = r.hi;
-			q("[data-wc-lo]").textContent = `/ ${r.lo}°`;
-			q("[data-wc-cond]").textContent = r.cond;
-			q("[data-wc-advice]").textContent = r.advice;
-
-			q("[data-wc-pop]").textContent = `${r.pop}%`;
-			q("[data-wc-pop-bar]").style.width = `${r.pop}%`;
-
-			q("[data-wc-uv]").textContent = r.uv;
-			const uvLabel = q("[data-wc-uv-label]");
-			uvLabel.textContent = r.uvLabel;
-			uvLabel.style.color = r.uvColor;
-			const uvFill = q("[data-wc-uv-fill]");
-			uvFill.style.width = `${r.uvPct}%`;
-			uvFill.style.background = `linear-gradient(90deg, ${r.uvColor}1f, ${r.uvColor})`;
-			const uvMark = q("[data-wc-uv-mark]");
-			uvMark.style.left = `${r.uvPct}%`;
-			uvMark.style.borderColor = r.uvColor;
-
-			q("[data-wc-aqi]").textContent = r.aqi;
-			const aqiLabel = q("[data-wc-aqi-label]");
-			aqiLabel.textContent = r.aqiLabel;
-			aqiLabel.style.color = r.aqiColor;
-			q("[data-wc-aqi-mark]").style.left = `${r.aqiPct}%`;
-
-			card.querySelectorAll("[data-wc-icon]").forEach((node) => {
-				node.hidden = node.dataset.wcIcon !== r.icon;
-			});
-
-			card.querySelectorAll("[data-wc-tab]").forEach((tab) => {
-				tab.setAttribute("aria-selected", tab.dataset.wcTab === key ? "true" : "false");
+		type DemoRegion = Pick<TripWeatherRegion, "key" | "tab" | "name" | "hi" | "lo" | "cond" | "icon" | "pop" | "uv" | "aqi" | "advice">;
+		const fallbackRegions: DemoRegion[] = (() => {
+			try {
+				const parsed: unknown = JSON.parse(card.dataset.wcDemoRegions ?? "[]");
+				return Array.isArray(parsed) ? parsed as DemoRegion[] : [];
+			} catch {
+				return [];
+			}
+		})();
+		const byKey = new Map<string, TripWeatherRegion>();
+		const enableAvailableTabs = (): void => {
+			card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => {
+				const available = byKey.has(tab.dataset.wcTab || "");
+				tab.disabled = !available;
+				tab.setAttribute("aria-disabled", String(!available));
 			});
 		};
+		const useOfflineFallback = (): void => {
+			fallbackRegions.forEach((region) => byKey.set(region.key, {
+				...region,
+				townCode: "",
+				weatherCode: null,
+				uvLevel: null,
+				uvSource: null,
+				aqiLevel: null,
+				aqiSource: copy.demo,
+				isDemoAqi: true,
+				warnings: [],
+				sunriseSunset: null,
+				moon: null,
+				fetchedAt: "",
+			}));
+			enableAvailableTabs();
+			if (fallbackRegions[0]) paint(fallbackRegions[0].key);
+			card.dataset.state = "offline";
+			card.dataset.wcPhase = "offline";
+			card.setAttribute("aria-busy", "false");
+			setText("[data-wc-status]", copy.offline);
+		};
+		const paint = (key: string): void => {
+			const region = byKey.get(key);
+			if (!region) return;
+			const uv = numberOrNull(region.uv);
+			const aqi = numberOrNull(region.aqi);
+			const uvStyle = uvBand(uv);
+			const aqiStyle = aqiTier(aqi, region.isDemoAqi);
+			const hasWarning = region.warnings.length > 0;
+			const state = hasWarning ? "alert" : isNight(region) ? "night" : "day";
+			card.dataset.state = state;
+			setText("[data-wc-place]", region.name);
+			setText("[data-wc-hi]", String(clamp(region.hi, 99)));
+			setText("[data-wc-lo]", `/ ${clamp(region.lo, 99)}°`);
+			setText("[data-wc-cond]", region.cond || copy.unavailable);
+			setText("[data-wc-advice]", region.advice || copy.unavailable);
+			setText("[data-wc-pop]", `${clamp(region.pop, 100)}%`);
+			const popBar = q<HTMLElement>("[data-wc-pop-bar]");
+			if (popBar) popBar.style.width = `${clamp(region.pop, 100)}%`;
+			setText("[data-wc-uv]", uv === null ? "—" : String(uv));
+			setText("[data-wc-uv-label]", uvStyle.label);
+			const uvFill = q<HTMLElement>("[data-wc-uv-fill]");
+			const uvMark = q<HTMLElement>("[data-wc-uv-mark]");
+			const uvLabel = q<HTMLElement>("[data-wc-uv-label]");
+			const uvPercent = pct(uv, 12);
+			if (uvFill) { uvFill.style.width = `${uvPercent}%`; uvFill.style.background = `linear-gradient(90deg, ${uvStyle.color}1f, ${uvStyle.color})`; }
+			if (uvMark) { uvMark.style.left = `${uvPercent}%`; uvMark.style.borderColor = uvStyle.color; }
+			if (uvLabel) uvLabel.style.color = uvStyle.color;
+			setText("[data-wc-aqi]", aqi === null ? "—" : String(aqi));
+			const aqiLabel = q<HTMLElement>("[data-wc-aqi-label]");
+			if (aqiLabel) { aqiLabel.textContent = aqiStyle.label; aqiLabel.style.color = aqiStyle.color; aqiLabel.title = region.isDemoAqi ? (region.aqiSource || copy.demo) : (region.aqiSource || ""); }
+			const aqiMark = q<HTMLElement>("[data-wc-aqi-mark]");
+			if (aqiMark) aqiMark.style.left = `${pct(aqi, 200)}%`;
+			const alert = q<HTMLElement>("[data-wc-alert]");
+			if (alert) alert.hidden = !hasWarning;
+			if (hasWarning) { setText("[data-wc-alert-title]", region.warnings[0].title || copy.unavailable); setText("[data-wc-alert-note]", `${region.warnings.length} ${copy.active}`); }
+			const illumination = typeof region.moon?.illumination_fraction === "number" && Number.isFinite(region.moon.illumination_fraction) ? Math.round(clamp(region.moon.illumination_fraction, 1) * 100) : null;
+			setText("[data-wc-moon-value]", state === "night" && illumination !== null ? `${illumination}%` : "—");
+			setText("[data-wc-moon-label]", state === "night" && region.moon?.phase ? region.moon.phase : "—");
+			card.querySelectorAll<HTMLElement>("[data-wc-icon]").forEach((node) => node.toggleAttribute("data-hidden", node.dataset.wcIcon !== region.icon));
+			card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => tab.setAttribute("aria-selected", tab.dataset.wcTab === key ? "true" : "false"));
+		};
 
-		card.querySelectorAll("[data-wc-tab]").forEach((tab) => {
-			tab.addEventListener("click", () => paint(tab.dataset.wcTab));
-		});
-	})();
+		card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => tab.addEventListener("click", () => { const key = tab.dataset.wcTab; if (key && !tab.disabled) paint(key); }));
+		void loadHomepageWeather({ locale }).then((result) => {
+			if (result.regions.length === 0) { useOfflineFallback(); return; }
+			result.regions.forEach((region) => byKey.set(region.key, region));
+			enableAvailableTabs();
+			paint(result.regions[0].key);
+			card.dataset.wcPhase = result.isPartial ? "partial" : "live";
+			card.setAttribute("aria-busy", "false");
+			setText("[data-wc-status]", `${result.isPartial ? copy.partial : copy.live} · ${formatTime(result.fetchedAt)}`);
+		}).catch(() => { useOfflineFallback(); });
+	}
 </script>
 
 <style>
@@ -527,6 +616,11 @@ const payload = regions.map((r) => ({
 		font-weight: 600;
 	}
 
+	.weather-card__tab:disabled {
+		cursor: not-allowed;
+		opacity: 0.42;
+	}
+
 	.weather-card__alert {
 		align-items: center;
 		background: rgba(255, 107, 122, 0.14);
@@ -642,6 +736,10 @@ const payload = regions.map((r) => ({
 		height: 76px;
 		position: relative;
 		width: 76px;
+	}
+
+	.weather-card [data-wc-icon][data-hidden] {
+		display: none;
 	}
 
 	.weather-card__glyph--night,
