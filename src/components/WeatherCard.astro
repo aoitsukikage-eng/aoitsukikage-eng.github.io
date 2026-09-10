@@ -281,15 +281,15 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 </article>
 
 <script>
-	import { loadHomepageWeather, type TripWeatherRegion, type WeatherLocale } from "../lib/tripWeather";
+	import { loadHomepageWeatherWithRecovery, type TripWeatherRegion, type WeatherLocale } from "../lib/tripWeather";
 
 	const card = document.querySelector<HTMLElement>("[data-weather-card]");
 	if (card) {
 		const locale: WeatherLocale = card.dataset.wcLocale === "en" || card.dataset.wcLocale === "ja" ? card.dataset.wcLocale : "zh";
 		const copy = {
-			zh: { live: "即時更新", partial: "部分即時更新", offline: "離線示範資料，無法更新", unavailable: "暫無資料", demo: "示範", active: "則生效中" },
-			en: { live: "Live", partial: "Partial live update", offline: "Offline demo data — unable to update", unavailable: "Unavailable", demo: "Demo", active: "active" },
-			ja: { live: "ライブ更新", partial: "一部ライブ更新", offline: "オフラインのデモデータ — 更新できません", unavailable: "利用不可", demo: "デモ", active: "件有効" },
+			zh: { live: "即時更新", partial: "部分即時更新", offline: "離線示範資料，無法更新", unavailable: "暫無資料", demo: "示範", active: "則生效中", waking: "服務喚醒中…" },
+			en: { live: "Live", partial: "Partial live update", offline: "Offline demo data — unable to update", unavailable: "Unavailable", demo: "Demo", active: "active", waking: "Waking service…" },
+			ja: { live: "ライブ更新", partial: "一部ライブ更新", offline: "オフラインのデモデータ — 更新できません", unavailable: "利用不可", demo: "デモ", active: "件有効", waking: "サービス起動中…" },
 		}[locale];
 		const q = <T extends Element>(selector: string): T | null => card.querySelector<T>(selector);
 		const setText = (selector: string, value: string): void => {
@@ -413,7 +413,14 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 		};
 
 		card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => tab.addEventListener("click", () => { const key = tab.dataset.wcTab; if (key && !tab.disabled) paint(key); }));
-		void loadHomepageWeather({ locale }).then((result) => {
+		void loadHomepageWeatherWithRecovery({
+			locale,
+			onRetry: () => {
+				card.dataset.wcPhase = "waking";
+				setText("[data-wc-status]", copy.waking);
+			},
+		}).then((result) => {
+			card.dataset.wcAttempts = String(result.attempts);
 			if (result.regions.length === 0) { useOfflineFallback(); return; }
 			result.regions.forEach((region) => byKey.set(region.key, region));
 			enableAvailableTabs();

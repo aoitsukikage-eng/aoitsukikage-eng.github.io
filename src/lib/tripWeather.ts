@@ -410,3 +410,97 @@ export async function loadHomepageWeather(
     fetchedAt: nowIso,
   };
 }
+
+export interface TripWeatherRecoveryResult extends TripWeatherResult {
+  attempts: number;
+  attemptFailures: TripWeatherFailure[][];
+}
+
+export interface LoadHomepageWeatherWithRecoveryOptions
+  extends LoadHomepageWeatherOptions {
+  retryTimeoutMs?: number;
+  retryDelayMs?: number;
+  onRetry?: (attempt: number) => void;
+}
+
+/**
+ * Loads homepage weather for the 4 fixed regions with one bounded recovery attempt
+ * when the initial attempt suffers a total failure (e.g. Azure scale-to-zero cold start timeout).
+ */
+export async function loadHomepageWeatherWithRecovery(
+  options: LoadHomepageWeatherWithRecoveryOptions = {}
+): Promise<TripWeatherRecoveryResult> {
+  const attemptFailures: TripWeatherFailure[][] = [];
+  const initialTimeoutMs = options.timeoutMs ?? 8000;
+  const maxRetryTimeoutMs = 20000;
+  const retryTimeoutMs = Math.min(
+    maxRetryTimeoutMs,
+    options.retryTimeoutMs ?? 15000
+  );
+  const retryDelayMs = options.retryDelayMs ?? 1000;
+
+  // Attempt 1: Initial fetch
+  const result1 = await loadHomepageWeather({
+    ...options,
+    timeoutMs: initialTimeoutMs,
+  });
+
+  attemptFailures.push(result1.failures);
+
+  // If external signal was aborted or Attempt 1 returned at least 1 region, return immediately
+  if (options.signal?.aborted || result1.regions.length > 0) {
+    return {
+      ...result1,
+      attempts: 1,
+      attemptFailures,
+    };
+  }
+
+  // Attempt 1 had total failure (0 regions). Trigger waking callback for UI recovery.
+  if (typeof options.onRetry === "function") {
+    try {
+      options.onRetry(2);
+    } catch {
+      // Ignore callback errors
+    }
+  }
+
+  if (retryDelayMs > 0) {
+    await new Promise<void>((resolve) => {
+      if (options.signal?.aborted) {
+        resolve();
+        return;
+      }
+      const timer = setTimeout(resolve, retryDelayMs);
+      if (options.signal) {
+        const onAbort = () => {
+          clearTimeout(timer);
+          resolve();
+        };
+        options.signal.addEventListener("abort", onAbort, { once: true });
+      }
+    });
+  }
+
+  if (options.signal?.aborted) {
+    return {
+      ...result1,
+      attempts: 1,
+      attemptFailures,
+    };
+  }
+
+  // Attempt 2: Bounded recovery attempt with longer timeout (up to 20s)
+  const result2 = await loadHomepageWeather({
+    ...options,
+    timeoutMs: retryTimeoutMs,
+  });
+
+  attemptFailures.push(result2.failures);
+
+  return {
+    ...result2,
+    attempts: 2,
+    attemptFailures,
+  };
+}

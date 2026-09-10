@@ -4,6 +4,29 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-09-11 — WeatherCard Azure scale-to-zero cold-start recovery & unreleased candidate verification
+
+An incident was reported on the production homepage where all four regions fell into the offline demo fallback (`data-wc-phase="offline"`). Independent browser reproduction confirmed that during cold starts on Azure Container Apps (documented as scale-to-zero), backend spin-up times exceeded the client's fixed 8000ms timeout per town request, causing `loadHomepageWeather` to return `regions: []` and permanently select offline fallback without recovery. Direct backend health checks confirmed HTTP 200 OK with valid CORS headers, and warm reloads cleanly transitioned to Live.
+
+To resolve cold-start false-offline errors without increasing cloud infrastructure costs:
+- Added `loadHomepageWeatherWithRecovery` in `src/lib/tripWeather.ts` implementing a single bounded recovery attempt when the initial attempt suffers a total failure (0 regions returned).
+- Attempt 1 maintains standard 8000ms timeout. If all 4 regions fail, the client triggers an `onRetry` callback transitioning `WeatherCard.astro` phase to `waking` and updating status copy to localized waking messages (`服務喚醒中…` / `Waking service…` / `サービス起動中…`).
+- Attempt 2 runs after a short delay with a bounded timeout capped at 20 seconds. If attempt 2 succeeds, phase transitions to `live` (or `partial`). If attempt 2 also fails, phase transitions to `offline`.
+- Strict control bounds: bounded to 2 attempts max, no polling, no infinite retry, no exponential backoff loops, and no tab-click refetching (tab switching remains local DOM repaints). Partial successes immediately render partial live without retrying failed regions.
+- Diagnostic data: `result` and card element record attempt counts (`data-wc-attempts`) and per-attempt failure breakdown without swallowing errors or producing console error noise during normal flow.
+
+Verification results on worktree `task-20260911-portfolio-weather-cold-start-recovery`:
+- Node unit tests: 17/17 passed (3 suites), covering first-all-fail recovery success, both-all-fail recovery failure, partial-no-retry, attempt/timeout bounding, external abort, and tab-click no-refetch.
+- Production build: 17 static pages built cleanly in 3.57s.
+- Astro check: 0 errors, 0 warnings (68 hints).
+- Git diff check: Clean formatting and zero trailing whitespace issues.
+- Real browser CDP self-checks on production preview:
+  - Scenario 1 (Attempt 1 fail 504 -> Attempt 2 mock 200 success): phase transitioned `loading` -> `waking` -> `live`, `data-wc-attempts="2"`, no-refetch PASS, console errors 0. Evidence saved to `recovery-success-live.png`, `recovery-success-console.json`, `recovery-success-network.json` (explicitly tagged as injected mock evidence).
+  - Scenario 2 (Both attempt 1 and 2 fail 504 -> offline fallback): phase transitioned `loading` -> `waking` -> `offline`, `data-wc-attempts="2"`, all 4 demo tabs switchable, no-refetch PASS, console errors 0. Evidence saved to `recovery-failure-offline-[n/c/s/e].png`, `recovery-failure-console.json`, `recovery-failure-network.json`.
+- Scope control: Modified files strictly restricted to 4 allowed files (`src/components/WeatherCard.astro`, `src/lib/tripWeather.ts`, `src/lib/tripWeather.test.ts`, `document/developer_log.md`).
+
+This candidate is prepared for independent acceptance (`READY_FOR_INDEPENDENT_ACCEPTANCE`). As of this entry, changes remain unpushed, unmerged, and undeployed.
+
 ## 2026-09-10 — WeatherCard Live main integration & pre-release verification
 
 The approved WeatherCard Live feature has been cleanly integrated onto the latest `origin/main` (base `bba75cd5f0775babaca71346bcea114f6a024404`) in an isolated worktree `task-20260910-portfolio-weather-live-integration`.
