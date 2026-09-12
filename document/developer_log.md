@@ -300,3 +300,102 @@ All changes were verified with `npm run astro -- check` (0 errors,
 confirmed against a live `astro preview` served over the Tailscale network
 so the site owner could review the rendered page and photo captions
 directly before merge. Branch: `task/20260803-portfolio-activities-real-content`.
+
+## 2026-09-12 — Executive compensation / ESG research page: chart-led rewrite
+
+`/research/executive-compensation-esg-disclosure/` was the only one of the five
+research pages carrying no figures at all (SinoPac has four, the Beta brief two,
+the Sharpe brief one), and it was also the page that said the least. Five of its
+seven blocks described the report's scope and publication boundary rather than
+its findings, the same "teacher requirements vs author extension" statement was
+repeated three times, and the single findings block contained no numbers — a
+reader finished the page knowing a comparison had been made but not what it
+found. Every quotable fact in the underlying coursework — the 15% baseline, the
+75% outlier, the identical weight tables, the 0-of-4 clawback result — was
+absent.
+
+The rewrite inverted the page order from "boundary → boundary → summary" to
+"conclusion → evidence → boundary". Frontmatter `summary` became a thesis
+sentence, `highlights` went from two prose cards to six numeric ones, `findings`
+from two contentless sentences to four number-bearing claims, and the markdown
+body was restructured into eight sections interleaving four new hand-drawn SVGs
+with their readings, with the merged scope/publication statement moved last.
+Source page numbers moved into a collapsed `<details>` block.
+
+The four charts follow the existing site convention rather than introducing a new
+one: hand-authored SVG in `public/research/`, embedded from the markdown body as
+`<img src="/research/x.svg" loading="lazy">`, palette taken from the `sinopac-*`
+figures, no chart library, no dedicated Astro component, and no use of the
+`visuals:` frontmatter field (declared in `content.config.ts` but unused by all
+five research entries). Fonts are referenced, never embedded — `beta-*.svg`
+inlines base64 woff2 and costs 80KB per file as a result; these four stay between
+7KB and 11KB.
+
+Two constraints in the original task spec turned out to be wrong, and the
+implementation was right to deviate from them. Acceptance initially failed the
+work on both before they were overruled:
+
+- The spec listed an eight-colour palette that omitted `#1a1206`. That colour is
+  the dark fill behind the amber warning callout in `sinopac-three-lines.svg`,
+  and reusing it for the charts' caveat boxes was correct; the palette is now
+  nine colours.
+- The spec demanded `font-family` be exactly `"IBM Plex Sans","Huninn",sans-serif`.
+  An SVG loaded through `<img>` is an isolated document and cannot see the
+  webfonts the page loads in its `<head>`, so that list resolves to nothing and
+  falls through to a system default. The implementation's addition of
+  `"PingFang TC","Noto Sans TC","Microsoft JhengHei"` is what actually produces
+  correct Traditional Chinese across macOS, Linux and Windows, and was kept.
+
+Four defects were found only by rasterising the SVGs and looking at them. Neither
+the coding layer's self-check nor the first acceptance pass rendered anything;
+both checked file text — grepping colour codes, grepping for base64, diffing
+frontmatter, running the build — and all of those passed while the figures were
+visibly broken:
+
+- The weight-ladder chart's Band A annotation started at `x="675"` with a string
+  far longer than the remaining 325px, so "外部評比 25%" was clipped outside the
+  viewBox.
+- Three labels in the 15% breakdown chart were drawn directly over the amber
+  diagonal hatch pattern, with the hatch lines running through the glyphs. Fixed
+  by placing a solid `#081226` backing rect behind each label and dropping the
+  off-palette `#f4fbff` text colour.
+- The template-overlap chart's centre column used fixed-width label pills, so
+  longer Chinese strings overflowed and overprinted each other; the worst row,
+  「永續責任採購（次層・高階經理人）」, was unreadable.
+- The 15% breakdown chart declared a 17px-per-1% scale in its own comment but
+  drew the two single-block columns at 267px for 15% and 312px for 20%, making
+  20% read as 1.17x of 15% instead of 1.33x. This one survived an extra round:
+  the stacked column had been measured (68/68/34/85 — correctly proportional),
+  that result was generalised to the whole figure, and the follow-up task card
+  then explicitly forbade touching the block heights, actively protecting the
+  bug. It was caught and fixed afterwards by measuring the rendered output
+  instead of the source, restoring 255px/340px and bottom-aligning all three
+  columns on a shared baseline so the heights are comparable at all.
+
+One wording change was unrelated to rendering: a caption asserted that the two
+companies with identical weight tables had "採用了相同的第三方諮詢機構或揭露範本".
+The shared-consultant claim appears in neither the source coursework nor the
+spec, and the page names two real listed companies, so the unsupported half was
+removed and the caption now says only that they appear to have referenced a
+common disclosure template rather than customising by industry.
+
+The standing practice that came out of this is that visual output cannot be
+verified by reading its source. Headless Chrome is available on the build host,
+and wrapping each SVG in a one-line HTML shell is enough:
+
+```
+google-chrome --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+  --force-device-scale-factor=1 --window-size=1000,1400 \
+  --screenshot=out.png page.html
+```
+
+Render-and-inspect is now a required acceptance criterion for any figure work on
+this site, not something left to the implementer's discretion.
+
+Verified with `npm run build` (17 pages, 0 errors) and headless-Chrome renders of
+all four figures after each round. Branch `task/20260901-esg-page-visualization`,
+eight commits from `80fe139` to `a30de9e`, acceptance `approved`. The branch is
+deliberately held unmerged: `style/visual-hardening-test-20260901` (Phase 1
+visual hardening, tip `8ea8f93`) has not landed on `main` yet either, and the
+intent is to merge that first so this page can be rebased onto the new styling
+rules once rather than reworked twice.
