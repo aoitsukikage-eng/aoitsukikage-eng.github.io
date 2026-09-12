@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import SharpeRatioDemo from "../../components/SharpeRatioDemo.astro";
 import LegalCaseStudy from "../../components/LegalCaseStudy.astro";
+import SugamoFeature from "../../components/SugamoFeature.astro";
 import { siteConfig } from "../../config/site";
 import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
 
@@ -21,6 +22,7 @@ const isEsgStudy = entry.data.slug === "executive-compensation-esg-disclosure";
 const isLegalStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
 const isSharpeRatioDemo = entry.data.slug === "portfolio-optimization-sharpe-ratio";
 const isLegalCaseStudy = entry.data.slug === "sinopac-sambo-overloan-governance";
+const isSugamoFeature = entry.data.slug === "sugamo-shinkin-community-finance";
 
 const currentLocale = Astro.currentLocale ?? "zh";
 const dict = currentLocale === "en" ? en : zh;
@@ -41,6 +43,8 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 			<SharpeRatioDemo />
 		) : isLocaleMatch && isLegalCaseStudy ? (
 			<LegalCaseStudy />
+		) : isLocaleMatch && isSugamoFeature ? (
+			<SugamoFeature />
 		) : (
 			<>
 		<header class="section-card section-shell" data-reveal style="--reveal-order: 0;">
