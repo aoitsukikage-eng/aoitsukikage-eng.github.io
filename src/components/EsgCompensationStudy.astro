@@ -50,6 +50,14 @@ import studyArticle from "./esg-compensation-study.html?raw";
 		overflow-x: auto;
 	}
 
+	/* Keep the prose on its 52rem reading measure, while the 1000px SVG
+	   charts can render at their authored scale on desktop.  The viewport cap
+	   makes the breakout collapse safely on narrow screens. */
+	.esg-study :global(.esg-figure) {
+		width: min(66rem, calc(100vw - 2rem));
+		justify-self: center;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.esg-study :global(.esg-hero),
 		.esg-study :global(.esg-highlight),
