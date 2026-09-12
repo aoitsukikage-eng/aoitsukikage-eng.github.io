@@ -73,3 +73,28 @@
 	--motion-slow: 560ms;
 	--easing-standard: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* Paper surface palette. Used by the research index, which renders as a
+   printed sheet on the dark shell instead of a HUD panel. */
+:root {
+	--paper-sky-gradient: linear-gradient(
+		180deg,
+		oklch(0.195 0.035 250) 0%,
+		oklch(0.225 0.038 250) 16%,
+		oklch(0.30 0.042 246) 27%,
+		oklch(0.44 0.04 242) 35%,
+		oklch(0.62 0.03 234) 43%,
+		oklch(0.80 0.018 222) 52%,
+		oklch(0.915 0.01 180) 62%,
+		oklch(0.955 0.007 100) 74%,
+		oklch(0.972 0.006 85) 88%
+	);
+	--paper: oklch(0.978 0.005 85);
+	--paper-alt: oklch(0.962 0.008 88);
+	--paper-border: oklch(0.90 0.008 85);
+	--paper-accent-border: oklch(0.85 0.025 215);
+	--ink: oklch(0.22 0.02 250);
+	--ink-dim: oklch(0.44 0.012 250);
+	--ink-muted: oklch(0.52 0.012 250);
+	--ink-accent: oklch(0.44 0.09 215);
+}
