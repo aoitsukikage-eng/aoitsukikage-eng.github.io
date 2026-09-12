@@ -165,17 +165,9 @@ const copy = {
 	currentPath={Astro.url.pathname}
 >
 	<div class="page-stack">
-		<div class="quote-shell section-card" data-reveal id="home-quote" style="--reveal-order: 0;">
-			<p class="section-kicker quote-kicker">[SYSTEM]</p>
-			<img
-				alt="Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present."
-				class="quote-image"
-				height="226"
-				loading="eager"
-				src="/quote/quote-b-v4.svg"
-				width="1400"
-			/>
-		</div>
+		<section class="home-weather-section" data-reveal id="home-weather" style="--reveal-order: 0;">
+			<WeatherCard locale={locale} state="day" />
+		</section>
 
 		<section class="home-top" data-reveal id="home-top" style="--reveal-order: 1;">
 			<div class="status-shell section-card" id="home-status">
@@ -283,11 +275,7 @@ const copy = {
 			<SkillTree locale={locale} />
 		</section>
 
-		<section class="home-weather-section" data-reveal id="home-weather" style="--reveal-order: 2;">
-			<WeatherCard locale={locale} state="day" />
-		</section>
-
-		<section class="section-shell section-plain" data-reveal id="home-featured" style="--reveal-order: 3;">
+		<section class="section-shell section-plain" data-reveal id="home-featured" style="--reveal-order: 2;">
 			<p class="section-kicker">{copy.featuredKicker}</p>
 			<div class="hud-divider" aria-hidden="true"></div>
 			<div class="section-grid">
@@ -321,7 +309,7 @@ const copy = {
 			</div>
 		</section>
 
-		<section class="section-shell section-plain" data-reveal id="home-entries" style="--reveal-order: 4;">
+		<section class="section-shell section-plain" data-reveal id="home-entries" style="--reveal-order: 3;">
 			<div class="section-grid">
 				{
 					copy.entries.map((entry) => (
@@ -338,6 +326,18 @@ const copy = {
 				}
 			</div>
 		</section>
+
+		<div class="quote-shell section-card" data-reveal id="home-quote" style="--reveal-order: 4;">
+			<p class="section-kicker quote-kicker">[SYSTEM]</p>
+			<img
+				alt="Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the present."
+				class="quote-image"
+				height="226"
+				loading="lazy"
+				src="/quote/quote-b-v4.svg"
+				width="1400"
+			/>
+		</div>
 
 		<section class="home-foot" data-reveal id="home-contact" style="--reveal-order: 5;">
 			<p class="home-foot__note">{copy.footerNote}</p>
