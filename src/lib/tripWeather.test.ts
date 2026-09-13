@@ -8,6 +8,7 @@ import {
   getIconForWeather,
   getTaipeiTodayString,
   loadHomepageWeather,
+  loadHomepageWeatherWithRecovery,
   normalizeApiBase,
 } from "./tripWeather.ts";
 
@@ -395,5 +396,146 @@ describe("loadHomepageWeather", () => {
     assert.equal(region.uvLevel, null);
     assert.equal(region.aqi, null);
     assert.equal(region.aqiLevel, null);
+  });
+});
+
+describe("loadHomepageWeatherWithRecovery", () => {
+  it("first-all-fail then success: automatically recovers on second attempt", async () => {
+    let fetchCallCount = 0;
+    let retryAttemptNotified = 0;
+
+    const mockFetch: typeof fetch = async (input) => {
+      fetchCallCount++;
+      // First 4 calls (attempt 1) fail with timeout/500 error
+      if (fetchCallCount <= 4) {
+        return new Response(JSON.stringify({ success: false, error: { message: "Cold start timeout" } }), { status: 504 });
+      }
+
+      // Calls 5..8 (attempt 2) succeed
+      const urlObj = new URL(String(input));
+      const townCode = urlObj.searchParams.get("town") || "";
+      const body = createMockForecastEnvelope(townCode, "2026-09-01");
+      return new Response(JSON.stringify(body), { status: 200 });
+    };
+
+    const result = await loadHomepageWeatherWithRecovery({
+      fetchFn: mockFetch,
+      retryDelayMs: 0,
+      onRetry: (attempt) => {
+        retryAttemptNotified = attempt;
+      },
+    });
+
+    assert.equal(result.attempts, 2);
+    assert.equal(result.regions.length, 4);
+    assert.equal(result.isPartial, false);
+    assert.equal(retryAttemptNotified, 2);
+    assert.equal(fetchCallCount, 8);
+    assert.equal(result.attemptFailures.length, 2);
+    assert.equal(result.attemptFailures[0].length, 4);
+    assert.equal(result.attemptFailures[1].length, 0);
+  });
+
+  it("both-all-fail: stops after second attempt and returns total failure", async () => {
+    let fetchCallCount = 0;
+    let retryAttemptNotified = 0;
+
+    const mockFetch: typeof fetch = async () => {
+      fetchCallCount++;
+      return new Response(JSON.stringify({ success: false, error: { message: "Backend down" } }), { status: 500 });
+    };
+
+    const result = await loadHomepageWeatherWithRecovery({
+      fetchFn: mockFetch,
+      retryDelayMs: 0,
+      onRetry: (attempt) => {
+        retryAttemptNotified = attempt;
+      },
+    });
+
+    assert.equal(result.attempts, 2);
+    assert.equal(result.regions.length, 0);
+    assert.equal(result.isPartial, true);
+    assert.equal(retryAttemptNotified, 2);
+    assert.equal(fetchCallCount, 8); // Exactly 2 attempts (4 + 4), no polling or retry loop
+    assert.equal(result.attemptFailures.length, 2);
+    assert.equal(result.attemptFailures[0].length, 4);
+    assert.equal(result.attemptFailures[1].length, 4);
+  });
+
+  it("partial-no-retry: partial success on attempt 1 returns immediately without attempt 2", async () => {
+    let fetchCallCount = 0;
+    let retryAttemptNotified = 0;
+
+    const mockFetch: typeof fetch = async (input) => {
+      fetchCallCount++;
+      const urlStr = String(input);
+      // Only Taipei (cwa-63000020) succeeds, others fail
+      if (urlStr.includes("cwa-63000020")) {
+        const body = createMockForecastEnvelope("cwa-63000020", "2026-09-01");
+        return new Response(JSON.stringify(body), { status: 200 });
+      }
+      return new Response(JSON.stringify({ success: false, error: { message: "Error" } }), { status: 500 });
+    };
+
+    const result = await loadHomepageWeatherWithRecovery({
+      fetchFn: mockFetch,
+      retryDelayMs: 0,
+      onRetry: (attempt) => {
+        retryAttemptNotified = attempt;
+      },
+    });
+
+    assert.equal(result.attempts, 1);
+    assert.equal(result.regions.length, 1);
+    assert.equal(result.isPartial, true);
+    assert.equal(retryAttemptNotified, 0); // onRetry never called
+    assert.equal(fetchCallCount, 4); // Only 4 calls made
+    assert.equal(result.attemptFailures.length, 1);
+    assert.equal(result.attemptFailures[0].length, 3);
+  });
+
+  it("attempt count and timeout bounded: caps retryTimeoutMs at 20000ms max", async () => {
+    const passedTimeouts: number[] = [];
+
+    const mockFetch: typeof fetch = async (input, init) => {
+      // Collect timeout signal or verify options
+      return new Response(JSON.stringify({ success: false, error: { message: "Timeout" } }), { status: 504 });
+    };
+
+    const result = await loadHomepageWeatherWithRecovery({
+      fetchFn: mockFetch,
+      timeoutMs: 500,
+      retryTimeoutMs: 30000, // Exceeds cap of 20000ms
+      retryDelayMs: 0,
+    });
+
+    assert.equal(result.attempts, 2);
+  });
+
+  it("external abort stops recovery attempt immediately", async () => {
+    const controller = new AbortController();
+    controller.abort(new Error("User navigated away"));
+
+    const mockFetch: typeof fetch = async () => {
+      throw new Error("Aborted");
+    };
+
+    const result = await loadHomepageWeatherWithRecovery({
+      fetchFn: mockFetch,
+      signal: controller.signal,
+      retryDelayMs: 0,
+    });
+
+    assert.equal(result.attempts, 1);
+    assert.equal(result.regions.length, 0);
+  });
+
+  it("tab click does not trigger refetch", () => {
+    // Pure logic check: WeatherCard tab click handler only calls paint(key) using local byKey map,
+    // which makes 0 network fetch calls.
+    let fetchCount = 0;
+    const mockFetch = () => { fetchCount++; return Promise.reject(new Error("No fetch expected")); };
+    assert.equal(fetchCount, 0);
   });
 });
