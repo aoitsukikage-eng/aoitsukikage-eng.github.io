@@ -50,9 +50,16 @@ import studyArticle from "./esg-compensation-study.html?raw";
 		overflow-x: auto;
 	}
 
-	/* Keep the prose on its 52rem reading measure, while the 1000px SVG
-	   charts can render at their authored scale on desktop.  The viewport cap
-	   makes the breakout collapse safely on narrow screens. */
+	/* The article and its sections carry an inline `display:grid`, so their
+	   single column is auto-sized: any child wider than the measure stretches
+	   every sibling with it. Pin the tracks to the reading measure first, then
+	   let only the figures overflow, evenly on both sides. The viewport cap
+	   retains a safe in-viewport figure width on narrow screens. */
+	.esg-study :global(article),
+	.esg-study :global(article > section) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
 	.esg-study :global(.esg-figure) {
 		width: min(66rem, calc(100vw - 2rem));
 		justify-self: center;
