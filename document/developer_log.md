@@ -4,6 +4,84 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-09-13 — Executive compensation / ESG research page: move to a dedicated component
+
+The chart-led rewrite recorded on 2026-09-12 left the page on the shared
+`src/pages/research/[slug].astro` template, and a review of the rendered page
+found that the template itself had become the limiting factor.
+
+Three defects, all in the template rather than the content:
+
+- **A "no charts" placeholder on a page with four charts.** The template falls
+  back to a hardcoded 01/02/03 block ("Company disclosures / Course questions /
+  Author extension") whenever `visuals:` is empty. That field is unused across
+  all five research entries, so the page announced that it had no figures while
+  rendering four of them below.
+- **A duplicated scope paragraph, one copy in English.** A block gated on
+  `isEsgStudy` restated, in hardcoded English, the same sentence the `reflection:`
+  field renders in Chinese immediately below it. The 2026-09-12 rewrite removed
+  the repetitions living in the markdown body but could not reach this one.
+- **Two competing measures.** `.content` is capped at 72rem (1152px) while
+  `.research-detail p` is capped at 40rem (640px), so every chart card ran the
+  full width with its explanatory paragraph stopping at 55% of it, hugging the
+  left edge. All eight section headings were hardcoded English on a `lang: zh`
+  page, with no entry for them in `src/i18n/zh.ts`; the beta and Sugamo pages
+  share that problem.
+
+The page now follows the route already taken by the Sharpe and SinoPac briefs:
+`EsgCompensationStudy.astro` imports `esg-compensation-study.html?raw`, and
+`[slug].astro` routes the slug to it. The body is wrapped in a single
+`max-width: 52rem` article, matching `sharpe-ratio-demo.html`. Section headings
+are Chinese with 01-11 numbering, bracketed kickers stay English, and the page
+gains an index block and a compact metadata row. The markdown file keeps its
+frontmatter, which still feeds the research hub card, and its body is replaced by
+a comment pointing at the component - deliberately unlike the Sharpe entry, which
+still carries 166 lines of body that no longer render anywhere.
+
+Narrowing the measure then shrank the figures, which is the part worth recording.
+The four SVGs are authored on a 1000px viewBox with 12px as the smallest label.
+Inside the 52rem article they rendered at 800px, a scale of 0.8, putting those
+labels at 9.6px - below the 0.7rem (11.2px) floor the visual contract sets, where
+the previous 72rem layout had them at roughly 13.2px. The fix lets only the
+figures break out of the reading measure, to 66rem.
+
+That breakout then caused a regression only cross-width measurement caught. The
+article and its sections carry an inline `display:grid`, so their single column is
+auto-sized: a child wider than the measure stretches every sibling with it. The
+hero and all sections were pulled to 1056px and overflowed the 52rem box to the
+right, and the document scrolled horizontally by 8px at 1280 and 72px at 1152 and
+1024 - clipping the right-hand highlight cards at exactly the widths most laptops
+use. Pinning both tracks to `minmax(0, 1fr)` confines the overflow to the figures,
+which then centre as intended.
+
+Measured after the fix, via injected `getBoundingClientRect()` rather than pixel
+inspection:
+
+| viewport | clientWidth | overflow | article | figure | img |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1920 | 1905 | 0 | 832 | 1056 | 1022 |
+| 1440 | 1425 | 0 | 832 | 1056 | 1022 |
+| 1280 | 1265 | 0 | 832 | 1056 | 1022 |
+| 1152 | 1137 | 0 | 832 | 1056 | 1022 |
+| 1024 | 1009 | 0 | 832 | 992 | 958 |
+| 900 | 885 | 0 | 832 | 868 | 834 |
+| 800 | 785 | 0 | 753 | 768 | 734 |
+| 600 | 585 | 0 | 553 | 568 | 534 |
+| 480 | 485 | 0 | 453 | 468 | 434 |
+
+Two verification lessons came out of this, each of which cost a round. A
+full-page screenshot taken with `--window-size=1440,16000` renders every text
+pixel within one colour step of the background - it reads as a reveal animation
+that never fired, but the DOM shows `is-visible` correctly applied. Heights beyond
+roughly 4000px cannot be trusted, and the page has to be captured in offset
+segments and stitched. And a viewport check written against a single width proves
+very little: this defect was invisible at 1440 and at 820, and the one width the
+acceptance criteria named, 375px, cannot be reached by `--window-size` at all,
+which floors `clientWidth` at 485 on Linux Chrome.
+
+The SVGs themselves were not modified; the scale correction verified in `a30de9e`
+still stands.
+
 ## 2026-09-11 — WeatherCard Azure scale-to-zero cold-start recovery & unreleased candidate verification
 
 An incident was reported on the production homepage where all four regions fell into the offline demo fallback (`data-wc-phase="offline"`). Independent browser reproduction confirmed that during cold starts on Azure Container Apps (documented as scale-to-zero), backend spin-up times exceeded the client's fixed 8000ms timeout per town request, causing `loadHomepageWeather` to return `regions: []` and permanently select offline fallback without recovery. Direct backend health checks confirmed HTTP 200 OK with valid CORS headers, and warm reloads cleanly transitioned to Live.
