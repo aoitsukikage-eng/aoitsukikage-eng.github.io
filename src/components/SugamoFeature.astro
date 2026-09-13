@@ -1,0 +1,85 @@
+---
+import featureArticle from "./sugamo-feature.html?raw";
+---
+
+<div class="sugamo-feature">
+	<Fragment set:html={featureArticle} />
+</div>
+
+<style>
+	.sugamo-feature {
+		padding: 0 0 var(--space-5);
+	}
+
+	.sugamo-feature :global(article) {
+		font-family: "IBM Plex Sans", "Huninn", sans-serif;
+	}
+
+	/* Header card HUD styling */
+	.sugamo-feature :global(header) {
+		box-shadow: var(--glow-soft), inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+		transition:
+			border-color var(--motion-base) var(--easing-standard),
+			box-shadow var(--motion-base) var(--easing-standard);
+	}
+
+	.sugamo-feature :global(header:hover) {
+		border-color: rgba(91, 231, 255, 0.24);
+		box-shadow: var(--glow-strong), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+	}
+
+	/* Column widths:
+	   .tcol         reading column max-width 38rem (~34-38 CJK chars), centered
+	   .feature-mid  in-text photos, fact boxes & SVG chart, max-width 52rem, centered
+	   .feature-wide hero photo & header, max-width 72rem, centered
+	*/
+	.sugamo-feature :global(.tcol) {
+		width: min(38rem, 100%);
+		margin-inline: auto;
+	}
+
+	.sugamo-feature :global(.feature-mid) {
+		width: min(52rem, 100%);
+		margin-inline: auto;
+	}
+
+	.sugamo-feature :global(.feature-wide) {
+		width: min(72rem, 100%);
+		margin-inline: auto;
+	}
+
+	/* Figure hover glow */
+	.sugamo-feature :global(figure img) {
+		transition:
+			border-color var(--motion-base) var(--easing-standard),
+			box-shadow var(--motion-base) var(--easing-standard);
+	}
+
+	.sugamo-feature :global(figure img:hover) {
+		border-color: rgba(91, 231, 255, 0.32);
+		box-shadow: 0 0 25px rgba(91, 231, 255, 0.08);
+	}
+
+	/* Links */
+	.sugamo-feature :global(a) {
+		color: inherit;
+	}
+
+	/* Responsive mobile adjustments */
+	@media (max-width: 640px) {
+		.sugamo-feature :global(.tcol),
+		.sugamo-feature :global(.feature-mid),
+		.sugamo-feature :global(.feature-wide) {
+			width: 100% !important;
+		}
+
+		.sugamo-feature :global(header) {
+			padding: 1.25rem 1.15rem !important;
+		}
+
+		.sugamo-feature :global(figcaption) {
+			flex-direction: column !important;
+			gap: 0.35rem !important;
+		}
+	}
+</style>
