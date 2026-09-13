@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 730" role="img" aria-labelledby="bdTitle bdDesc">
+  <title id="bdTitle">最高經營層 15% 權重之拆解與黑盒對照</title>
+  <desc id="bdDesc">對照中保科/強盛新、嘉里大榮與國喬石化之最高經營層 ESG 薪酬權重拆解方式，呈現具體拆解與未拆解黑盒之差異。</desc>
+  <defs>
+    <style>
+      .f { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .mono { font-family: "IBM Plex Mono",monospace,"IBM Plex Sans",sans-serif; }
+      .h { font-size: 21px; fill: #5be7ff; font-weight: bold; letter-spacing: .02em; }
+      .sub { font-size: 13px; fill: #8fa3bf; }
+      .ctitle { font-size: 15px; fill: #5be7ff; font-weight: bold; text-anchor: middle; }
+      .csub { font-size: 12px; fill: #8fa3bf; text-anchor: middle; }
+      .blbl { font-size: 13px; fill: #081226; font-weight: bold; text-anchor: middle; }
+      .bsub-light { font-size: 11px; fill: #c8d6ea; text-anchor: middle; }
+      .note-title { font-size: 13px; fill: #ffb157; font-weight: bold; }
+      .note-txt { font-size: 12px; fill: #c8d6ea; }
+      .tag-e { font-size: 11px; fill: #081226; font-weight: bold; }
+      .tag-s { font-size: 11px; fill: #081226; font-weight: bold; }
+    </style>
+    <pattern id="hatch-amber-bd" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="#0c1730"/>
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#ffb157" stroke-width="3" opacity="0.85"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="730" fill="#081226"/>
+
+  <!-- Title block -->
+  <text class="f h" x="40" y="40">同樣是 15%，兩種拆法：具體子項 vs 未拆解黑盒</text>
+  <text class="f sub" x="40" y="62">對照最高經營層／高階主管薪酬中 ESG 權重之實際組成結構</text>
+  <line x1="40" y1="75" x2="960" y2="75" stroke="#5be7ff" stroke-opacity=".25"/>
+
+  <!-- ================= Column 1: 中保科 / 強盛新 (15%) ================= -->
+  <g transform="translate(40, 95)">
+    <rect width="280" height="500" rx="8" fill="#0c1730" stroke="#5fd694" stroke-opacity=".4"/>
+    <text class="f ctitle" x="140" y="30">中保科 / 強盛新</text>
+    <text class="f csub" x="140" y="48">（最高經營層・合計 15%）</text>
+
+    <!-- Stacked Bar Container -->
+    <!-- Scale: 17px per 1%. All three columns share one baseline at y=477 within the card. -->
+    <!-- Total 15% = 255px -->
+    <g transform="translate(50, 210)">
+      <!-- 綠色產品創新 4% -> 68px -->
+      <rect x="0" y="0" width="180" height="68" rx="4" fill="#5fd694"/>
+      <text class="f blbl" x="90" y="32">綠色產品創新 4%</text>
+      <rect x="148" y="8" width="24" height="16" rx="3" fill="#081226" opacity="0.25"/>
+      <text class="f tag-e" x="160" y="20" text-anchor="middle">E</text>
+
+      <!-- 低碳製造轉型 4% -> 68px -->
+      <rect x="0" y="72" width="180" height="68" rx="4" fill="#5fd694" opacity="0.8"/>
+      <text class="f blbl" x="90" y="104">低碳製造轉型 4%</text>
+
+      <!-- 職業安全衛生 2% -> 34px -->
+      <rect x="0" y="144" width="180" height="34" rx="4" fill="#5be7ff"/>
+      <text class="f blbl" x="90" y="166">職業安全衛生 2% [S]</text>
+
+      <!-- 其他 (未說明涵蓋範圍) 5% -> 85px -->
+      <rect x="0" y="182" width="180" height="85" rx="4" fill="url(#hatch-amber-bd)" stroke="#ffb157" stroke-width="1"/>
+      <rect x="15" y="198" width="150" height="52" rx="4" fill="#081226" fill-opacity=".85"/>
+      <text class="f" x="90" y="220" font-size="13" font-weight="bold" fill="#5be7ff" text-anchor="middle">其他（未說明範圍）5%</text>
+      <text class="f bsub-light" x="90" y="239">未分類子項</text>
+    </g>
+
+    <!-- Total Label -->
+    <rect x="50" y="70" width="180" height="32" rx="4" fill="#5fd694" opacity="0.2" stroke="#5fd694"/>
+    <text class="f mono" x="140" y="91" fill="#5fd694" font-size="14" font-weight="bold" text-anchor="middle">已拆解權重：15%</text>
+  </g>
+
+  <!-- ================= Column 2: 嘉里大榮 (至少 15%) ================= -->
+  <g transform="translate(360, 95)">
+    <rect width="280" height="500" rx="8" fill="#0c1730" stroke="#ffb157" stroke-opacity=".4"/>
+    <text class="f ctitle" x="140" y="30" fill="#ffb157">嘉里大榮物流</text>
+    <text class="f csub" x="140" y="48">（高階主管・至少 15%）</text>
+
+    <!-- Total Label -->
+    <rect x="50" y="70" width="180" height="32" rx="4" fill="#ffb157" opacity="0.2" stroke="#ffb157"/>
+    <text class="f mono" x="140" y="91" fill="#ffb157" font-size="14" font-weight="bold" text-anchor="middle">整體權重：至少 15%</text>
+
+    <!-- Stacked Bar (Single Block 15% -> 255px) -->
+    <g transform="translate(50, 222)">
+      <rect x="0" y="0" width="180" height="255" rx="4" fill="url(#hatch-amber-bd)" stroke="#ffb157" stroke-width="1.5"/>
+      <rect x="15" y="80" width="150" height="96" rx="4" fill="#081226" fill-opacity=".85"/>
+      <text class="f" x="90" y="106" font-size="13" font-weight="bold" fill="#5be7ff" text-anchor="middle">永續目標相關之項目</text>
+      <text class="f mono" x="90" y="132" fill="#ffb157" font-size="16" font-weight="bold" text-anchor="middle">至少 15%</text>
+      <text class="f bsub-light" x="90" y="157">（未拆解具體子項與配比）</text>
+    </g>
+  </g>
+
+  <!-- ================= Column 3: 國喬石化 (20%) ================= -->
+  <g transform="translate(680, 95)">
+    <rect width="280" height="500" rx="8" fill="#0c1730" stroke="#ffb157" stroke-opacity=".4"/>
+    <text class="f ctitle" x="140" y="30" fill="#ffb157">國喬石化</text>
+    <text class="f csub" x="140" y="48">（高階經理人・20%）</text>
+
+    <!-- Total Label -->
+    <rect x="50" y="70" width="180" height="32" rx="4" fill="#ffb157" opacity="0.2" stroke="#ffb157"/>
+    <text class="f mono" x="140" y="91" fill="#ffb157" font-size="14" font-weight="bold" text-anchor="middle">整體權重：20%</text>
+
+    <!-- Stacked Bar (Single Block 20% -> 340px) -->
+    <g transform="translate(50, 137)">
+      <rect x="0" y="0" width="180" height="340" rx="4" fill="url(#hatch-amber-bd)" stroke="#ffb157" stroke-width="1.5"/>
+      <rect x="15" y="121" width="150" height="98" rx="4" fill="#081226" fill-opacity=".85"/>
+      <text class="f" x="90" y="147" font-size="13" font-weight="bold" fill="#5be7ff" text-anchor="middle">永續績效指標</text>
+      <text class="f mono" x="90" y="175" fill="#ffb157" font-size="18" font-weight="bold" text-anchor="middle">20%</text>
+      <text class="f bsub-light" x="90" y="200">（未拆解具體子項與配比）</text>
+    </g>
+  </g>
+
+  <!-- ================= Note Footer ================= -->
+  <g transform="translate(40, 615)">
+    <rect width="920" height="85" rx="8" fill="#1a1206" stroke="#ffb157" stroke-opacity=".6"/>
+    <text class="f note-title" x="20" y="28">💡 關鍵發現與註記</text>
+    <text class="f note-txt" x="20" y="52">中保科／強盛新雖屬「具體」一組，15% 中仍有 5%（三分之一）為公司未說明範圍的「其他」。</text>
+    <text class="f note-txt" x="20" y="70">嘉里大榮（至少 15%）與國喬（20%）則完全未公開內部細項比重，外部無法評估其實質驅動方向。</text>
+  </g>
+</svg>

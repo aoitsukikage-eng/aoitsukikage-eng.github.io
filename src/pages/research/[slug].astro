@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import SharpeRatioDemo from "../../components/SharpeRatioDemo.astro";
 import LegalCaseStudy from "../../components/LegalCaseStudy.astro";
+import EsgCompensationStudy from "../../components/EsgCompensationStudy.astro";
 import { siteConfig } from "../../config/site";
 import { getResearchEntries, getResearchGroup, RESEARCH_GROUPS, sortResearch } from "../../lib/research";
 
@@ -37,7 +38,9 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 
 <SiteLayout title={`${entry.data.title} | Research`} description={entry.data.summary} currentPath={Astro.url.pathname}>
 	<article class="page-stack research-detail">
-		{isLocaleMatch && isSharpeRatioDemo ? (
+		{isLocaleMatch && isEsgStudy ? (
+			<EsgCompensationStudy />
+		) : isLocaleMatch && isSharpeRatioDemo ? (
 			<SharpeRatioDemo />
 		) : isLocaleMatch && isLegalCaseStudy ? (
 			<LegalCaseStudy />
@@ -99,14 +102,6 @@ const backHubUrl = currentLocale === "en" ? "/en/research/" : "/research/";
 					</ol>}
 				</section>
 				)}
-
-				{isEsgStudy && <section class="section-card section-shell distinction" aria-labelledby="assignment-boundary-heading" data-reveal style="--reveal-order: 5;">
-					<p class="section-kicker">[SCOPE BOUNDARY]</p>
-					<h2 id="assignment-boundary-heading">Teacher requirements and author extension</h2>
-					<div class="hud-divider" aria-hidden="true"></div>
-					<p><strong>Teacher requirements:</strong> identify the ESG performance indicators used and their weighting in executive compensation evaluation.</p>
-					<p><strong>Author extension:</strong> the four-company cross-industry sample, annual-report/sustainability-report cross-reading, disclosure-consistency comparison, clawback, and governance observations.</p>
-				</section>}
 
 				<section class="section-shell section-plain" aria-labelledby="reflection-heading" data-reveal style={`--reveal-order: ${isEsgStudy ? 6 : 5};`}>
 					<p class="section-kicker">[REFLECTION & LIMITS]</p>
