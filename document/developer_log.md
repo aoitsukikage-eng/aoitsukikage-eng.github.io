@@ -4,6 +4,74 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-09-11 — WeatherCard Azure scale-to-zero cold-start recovery & unreleased candidate verification
+
+An incident was reported on the production homepage where all four regions fell into the offline demo fallback (`data-wc-phase="offline"`). Independent browser reproduction confirmed that during cold starts on Azure Container Apps (documented as scale-to-zero), backend spin-up times exceeded the client's fixed 8000ms timeout per town request, causing `loadHomepageWeather` to return `regions: []` and permanently select offline fallback without recovery. Direct backend health checks confirmed HTTP 200 OK with valid CORS headers, and warm reloads cleanly transitioned to Live.
+
+To resolve cold-start false-offline errors without increasing cloud infrastructure costs:
+- Added `loadHomepageWeatherWithRecovery` in `src/lib/tripWeather.ts` implementing a single bounded recovery attempt when the initial attempt suffers a total failure (0 regions returned).
+- Attempt 1 maintains standard 8000ms timeout. If all 4 regions fail, the client triggers an `onRetry` callback transitioning `WeatherCard.astro` phase to `waking` and updating status copy to localized waking messages (`服務喚醒中…` / `Waking service…` / `サービス起動中…`).
+- Attempt 2 runs after a short delay with a bounded timeout capped at 20 seconds. If attempt 2 succeeds, phase transitions to `live` (or `partial`). If attempt 2 also fails, phase transitions to `offline`.
+- Strict control bounds: bounded to 2 attempts max, no polling, no infinite retry, no exponential backoff loops, and no tab-click refetching (tab switching remains local DOM repaints). Partial successes immediately render partial live without retrying failed regions.
+- Diagnostic data: `result` and card element record attempt counts (`data-wc-attempts`) and per-attempt failure breakdown without swallowing errors or producing console error noise during normal flow.
+
+Verification results on worktree `task-20260911-portfolio-weather-cold-start-recovery`:
+- Node unit tests: 17/17 passed (3 suites), covering first-all-fail recovery success, both-all-fail recovery failure, partial-no-retry, attempt/timeout bounding, external abort, and tab-click no-refetch.
+- Production build: 17 static pages built cleanly in 3.57s.
+- Astro check: 0 errors, 0 warnings (68 hints).
+- Git diff check: Clean formatting and zero trailing whitespace issues.
+- Real browser CDP self-checks on production preview:
+  - Scenario 1 (Attempt 1 fail 504 -> Attempt 2 mock 200 success): phase transitioned `loading` -> `waking` -> `live`, `data-wc-attempts="2"`, no-refetch PASS, console errors 0. Evidence saved to `recovery-success-live.png`, `recovery-success-console.json`, `recovery-success-network.json` (explicitly tagged as injected mock evidence).
+  - Scenario 2 (Both attempt 1 and 2 fail 504 -> offline fallback): phase transitioned `loading` -> `waking` -> `offline`, `data-wc-attempts="2"`, all 4 demo tabs switchable, no-refetch PASS, console errors 0. Evidence saved to `recovery-failure-offline-[n/c/s/e].png`, `recovery-failure-console.json`, `recovery-failure-network.json`.
+- Scope control: Modified files strictly restricted to 4 allowed files (`src/components/WeatherCard.astro`, `src/lib/tripWeather.ts`, `src/lib/tripWeather.test.ts`, `document/developer_log.md`).
+
+This candidate is prepared for independent acceptance (`READY_FOR_INDEPENDENT_ACCEPTANCE`). As of this entry, changes remain unpushed, unmerged, and undeployed.
+
+## 2026-09-10 — WeatherCard Live main integration & pre-release verification
+
+The approved WeatherCard Live feature has been cleanly integrated onto the latest `origin/main` (base `bba75cd5f0775babaca71346bcea114f6a024404`) in an isolated worktree `task-20260910-portfolio-weather-live-integration`.
+The source feature commits `63c7faf`, `26b49c1`, `04abfa6`, `c4ab5e2`, and `3fbb7f7` were applied in order without merge conflicts.
+
+Azure Production API smoke verification confirmed complete live API availability and CORS compliance for `Origin: https://aoitsukikage-eng.github.io`. Both GET and OPTIONS preflight requests for `/api/health` and `/api/forecast` returned HTTP 200 OK with `Access-Control-Allow-Origin: https://aoitsukikage-eng.github.io`. Forecast payloads across all four regions (North `cwa-63000020`, Central `cwa-66000060`, South `cwa-67000370`, East `cwa-10015010`) and locales (zh, en, ja) were verified with valid temperatures, hourly forecasts, sunrise/sunset, moon phases, UV index, and AQI readings.
+
+Verification results on the integration worktree:
+- Node unit tests: 11/11 passed (2 suites).
+- Production build: 17 static pages built cleanly in 2.06s.
+- Astro check: 0 errors, 0 warnings (68 hints).
+- Git diff check: Clean formatting and zero trailing whitespace issues.
+- Scope control: Modified files strictly restricted to the 4 allowed files (`src/components/WeatherCard.astro`, `src/lib/tripWeather.ts`, `src/lib/tripWeather.test.ts`, `document/developer_log.md`).
+
+This integration is prepared for independent acceptance (`READY_FOR_INDEPENDENT_ACCEPTANCE`). As of this entry, changes remain unpushed and undeployed.
+
+## 2026-09-06 — WeatherCard Live integration
+
+The homepage WeatherCard now reuses the existing Trip Weather Azure backend;
+GitHub Pages does not add a separate backend. The browser client, rather than
+Astro's build step, initializes the approved data layer for the fixed North,
+Central, South, and East regions (N/C/S/E), with zh, en, and ja locale support.
+The related worktree commits are `63c7faf` (data layer and tests), `26b49c1`
+(SVG hidden-attribute fix), `04abfa6` (client-side Live wiring), and `c4ab5e2`
+(offline tab fallback).
+
+The runtime keeps successful regions visible on a partial failure and presents
+an honest offline/demo fallback on a total failure. Nullable UV and AQI values
+render safely; demo AQI is explicitly labelled; and warnings, day/night
+presentation, and moon information update from the currently selected region.
+Selecting a tab does not refetch data. The data-layer evidence records 11/11
+tests passing, while the accepted UI and fallback work records successful
+17-page production builds and Astro checks with 0 errors and 0 warnings
+(alongside 68 pre-existing hints).
+
+Initial acceptance of `04abfa6` was changes_required because the enabled
+offline fallback tabs did not update their demo content. Commit `c4ab5e2`
+resolved that finding: independent browser verification confirmed N/C/S/E
+switching, no added requests on tab clicks, and no console warnings or errors;
+the final result was approved. This is worktree-and-branch acceptance only.
+As of this record, it has not been integrated into latest main, pushed, or
+deployed to public GitHub Pages, so the public homepage is not claimed to be
+Live. Azure CORS and the three-language core remain existing backend/runtime
+prerequisites; this record makes no unverified deployment or version claim.
+
 ## 2026-07-31 — Discord Multi-Bot Showcase publication
 
 Commits `3fcd929` (feat: add Discord Bot Showcase project entry) and `dd127a0`

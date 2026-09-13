@@ -16,6 +16,8 @@ tags:
   - sustainability-disclosure
   - cross-industry
 type: comparative
+cardTitle: 高階主管薪酬與 ESG 績效連結
+cardSummary: 四家臺灣上市公司 2024 年度的指標、權重與跨文件揭露比較，辨識可比較的邊界在哪裡。
 highlights:
   - label: 樣本
     value: 4 家・4 產業

@@ -16,6 +16,8 @@ tags:
   - aging-society
   - community-banking
 type: narrative
+cardSummary: 一家信用金庫如何在超高齡化的商店街裡維持服務可近性與在地關係，以時間脈絡與社區情境整理。
+featured: true
 highlights:
   - label: 個案
     value: 巢鴨信用金庫

@@ -76,6 +76,9 @@ const researchItemCollection = defineCollection({
 		year: z.number().int().min(1900).max(3000),
 		tags: z.array(z.string().min(1)).min(1),
 		type: z.enum(["quantitative", "comparative", "narrative"]),
+		cardTitle: z.string().min(1).optional(),
+		cardSummary: z.string().min(1).optional(),
+		featured: z.boolean().optional().default(false),
 		highlights: z
 			.array(
 				z.object({

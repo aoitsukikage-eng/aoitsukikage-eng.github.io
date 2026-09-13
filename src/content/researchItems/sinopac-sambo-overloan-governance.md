@@ -17,6 +17,8 @@ tags:
   - governance
   - related-party-transactions
 type: narrative
+cardTitle: 永豐金控三寶超貸案
+cardSummary: 四部法規交織、條文完備，違法卻持續五年未被發現。拆解行政處分與三審判決，追問落差出在哪裡。
 highlights:
   - label: 是法規不夠嚴密嗎？
     value: 不是。四部法規同時適用，覆蓋本案所有違法態樣
