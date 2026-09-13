@@ -2,8 +2,8 @@
 
 This directory contains only public-safe visual assets for inline reading on the research pages.
 
-- `beta-risk-comparison.png` — Beta risk comparison chart from the portfolio-risk analysis.
-- `beta-sml-analysis.png` — Security Market Line analysis chart from the portfolio-risk analysis.
+- `beta-risk-comparison.svg` — Beta risk comparison chart from the portfolio-risk analysis.
+- `beta-sml-analysis.svg` — Security Market Line analysis chart from the portfolio-risk analysis.
 - `portfolio-efficient-frontier.svg` — Author-created SVG redrawing the source
   workbook's efficient-frontier and CML coordinates for public reading.
 - `sugamo-five-year-financials.svg` — Author-created five-year financial track chart for the Sugamo Shinkin report.
@@ -11,6 +11,10 @@ This directory contains only public-safe visual assets for inline reading on the
 - `sugamo/sugamo-ekoda.jpg` — Ekoda branch by Suikotei, CC BY 4.0 (Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Sugamo_Shinkin_Bank_Ekoda_Branch.jpg).
 - `sugamo/sugamo-niiza.jpg` — Niiza branch by Suikotei, CC BY-SA 4.0 (Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Sugamo_Shinkin_Bank_Niiza_Branch.jpg).
 - `sugamo/sugamo-head-office.jpg` — Head office by Suikotei, CC BY-SA 4.0 (Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Sugamo_Shinkin_Bank_Head_Office.jpg).
+- `esg-weight-ladder.svg` — ESG compensation weight ladder and concreteness comparison across three management tiers.
+- `esg-15pct-breakdown.svg` — Side-by-side breakdown comparison of 15% ESG executive compensation weights.
+- `esg-template-overlap.svg` — Mirror comparison table of ESG compensation weights between TSE companies of different industries.
+- `esg-consistency-matrix.svg` — Dual-document disclosure consistency matrix comparing annual reports and ESG reports across four dimensions.
 
 Complete report files, source office files, and PDFs are not distributed. The
 charts remain page-reading assets and are not offered with download calls to

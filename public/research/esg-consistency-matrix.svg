@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 660" role="img" aria-labelledby="cmTitle cmDesc">
+  <title id="cmTitle">年報與永續報告書雙文件揭露一致性矩陣</title>
+  <desc id="cmDesc">矩陣分析四家公司在年報與永續報告書兩份文件間，於董事連結、高階主管連結、指標細節與實施時點描述的一致性程度，並標示 Clawback 與長期股權激勵建置狀況。</desc>
+  <defs>
+    <style>
+      .f { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .h { font-size: 21px; fill: #5be7ff; font-weight: bold; letter-spacing: .02em; }
+      .sub { font-size: 13px; fill: #8fa3bf; }
+      .lgd { font-size: 12.5px; font-weight: bold; }
+      .th { font-size: 14px; fill: #5be7ff; font-weight: bold; text-anchor: middle; }
+      .cname { font-size: 14px; fill: #c8d6ea; font-weight: bold; }
+      .cid { font-size: 12px; fill: #8fa3bf; }
+      .cell-txt { font-size: 13px; font-weight: bold; text-anchor: middle; }
+      .strip-title { font-size: 13px; fill: #ff8f8f; font-weight: bold; }
+      .strip-txt { font-size: 13px; fill: #c8d6ea; font-weight: bold; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="660" fill="#081226"/>
+
+  <!-- Title block -->
+  <text class="f h" x="40" y="40">雙文件（年報 vs 永續報告書）揭露一致性矩陣</text>
+  <text class="f sub" x="40" y="62">交叉比對兩份公開法定文件在四大關鍵維度上的相互吻合程度</text>
+
+  <!-- Legend -->
+  <g transform="translate(560, 26)">
+    <circle cx="10" cy="10" r="7" fill="#5fd694"/>
+    <text class="f lgd" x="22" y="14" fill="#5fd694">● 一致</text>
+
+    <path d="M 120 10 A 7 7 0 0 0 120 3 Z" fill="#ffb157"/>
+    <circle cx="120" cy="10" r="7" fill="none" stroke="#ffb157" stroke-width="2"/>
+    <text class="f lgd" x="133" y="14" fill="#ffb157">◐ 範圍一致、細節有別</text>
+
+    <circle cx="285" cy="10" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+    <text class="f lgd" x="297" y="14" fill="#ff8f8f">○ 不一致</text>
+  </g>
+
+  <line x1="40" y1="75" x2="960" y2="75" stroke="#5be7ff" stroke-opacity=".25"/>
+
+  <!-- Matrix Header Row -->
+  <g transform="translate(40, 95)">
+    <rect width="210" height="42" rx="5" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="105" y="26">受評公司</text>
+
+    <rect x="220" y="0" width="170" height="42" rx="5" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="305" y="26">董事連結</text>
+
+    <rect x="400" y="0" width="170" height="42" rx="5" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="485" y="26">高階主管連結</text>
+
+    <rect x="580" y="0" width="170" height="42" rx="5" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="665" y="26">指標細節</text>
+
+    <rect x="760" y="0" width="160" height="42" rx="5" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="840" y="26">實施時點描述</text>
+  </g>
+
+  <!-- Matrix Body Rows -->
+  <g transform="translate(40, 148)">
+
+    <!-- Row 1: 中興保全科技 (●, ●, ●, ●) -->
+    <g transform="translate(0, 0)">
+      <rect width="920" height="85" rx="6" fill="#0c1730" stroke="#5fd694" stroke-opacity=".3"/>
+      <rect width="920" height="85" rx="6" fill="#5fd694" opacity="0.04"/>
+
+      <!-- Company -->
+      <text class="f cname" x="20" y="40">中興保全科技</text>
+      <text class="f cid" x="20" y="60"> (9917)</text>
+
+      <!-- Col 1: 董事連結 ● 一致 -->
+      <g transform="translate(220, 15)">
+        <rect width="170" height="55" rx="4" fill="#5fd694" opacity="0.12"/>
+        <circle cx="45" cy="27" r="7" fill="#5fd694"/>
+        <text class="f cell-txt" x="105" y="32" fill="#5fd694">● 一致</text>
+      </g>
+
+      <!-- Col 2: 高階主管連結 ● 一致 -->
+      <g transform="translate(400, 15)">
+        <rect width="170" height="55" rx="4" fill="#5fd694" opacity="0.12"/>
+        <circle cx="45" cy="27" r="7" fill="#5fd694"/>
+        <text class="f cell-txt" x="105" y="32" fill="#5fd694">● 一致</text>
+      </g>
+
+      <!-- Col 3: 指標細節 ● 一致 -->
+      <g transform="translate(580, 15)">
+        <rect width="170" height="55" rx="4" fill="#5fd694" opacity="0.12"/>
+        <circle cx="45" cy="27" r="7" fill="#5fd694"/>
+        <text class="f cell-txt" x="105" y="32" fill="#5fd694">● 一致</text>
+      </g>
+
+      <!-- Col 4: 實施時點描述 ● 一致 -->
+      <g transform="translate(760, 15)">
+        <rect width="160" height="55" rx="4" fill="#5fd694" opacity="0.12"/>
+        <circle cx="40" cy="27" r="7" fill="#5fd694"/>
+        <text class="f cell-txt" x="98" y="32" fill="#5fd694">● 一致</text>
+      </g>
+    </g>
+
+    <!-- Row 2: 國喬石化 (◐, ◐, ○, ●) -->
+    <g transform="translate(0, 95)">
+      <rect width="920" height="85" rx="6" fill="#0c1730" stroke="#ffb157" stroke-opacity=".3"/>
+
+      <!-- Company -->
+      <text class="f cname" x="20" y="40">國喬石化</text>
+      <text class="f cid" x="20" y="60"> (1312)</text>
+
+      <!-- Col 1: 董事連結 ◐ 範圍一致 -->
+      <g transform="translate(220, 15)">
+        <rect width="170" height="55" rx="4" fill="#ffb157" opacity="0.1"/>
+        <path d="M 35 27 A 7 7 0 0 0 35 13 Z" fill="#ffb157"/>
+        <circle cx="35" cy="20" r="7" fill="none" stroke="#ffb157" stroke-width="2"/>
+        <text class="f cell-txt" x="100" y="25" fill="#ffb157">◐ 範圍一致</text>
+      </g>
+
+      <!-- Col 2: 高階主管連結 ◐ 範圍一致 -->
+      <g transform="translate(400, 15)">
+        <rect width="170" height="55" rx="4" fill="#ffb157" opacity="0.1"/>
+        <path d="M 35 27 A 7 7 0 0 0 35 13 Z" fill="#ffb157"/>
+        <circle cx="35" cy="20" r="7" fill="none" stroke="#ffb157" stroke-width="2"/>
+        <text class="f cell-txt" x="100" y="25" fill="#ffb157">◐ 範圍一致</text>
+      </g>
+
+      <!-- Col 3: 指標細節 ○ 不一致 -->
+      <g transform="translate(580, 15)">
+        <rect width="170" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="45" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="105" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+
+      <!-- Col 4: 實施時點描述 ● 一致 -->
+      <g transform="translate(760, 15)">
+        <rect width="160" height="55" rx="4" fill="#5fd694" opacity="0.12"/>
+        <circle cx="40" cy="27" r="7" fill="#5fd694"/>
+        <text class="f cell-txt" x="98" y="32" fill="#5fd694">● 一致</text>
+      </g>
+    </g>
+
+    <!-- Row 3: 強盛新 (○, ○, ○, ○) -->
+    <g transform="translate(0, 190)">
+      <rect width="920" height="85" rx="6" fill="#0c1730" stroke="#ff8f8f" stroke-opacity=".3"/>
+      <rect width="920" height="85" rx="6" fill="#ff8f8f" opacity="0.04"/>
+
+      <!-- Company -->
+      <text class="f cname" x="20" y="40">強盛新</text>
+      <text class="f cid" x="20" y="60"> (1463)</text>
+
+      <!-- Col 1: ○ 不一致 -->
+      <g transform="translate(220, 15)">
+        <rect width="170" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="45" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="105" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+
+      <!-- Col 2: ○ 不一致 -->
+      <g transform="translate(400, 15)">
+        <rect width="170" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="45" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="105" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+
+      <!-- Col 3: ○ 不一致 -->
+      <g transform="translate(580, 15)">
+        <rect width="170" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="45" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="105" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+
+      <!-- Col 4: ○ 不一致 -->
+      <g transform="translate(760, 15)">
+        <rect width="160" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="40" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="98" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+    </g>
+
+    <!-- Row 4: 嘉里大榮物流 (○, ◐, ○, ○) -->
+    <g transform="translate(0, 285)">
+      <rect width="920" height="85" rx="6" fill="#0c1730" stroke="#ffb157" stroke-opacity=".3"/>
+
+      <!-- Company -->
+      <text class="f cname" x="20" y="40">嘉里大榮物流</text>
+      <text class="f cid" x="20" y="60"> (2608)</text>
+
+      <!-- Col 1: ○ 不一致 -->
+      <g transform="translate(220, 15)">
+        <rect width="170" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="45" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="105" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+
+      <!-- Col 2: ◐ 範圍一致 -->
+      <g transform="translate(400, 15)">
+        <rect width="170" height="55" rx="4" fill="#ffb157" opacity="0.1"/>
+        <path d="M 35 27 A 7 7 0 0 0 35 13 Z" fill="#ffb157"/>
+        <circle cx="35" cy="20" r="7" fill="none" stroke="#ffb157" stroke-width="2"/>
+        <text class="f cell-txt" x="100" y="25" fill="#ffb157">◐ 範圍一致</text>
+      </g>
+
+      <!-- Col 3: ○ 不一致 -->
+      <g transform="translate(580, 15)">
+        <rect width="170" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="45" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="105" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+
+      <!-- Col 4: ○ 不一致 -->
+      <g transform="translate(760, 15)">
+        <rect width="160" height="55" rx="4" fill="#ff8f8f" opacity="0.1"/>
+        <circle cx="40" cy="27" r="6" fill="none" stroke="#ff8f8f" stroke-width="2"/>
+        <text class="f cell-txt" x="98" y="32" fill="#ff8f8f">○ 不一致</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom Strip for Clawback & Long-term incentive -->
+  <g transform="translate(40, 540)">
+    <rect width="920" height="85" rx="8" fill="#1a1206" stroke="#ff8f8f" stroke-opacity=".7"/>
+    <text class="f strip-title" x="20" y="28">🚨 全面缺席警示（治理實質落差）</text>
+    <text class="f strip-txt" x="20" y="58">Clawback（薪酬索回）政策：<tspan fill="#ff8f8f">4 家全部未建置</tspan>　｜　長期股權激勵連結 ESG：<tspan fill="#ff8f8f">4 家全部未明示</tspan></text>
+  </g>
+</svg>

@@ -4,6 +4,107 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-09-13 — Executive compensation / ESG research page: move to a dedicated component
+
+The chart-led rewrite recorded on 2026-09-12 left the page on the shared
+`src/pages/research/[slug].astro` template, and a review of the rendered page
+found that the template itself had become the limiting factor.
+
+Three defects, all in the template rather than the content:
+
+- **A "no charts" placeholder on a page with four charts.** The template falls
+  back to a hardcoded 01/02/03 block ("Company disclosures / Course questions /
+  Author extension") whenever `visuals:` is empty. That field is unused across
+  all five research entries, so the page announced that it had no figures while
+  rendering four of them below.
+- **A duplicated scope paragraph, one copy in English.** A block gated on
+  `isEsgStudy` restated, in hardcoded English, the same sentence the `reflection:`
+  field renders in Chinese immediately below it. The 2026-09-12 rewrite removed
+  the repetitions living in the markdown body but could not reach this one.
+- **Two competing measures.** `.content` is capped at 72rem (1152px) while
+  `.research-detail p` is capped at 40rem (640px), so every chart card ran the
+  full width with its explanatory paragraph stopping at 55% of it, hugging the
+  left edge. All eight section headings were hardcoded English on a `lang: zh`
+  page, with no entry for them in `src/i18n/zh.ts`; the beta and Sugamo pages
+  share that problem.
+
+The page now follows the route already taken by the Sharpe and SinoPac briefs:
+`EsgCompensationStudy.astro` imports `esg-compensation-study.html?raw`, and
+`[slug].astro` routes the slug to it. The body is wrapped in a single
+`max-width: 52rem` article, matching `sharpe-ratio-demo.html`. Section headings
+are Chinese with 01-11 numbering, bracketed kickers stay English, and the page
+gains an index block and a compact metadata row. The markdown file keeps its
+frontmatter, which still feeds the research hub card, and its body is replaced by
+a comment pointing at the component - deliberately unlike the Sharpe entry, which
+still carries 166 lines of body that no longer render anywhere.
+
+Narrowing the measure then shrank the figures, which is the part worth recording.
+The four SVGs are authored on a 1000px viewBox with 12px as the smallest label.
+Inside the 52rem article they rendered at 800px, a scale of 0.8, putting those
+labels at 9.6px - below the 0.7rem (11.2px) floor the visual contract sets, where
+the previous 72rem layout had them at roughly 13.2px. The fix lets only the
+figures break out of the reading measure, to 66rem.
+
+That breakout then caused a regression only cross-width measurement caught. The
+article and its sections carry an inline `display:grid`, so their single column is
+auto-sized: a child wider than the measure stretches every sibling with it. The
+hero and all sections were pulled to 1056px and overflowed the 52rem box to the
+right, and the document scrolled horizontally by 8px at 1280 and 72px at 1152 and
+1024 - clipping the right-hand highlight cards at exactly the widths most laptops
+use. Pinning both tracks to `minmax(0, 1fr)` confines the overflow to the figures,
+which then centre as intended.
+
+Measured after the fix, via injected `getBoundingClientRect()` rather than pixel
+inspection:
+
+| viewport | clientWidth | overflow | article | figure | img |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1920 | 1905 | 0 | 832 | 1056 | 1022 |
+| 1440 | 1425 | 0 | 832 | 1056 | 1022 |
+| 1280 | 1265 | 0 | 832 | 1056 | 1022 |
+| 1152 | 1137 | 0 | 832 | 1056 | 1022 |
+| 1024 | 1009 | 0 | 832 | 992 | 958 |
+| 900 | 885 | 0 | 832 | 868 | 834 |
+| 800 | 785 | 0 | 753 | 768 | 734 |
+| 600 | 585 | 0 | 553 | 568 | 534 |
+| 480 | 485 | 0 | 453 | 468 | 434 |
+
+Two verification lessons came out of this, each of which cost a round. A
+full-page screenshot taken with `--window-size=1440,16000` renders every text
+pixel within one colour step of the background - it reads as a reveal animation
+that never fired, but the DOM shows `is-visible` correctly applied. Heights beyond
+roughly 4000px cannot be trusted, and the page has to be captured in offset
+segments and stitched. And a viewport check written against a single width proves
+very little: this defect was invisible at 1440 and at 820, and the one width the
+acceptance criteria named, 375px, cannot be reached by `--window-size` at all,
+which floors `clientWidth` at 485 on Linux Chrome.
+
+The SVGs themselves were not modified; the scale correction verified in `a30de9e`
+still stands.
+
+## 2026-09-11 — WeatherCard Azure scale-to-zero cold-start recovery & unreleased candidate verification
+
+An incident was reported on the production homepage where all four regions fell into the offline demo fallback (`data-wc-phase="offline"`). Independent browser reproduction confirmed that during cold starts on Azure Container Apps (documented as scale-to-zero), backend spin-up times exceeded the client's fixed 8000ms timeout per town request, causing `loadHomepageWeather` to return `regions: []` and permanently select offline fallback without recovery. Direct backend health checks confirmed HTTP 200 OK with valid CORS headers, and warm reloads cleanly transitioned to Live.
+
+To resolve cold-start false-offline errors without increasing cloud infrastructure costs:
+- Added `loadHomepageWeatherWithRecovery` in `src/lib/tripWeather.ts` implementing a single bounded recovery attempt when the initial attempt suffers a total failure (0 regions returned).
+- Attempt 1 maintains standard 8000ms timeout. If all 4 regions fail, the client triggers an `onRetry` callback transitioning `WeatherCard.astro` phase to `waking` and updating status copy to localized waking messages (`服務喚醒中…` / `Waking service…` / `サービス起動中…`).
+- Attempt 2 runs after a short delay with a bounded timeout capped at 20 seconds. If attempt 2 succeeds, phase transitions to `live` (or `partial`). If attempt 2 also fails, phase transitions to `offline`.
+- Strict control bounds: bounded to 2 attempts max, no polling, no infinite retry, no exponential backoff loops, and no tab-click refetching (tab switching remains local DOM repaints). Partial successes immediately render partial live without retrying failed regions.
+- Diagnostic data: `result` and card element record attempt counts (`data-wc-attempts`) and per-attempt failure breakdown without swallowing errors or producing console error noise during normal flow.
+
+Verification results on worktree `task-20260911-portfolio-weather-cold-start-recovery`:
+- Node unit tests: 17/17 passed (3 suites), covering first-all-fail recovery success, both-all-fail recovery failure, partial-no-retry, attempt/timeout bounding, external abort, and tab-click no-refetch.
+- Production build: 17 static pages built cleanly in 3.57s.
+- Astro check: 0 errors, 0 warnings (68 hints).
+- Git diff check: Clean formatting and zero trailing whitespace issues.
+- Real browser CDP self-checks on production preview:
+  - Scenario 1 (Attempt 1 fail 504 -> Attempt 2 mock 200 success): phase transitioned `loading` -> `waking` -> `live`, `data-wc-attempts="2"`, no-refetch PASS, console errors 0. Evidence saved to `recovery-success-live.png`, `recovery-success-console.json`, `recovery-success-network.json` (explicitly tagged as injected mock evidence).
+  - Scenario 2 (Both attempt 1 and 2 fail 504 -> offline fallback): phase transitioned `loading` -> `waking` -> `offline`, `data-wc-attempts="2"`, all 4 demo tabs switchable, no-refetch PASS, console errors 0. Evidence saved to `recovery-failure-offline-[n/c/s/e].png`, `recovery-failure-console.json`, `recovery-failure-network.json`.
+- Scope control: Modified files strictly restricted to 4 allowed files (`src/components/WeatherCard.astro`, `src/lib/tripWeather.ts`, `src/lib/tripWeather.test.ts`, `document/developer_log.md`).
+
+This candidate is prepared for independent acceptance (`READY_FOR_INDEPENDENT_ACCEPTANCE`). As of this entry, changes remain unpushed, unmerged, and undeployed.
+
 ## 2026-09-10 — WeatherCard Live main integration & pre-release verification
 
 The approved WeatherCard Live feature has been cleanly integrated onto the latest `origin/main` (base `bba75cd5f0775babaca71346bcea114f6a024404`) in an isolated worktree `task-20260910-portfolio-weather-live-integration`.
@@ -345,3 +446,102 @@ All changes were verified with `npm run astro -- check` (0 errors,
 confirmed against a live `astro preview` served over the Tailscale network
 so the site owner could review the rendered page and photo captions
 directly before merge. Branch: `task/20260803-portfolio-activities-real-content`.
+
+## 2026-09-12 — Executive compensation / ESG research page: chart-led rewrite
+
+`/research/executive-compensation-esg-disclosure/` was the only one of the five
+research pages carrying no figures at all (SinoPac has four, the Beta brief two,
+the Sharpe brief one), and it was also the page that said the least. Five of its
+seven blocks described the report's scope and publication boundary rather than
+its findings, the same "teacher requirements vs author extension" statement was
+repeated three times, and the single findings block contained no numbers — a
+reader finished the page knowing a comparison had been made but not what it
+found. Every quotable fact in the underlying coursework — the 15% baseline, the
+75% outlier, the identical weight tables, the 0-of-4 clawback result — was
+absent.
+
+The rewrite inverted the page order from "boundary → boundary → summary" to
+"conclusion → evidence → boundary". Frontmatter `summary` became a thesis
+sentence, `highlights` went from two prose cards to six numeric ones, `findings`
+from two contentless sentences to four number-bearing claims, and the markdown
+body was restructured into eight sections interleaving four new hand-drawn SVGs
+with their readings, with the merged scope/publication statement moved last.
+Source page numbers moved into a collapsed `<details>` block.
+
+The four charts follow the existing site convention rather than introducing a new
+one: hand-authored SVG in `public/research/`, embedded from the markdown body as
+`<img src="/research/x.svg" loading="lazy">`, palette taken from the `sinopac-*`
+figures, no chart library, no dedicated Astro component, and no use of the
+`visuals:` frontmatter field (declared in `content.config.ts` but unused by all
+five research entries). Fonts are referenced, never embedded — `beta-*.svg`
+inlines base64 woff2 and costs 80KB per file as a result; these four stay between
+7KB and 11KB.
+
+Two constraints in the original task spec turned out to be wrong, and the
+implementation was right to deviate from them. Acceptance initially failed the
+work on both before they were overruled:
+
+- The spec listed an eight-colour palette that omitted `#1a1206`. That colour is
+  the dark fill behind the amber warning callout in `sinopac-three-lines.svg`,
+  and reusing it for the charts' caveat boxes was correct; the palette is now
+  nine colours.
+- The spec demanded `font-family` be exactly `"IBM Plex Sans","Huninn",sans-serif`.
+  An SVG loaded through `<img>` is an isolated document and cannot see the
+  webfonts the page loads in its `<head>`, so that list resolves to nothing and
+  falls through to a system default. The implementation's addition of
+  `"PingFang TC","Noto Sans TC","Microsoft JhengHei"` is what actually produces
+  correct Traditional Chinese across macOS, Linux and Windows, and was kept.
+
+Four defects were found only by rasterising the SVGs and looking at them. Neither
+the coding layer's self-check nor the first acceptance pass rendered anything;
+both checked file text — grepping colour codes, grepping for base64, diffing
+frontmatter, running the build — and all of those passed while the figures were
+visibly broken:
+
+- The weight-ladder chart's Band A annotation started at `x="675"` with a string
+  far longer than the remaining 325px, so "外部評比 25%" was clipped outside the
+  viewBox.
+- Three labels in the 15% breakdown chart were drawn directly over the amber
+  diagonal hatch pattern, with the hatch lines running through the glyphs. Fixed
+  by placing a solid `#081226` backing rect behind each label and dropping the
+  off-palette `#f4fbff` text colour.
+- The template-overlap chart's centre column used fixed-width label pills, so
+  longer Chinese strings overflowed and overprinted each other; the worst row,
+  「永續責任採購（次層・高階經理人）」, was unreadable.
+- The 15% breakdown chart declared a 17px-per-1% scale in its own comment but
+  drew the two single-block columns at 267px for 15% and 312px for 20%, making
+  20% read as 1.17x of 15% instead of 1.33x. This one survived an extra round:
+  the stacked column had been measured (68/68/34/85 — correctly proportional),
+  that result was generalised to the whole figure, and the follow-up task card
+  then explicitly forbade touching the block heights, actively protecting the
+  bug. It was caught and fixed afterwards by measuring the rendered output
+  instead of the source, restoring 255px/340px and bottom-aligning all three
+  columns on a shared baseline so the heights are comparable at all.
+
+One wording change was unrelated to rendering: a caption asserted that the two
+companies with identical weight tables had "採用了相同的第三方諮詢機構或揭露範本".
+The shared-consultant claim appears in neither the source coursework nor the
+spec, and the page names two real listed companies, so the unsupported half was
+removed and the caption now says only that they appear to have referenced a
+common disclosure template rather than customising by industry.
+
+The standing practice that came out of this is that visual output cannot be
+verified by reading its source. Headless Chrome is available on the build host,
+and wrapping each SVG in a one-line HTML shell is enough:
+
+```
+google-chrome --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+  --force-device-scale-factor=1 --window-size=1000,1400 \
+  --screenshot=out.png page.html
+```
+
+Render-and-inspect is now a required acceptance criterion for any figure work on
+this site, not something left to the implementer's discretion.
+
+Verified with `npm run build` (17 pages, 0 errors) and headless-Chrome renders of
+all four figures after each round. Branch `task/20260901-esg-page-visualization`,
+eight commits from `80fe139` to `a30de9e`, acceptance `approved`. The branch is
+deliberately held unmerged: `style/visual-hardening-test-20260901` (Phase 1
+visual hardening, tip `8ea8f93`) has not landed on `main` yet either, and the
+intent is to merge that first so this page can be rebased onto the new styling
+rules once rather than reworked twice.
