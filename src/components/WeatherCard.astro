@@ -286,7 +286,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 </article>
 
 <script>
-	import { loadHomepageWeatherRegionWithRecovery, type TripWeatherRegion, type WeatherLocale } from "../lib/tripWeather";
+	import { createHomepageWeatherTabRequestTracker, loadHomepageWeatherRegionWithRecovery, type TripWeatherRegion, type WeatherLocale } from "../lib/tripWeather";
 
 	const card = document.querySelector<HTMLElement>("[data-weather-card]");
 	if (card) {
@@ -351,7 +351,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 		const tabs = Array.from(card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]"));
 		const defaultKey = tabs[0]?.dataset.wcTab || "N";
 		let selectedKey = defaultKey;
-		let requestSerial = 0;
+		const requestTracker = createHomepageWeatherTabRequestTracker();
 		const requestState = q<HTMLElement>("[data-wc-request-state]");
 		const retryButton = q<HTMLButtonElement>("[data-wc-retry]");
 		const updateSelectedTab = (): void => {
@@ -411,7 +411,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 
 		const loadTab = async (key: string): Promise<void> => {
 			if (tabPhase.get(key) === "loading" || tabPhase.get(key) === "ready") return;
-			const requestId = ++requestSerial;
+			const requestToken = requestTracker.begin(key);
 			tabPhase.set(key, "loading");
 			if (selectedKey === key) {
 				card.dataset.wcPhase = "loading";
@@ -431,7 +431,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 				if (!region) throw new Error(result.failures[0]?.error || "Weather unavailable");
 				byKey.set(key, region);
 				tabPhase.set(key, "ready");
-				if (selectedKey === key && requestId <= requestSerial) {
+				if (requestTracker.canPaint(selectedKey, key, requestToken)) {
 					paint(key);
 					hideRequestState();
 					card.dataset.wcPhase = "live";

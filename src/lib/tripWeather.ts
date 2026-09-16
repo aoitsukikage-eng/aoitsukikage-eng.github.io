@@ -588,6 +588,24 @@ export async function loadHomepageWeatherRegionWithRecovery(
 export type HomepageWeatherTabState = "idle" | "loading" | "ready" | "error";
 
 /**
+ * Tracks request ownership separately for each homepage weather tab. Starting a
+ * request for one tab must not invalidate an in-flight request for another.
+ */
+export function createHomepageWeatherTabRequestTracker() {
+  const tokens = new Map<string, number>();
+
+  return {
+    begin: (key: string): number => {
+      const token = (tokens.get(key) ?? 0) + 1;
+      tokens.set(key, token);
+      return token;
+    },
+    canPaint: (selectedKey: string, key: string, token: number): boolean =>
+      selectedKey === key && tokens.get(key) === token,
+  };
+}
+
+/**
  * Keeps successful per-tab homepage weather data in page-session memory.
  * Concurrent callers for the same tab share one request; failed requests are
  * deliberately not cached so a user-triggered retry only fetches that tab.

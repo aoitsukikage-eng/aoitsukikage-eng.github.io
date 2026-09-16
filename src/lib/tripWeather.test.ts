@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
   DEFAULT_TRIP_WEATHER_API_BASE,
+  createHomepageWeatherTabRequestTracker,
   createHomepageWeatherTabLoader,
   FIXED_TOWNS,
   formatTownDisplayName,
@@ -544,6 +545,38 @@ describe("loadHomepageWeatherWithRecovery", () => {
 });
 
 describe("lazy homepage weather tabs", () => {
+  it("lets a reselected tab finish loading without another tab overwriting it", async () => {
+    const requests = createHomepageWeatherTabRequestTracker();
+    const northRequest = requests.begin("N"); // A starts loading.
+    const centralRequest = requests.begin("C"); // B starts loading.
+    let selectedKey = "N"; // The user reselects A before either response resolves.
+    let visibleContent = "loading";
+    let ariaBusy = true;
+    let resolveNorth!: () => void;
+    let resolveCentral!: () => void;
+    const northResponse = new Promise<void>((resolve) => { resolveNorth = resolve; });
+    const centralResponse = new Promise<void>((resolve) => { resolveCentral = resolve; });
+
+    const applyResponse = (key: string, token: number, content: string) => {
+      if (!requests.canPaint(selectedKey, key, token)) return;
+      visibleContent = content;
+      ariaBusy = false;
+    };
+    const northLoad = northResponse.then(() => applyResponse("N", northRequest, "North forecast"));
+    const centralLoad = centralResponse.then(() => applyResponse("C", centralRequest, "Central forecast"));
+
+    resolveNorth();
+    await northLoad;
+
+    assert.equal(visibleContent, "North forecast");
+    assert.equal(ariaBusy, false);
+
+    // B may finish and cache independently, but it cannot replace selected A.
+    resolveCentral();
+    await centralLoad;
+    assert.equal(visibleContent, "North forecast");
+  });
+
   it("loads only the selected North region on initial hydration", async () => {
     const requestedTowns: string[] = [];
     const mockFetch: typeof fetch = async (input) => {
