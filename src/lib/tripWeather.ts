@@ -250,10 +250,8 @@ export function formatTownDisplayName(
   return config.i18n[locale]?.defaultName ?? config.i18n.zh.defaultName;
 }
 
-/**
- * Loads homepage weather for the 4 fixed regions concurrently.
- */
-export async function loadHomepageWeather(
+async function loadHomepageWeatherForTowns(
+  towns: readonly FixedTownConfig[],
   options: LoadHomepageWeatherOptions = {}
 ): Promise<TripWeatherResult> {
   const locale: WeatherLocale = options.locale || "zh";
@@ -268,7 +266,7 @@ export async function loadHomepageWeather(
 
   const nowIso = new Date().toISOString();
 
-  const fetchPromises = FIXED_TOWNS.map(
+  const fetchPromises = towns.map(
     async (townConfig): Promise<TripWeatherRegion> => {
       const url = `${apiBase}/api/forecast?town=${encodeURIComponent(
         townConfig.townCode
@@ -391,7 +389,7 @@ export async function loadHomepageWeather(
   const failures: TripWeatherFailure[] = [];
 
   results.forEach((res, index) => {
-    const townConfig = FIXED_TOWNS[index];
+    const townConfig = towns[index];
     if (res.status === "fulfilled") {
       regions.push(res.value);
     } else {
@@ -409,6 +407,32 @@ export async function loadHomepageWeather(
     isPartial: failures.length > 0,
     fetchedAt: nowIso,
   };
+}
+
+/**
+ * Loads homepage weather for the 4 fixed regions concurrently.
+ * Kept for consumers that need the complete homepage weather set.
+ */
+export async function loadHomepageWeather(
+  options: LoadHomepageWeatherOptions = {}
+): Promise<TripWeatherResult> {
+  return loadHomepageWeatherForTowns(FIXED_TOWNS, options);
+}
+
+/**
+ * Loads one fixed homepage region. This is intentionally separate from the
+ * all-region helper so the WeatherCard can defer network work until a tab is
+ * selected.
+ */
+export async function loadHomepageWeatherRegion(
+  key: FixedTownConfig["key"],
+  options: LoadHomepageWeatherOptions = {}
+): Promise<TripWeatherResult> {
+  const town = FIXED_TOWNS.find((config) => config.key === key);
+  if (!town) {
+    throw new Error(`Unknown homepage weather region: ${key}`);
+  }
+  return loadHomepageWeatherForTowns([town], options);
 }
 
 export interface TripWeatherRecoveryResult extends TripWeatherResult {
@@ -502,5 +526,111 @@ export async function loadHomepageWeatherWithRecovery(
     ...result2,
     attempts: 2,
     attemptFailures,
+  };
+}
+
+/**
+ * Loads one homepage region with the same bounded cold-start recovery used by
+ * the initial homepage request. A failed lazy tab remains independently
+ * retryable by its caller.
+ */
+export async function loadHomepageWeatherRegionWithRecovery(
+  key: FixedTownConfig["key"],
+  options: LoadHomepageWeatherWithRecoveryOptions = {}
+): Promise<TripWeatherRecoveryResult> {
+  const attemptFailures: TripWeatherFailure[][] = [];
+  const initialTimeoutMs = options.timeoutMs ?? 8000;
+  const retryTimeoutMs = Math.min(20000, options.retryTimeoutMs ?? 15000);
+  const retryDelayMs = options.retryDelayMs ?? 1000;
+
+  const result1 = await loadHomepageWeatherRegion(key, {
+    ...options,
+    timeoutMs: initialTimeoutMs,
+  });
+  attemptFailures.push(result1.failures);
+
+  if (options.signal?.aborted || result1.regions.length > 0) {
+    return { ...result1, attempts: 1, attemptFailures };
+  }
+
+  try {
+    options.onRetry?.(2);
+  } catch {
+    // A presentation callback must not prevent bounded request recovery.
+  }
+
+  if (retryDelayMs > 0) {
+    await new Promise<void>((resolve) => {
+      if (options.signal?.aborted) {
+        resolve();
+        return;
+      }
+      const timer = setTimeout(resolve, retryDelayMs);
+      options.signal?.addEventListener("abort", () => {
+        clearTimeout(timer);
+        resolve();
+      }, { once: true });
+    });
+  }
+
+  if (options.signal?.aborted) {
+    return { ...result1, attempts: 1, attemptFailures };
+  }
+
+  const result2 = await loadHomepageWeatherRegion(key, {
+    ...options,
+    timeoutMs: retryTimeoutMs,
+  });
+  attemptFailures.push(result2.failures);
+  return { ...result2, attempts: 2, attemptFailures };
+}
+
+export type HomepageWeatherTabState = "idle" | "loading" | "ready" | "error";
+
+/**
+ * Keeps successful per-tab homepage weather data in page-session memory.
+ * Concurrent callers for the same tab share one request; failed requests are
+ * deliberately not cached so a user-triggered retry only fetches that tab.
+ */
+export function createHomepageWeatherTabLoader(
+  options: LoadHomepageWeatherWithRecoveryOptions = {}
+) {
+  const cached = new Map<FixedTownConfig["key"], TripWeatherRegion>();
+  const states = new Map<FixedTownConfig["key"], HomepageWeatherTabState>();
+  const pending = new Map<FixedTownConfig["key"], Promise<TripWeatherRegion>>();
+
+  const load = (key: FixedTownConfig["key"]): Promise<TripWeatherRegion> => {
+    const cachedRegion = cached.get(key);
+    if (cachedRegion) return Promise.resolve(cachedRegion);
+    const existing = pending.get(key);
+    if (existing) return existing;
+
+    states.set(key, "loading");
+    const request = loadHomepageWeatherRegionWithRecovery(key, options)
+      .then((result) => {
+        const region = result.regions[0];
+        if (!region) throw new Error(result.failures[0]?.error || "Weather unavailable");
+        cached.set(key, region);
+        states.set(key, "ready");
+        return region;
+      })
+      .catch((error: unknown) => {
+        states.set(key, "error");
+        throw error;
+      })
+      .finally(() => pending.delete(key));
+    pending.set(key, request);
+    return request;
+  };
+
+  return {
+    load,
+    retry: (key: FixedTownConfig["key"]): Promise<TripWeatherRegion> => {
+      cached.delete(key);
+      pending.delete(key);
+      states.set(key, "idle");
+      return load(key);
+    },
+    getState: (key: FixedTownConfig["key"]): HomepageWeatherTabState => states.get(key) ?? "idle",
   };
 }

@@ -96,10 +96,10 @@ const href = suppliedHref ?? (locale === "zh" ? defaultHref : `${defaultHref}?la
 
 const t =
 	locale === "en"
-		? { pop: "Rain", uv: "UV", aqi: "AQI", cta: "View full forecast", loading: "Loading weather…" }
+		? { pop: "Rain", uv: "UV", aqi: "AQI", cta: "View full forecast", loading: "Loading weather…", retry: "Retry" }
 		: locale === "ja"
-			? { pop: "降水", uv: "UV", aqi: "AQI", cta: "詳細な天気を見る", loading: "天気を読み込み中…" }
-			: { pop: "降雨", uv: "紫外線", aqi: "空品", cta: "查看完整天氣預覽", loading: "正在載入天氣…" };
+			? { pop: "降水", uv: "UV", aqi: "AQI", cta: "詳細な天気を見る", loading: "天気を読み込み中…", retry: "再試行" }
+			: { pop: "降雨", uv: "紫外線", aqi: "空品", cta: "查看完整天氣預覽", loading: "正在載入天氣…", retry: "重試" };
 
 const uvBands = [
 	{ max: 2, color: "#5fd694", label: "低量級" },
@@ -151,6 +151,11 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 				</button>
 			))
 		}
+	</div>
+
+	<div class="weather-card__request-state" data-wc-request-state hidden role="status">
+		<span data-wc-request-message></span>
+		<button class="weather-card__retry" data-wc-retry hidden type="button">{t.retry}</button>
 	</div>
 
 	<div class="weather-card__alert" data-wc-alert hidden role="alert">
@@ -281,7 +286,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 </article>
 
 <script>
-	import { loadHomepageWeatherWithRecovery, type TripWeatherRegion, type WeatherLocale } from "../lib/tripWeather";
+	import { loadHomepageWeatherRegionWithRecovery, type TripWeatherRegion, type WeatherLocale } from "../lib/tripWeather";
 
 	const card = document.querySelector<HTMLElement>("[data-weather-card]");
 	if (card) {
@@ -341,35 +346,27 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 			}
 		})();
 		const byKey = new Map<string, TripWeatherRegion>();
-		const enableAvailableTabs = (): void => {
-			card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => {
-				const available = byKey.has(tab.dataset.wcTab || "");
-				tab.disabled = !available;
-				tab.setAttribute("aria-disabled", String(!available));
-			});
+		type TabPhase = "idle" | "loading" | "ready" | "error";
+		const tabPhase = new Map<string, TabPhase>();
+		const tabs = Array.from(card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]"));
+		const defaultKey = tabs[0]?.dataset.wcTab || "N";
+		let selectedKey = defaultKey;
+		let requestSerial = 0;
+		const requestState = q<HTMLElement>("[data-wc-request-state]");
+		const retryButton = q<HTMLButtonElement>("[data-wc-retry]");
+		const updateSelectedTab = (): void => {
+			tabs.forEach((tab) => tab.setAttribute("aria-selected", String(tab.dataset.wcTab === selectedKey)));
 		};
-		const useOfflineFallback = (): void => {
-			fallbackRegions.forEach((region) => byKey.set(region.key, {
-				...region,
-				townCode: "",
-				weatherCode: null,
-				uvLevel: null,
-				uvSource: null,
-				aqiLevel: null,
-				aqiSource: copy.demo,
-				isDemoAqi: true,
-				warnings: [],
-				sunriseSunset: null,
-				moon: null,
-				fetchedAt: "",
-			}));
-			enableAvailableTabs();
-			if (fallbackRegions[0]) paint(fallbackRegions[0].key);
-			card.dataset.state = "offline";
-			card.dataset.wcPhase = "offline";
-			card.setAttribute("aria-busy", "false");
-			setText("[data-wc-status]", copy.offline);
+		const showRequestState = (message: string, retry = false): void => {
+			if (requestState) requestState.hidden = false;
+			setText("[data-wc-request-message]", message);
+			if (retryButton) retryButton.hidden = !retry;
 		};
+		const hideRequestState = (): void => {
+			if (requestState) requestState.hidden = true;
+			if (retryButton) retryButton.hidden = true;
+		};
+		const tabLabel = (key: string): string => tabs.find((tab) => tab.dataset.wcTab === key)?.textContent?.trim() || key;
 		const paint = (key: string): void => {
 			const region = byKey.get(key);
 			if (!region) return;
@@ -409,26 +406,76 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 			setText("[data-wc-moon-value]", state === "night" && illumination !== null ? `${illumination}%` : "—");
 			setText("[data-wc-moon-label]", state === "night" && region.moon?.phase ? region.moon.phase : "—");
 			card.querySelectorAll<HTMLElement>("[data-wc-icon]").forEach((node) => node.toggleAttribute("data-hidden", node.dataset.wcIcon !== region.icon));
-			card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => tab.setAttribute("aria-selected", tab.dataset.wcTab === key ? "true" : "false"));
+			updateSelectedTab();
 		};
 
-		card.querySelectorAll<HTMLButtonElement>("[data-wc-tab]").forEach((tab) => tab.addEventListener("click", () => { const key = tab.dataset.wcTab; if (key && !tab.disabled) paint(key); }));
-		void loadHomepageWeatherWithRecovery({
-			locale,
-			onRetry: () => {
-				card.dataset.wcPhase = "waking";
-				setText("[data-wc-status]", copy.waking);
-			},
-		}).then((result) => {
-			card.dataset.wcAttempts = String(result.attempts);
-			if (result.regions.length === 0) { useOfflineFallback(); return; }
-			result.regions.forEach((region) => byKey.set(region.key, region));
-			enableAvailableTabs();
-			paint(result.regions[0].key);
-			card.dataset.wcPhase = result.isPartial ? "partial" : "live";
-			card.setAttribute("aria-busy", "false");
-			setText("[data-wc-status]", `${result.isPartial ? copy.partial : copy.live} · ${formatTime(result.fetchedAt)}`);
-		}).catch(() => { useOfflineFallback(); });
+		const loadTab = async (key: string): Promise<void> => {
+			if (tabPhase.get(key) === "loading" || tabPhase.get(key) === "ready") return;
+			const requestId = ++requestSerial;
+			tabPhase.set(key, "loading");
+			if (selectedKey === key) {
+				card.dataset.wcPhase = "loading";
+				card.setAttribute("aria-busy", "true");
+				setText("[data-wc-status]", copy.loading);
+				showRequestState(`${copy.loading} ${tabLabel(key)}`);
+			}
+			try {
+				const result = await loadHomepageWeatherRegionWithRecovery(key as "N" | "C" | "S" | "E", {
+					locale,
+					onRetry: () => {
+						if (selectedKey === key) setText("[data-wc-status]", copy.waking);
+					},
+				});
+				card.dataset.wcAttempts = String(result.attempts);
+				const region = result.regions[0];
+				if (!region) throw new Error(result.failures[0]?.error || "Weather unavailable");
+				byKey.set(key, region);
+				tabPhase.set(key, "ready");
+				if (selectedKey === key && requestId <= requestSerial) {
+					paint(key);
+					hideRequestState();
+					card.dataset.wcPhase = "live";
+					card.setAttribute("aria-busy", "false");
+					setText("[data-wc-status]", `${copy.live} · ${formatTime(region.fetchedAt)}`);
+				}
+			} catch {
+				tabPhase.set(key, "error");
+				if (selectedKey === key) {
+					card.dataset.wcPhase = "error";
+					card.setAttribute("aria-busy", "false");
+					setText("[data-wc-status]", copy.unavailable);
+					showRequestState(`${tabLabel(key)} · ${copy.unavailable}`, true);
+				}
+			}
+		};
+		const selectTab = (key: string): void => {
+			selectedKey = key;
+			updateSelectedTab();
+			const phase = tabPhase.get(key) ?? "idle";
+			if (phase === "ready") {
+				paint(key);
+				hideRequestState();
+				card.setAttribute("aria-busy", "false");
+				return;
+			}
+			if (phase === "loading") {
+				card.setAttribute("aria-busy", "true");
+				setText("[data-wc-status]", copy.loading);
+				showRequestState(`${copy.loading} ${tabLabel(key)}`);
+				return;
+			}
+			if (phase === "error") showRequestState(`${tabLabel(key)} · ${copy.unavailable}`, true);
+			void loadTab(key);
+		};
+		tabs.forEach((tab) => tab.addEventListener("click", () => {
+			const key = tab.dataset.wcTab;
+			if (key) selectTab(key);
+		}));
+		retryButton?.addEventListener("click", () => {
+			tabPhase.set(selectedKey, "idle");
+			void loadTab(selectedKey);
+		});
+		void loadTab(defaultKey);
 	}
 </script>
 
@@ -626,6 +673,30 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 	.weather-card__tab:disabled {
 		cursor: not-allowed;
 		opacity: 0.42;
+	}
+
+	.weather-card__request-state {
+		align-items: center;
+		background: var(--wc-panel);
+		border: 1px solid var(--wc-panel-border);
+		border-radius: 0.7rem;
+		color: var(--wc-sec);
+		display: flex;
+		font-size: 0.72rem;
+		gap: 0.7rem;
+		justify-content: space-between;
+		padding: 0.55rem 0.7rem;
+	}
+
+	.weather-card__retry {
+		background: transparent;
+		border: 1px solid var(--wc-accent);
+		border-radius: var(--radius-pill, 999px);
+		color: var(--wc-accent);
+		cursor: pointer;
+		font: inherit;
+		font-weight: 600;
+		padding: 0.22rem 0.55rem;
 	}
 
 	.weather-card__alert {
