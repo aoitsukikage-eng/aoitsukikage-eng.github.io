@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   DEFAULT_TRIP_WEATHER_API_BASE,
   createHomepageWeatherTabRequestTracker,
@@ -545,7 +546,27 @@ describe("loadHomepageWeatherWithRecovery", () => {
 });
 
 describe("lazy homepage weather tabs", () => {
-  it("lets a reselected tab finish loading without another tab overwriting it", async () => {
+	it("renders localized loading copy with the selected tab label", () => {
+		const weatherCard = readFileSync(
+			new URL("../components/WeatherCard.astro", import.meta.url),
+			"utf8"
+		);
+		const loadingCopy = {
+			zh: "正在載入天氣…",
+			en: "Loading weather…",
+			ja: "天気を読み込み中…",
+		};
+
+		for (const [locale, copy] of Object.entries(loadingCopy)) {
+			assert.match(weatherCard, new RegExp(`${locale}: \\{[^}]*loading: "${copy}"`));
+			const requestMessage = `${copy} 北部`;
+			assert.ok(requestMessage.includes("北部"));
+			assert.ok(!requestMessage.includes("undefined"));
+		}
+		assert.match(weatherCard, /showRequestState\(`\$\{copy\.loading\} \$\{tabLabel\(key\)\}`\)/);
+	});
+
+	it("lets a reselected tab finish loading without another tab overwriting it", async () => {
     const requests = createHomepageWeatherTabRequestTracker();
     const northRequest = requests.begin("N"); // A starts loading.
     const centralRequest = requests.begin("C"); // B starts loading.
