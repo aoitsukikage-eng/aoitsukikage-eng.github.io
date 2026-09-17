@@ -3,11 +3,15 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
   DEFAULT_TRIP_WEATHER_API_BASE,
+  createHomepageWeatherTabRequestTracker,
+  createHomepageWeatherTabLoader,
   FIXED_TOWNS,
   formatTownDisplayName,
   getIconForWeather,
   getTaipeiTodayString,
   loadHomepageWeather,
+  loadHomepageWeatherRegion,
+  loadHomepageWeatherRegionWithRecovery,
   loadHomepageWeatherWithRecovery,
   normalizeApiBase,
 } from "./tripWeather.ts";
@@ -537,5 +541,112 @@ describe("loadHomepageWeatherWithRecovery", () => {
     let fetchCount = 0;
     const mockFetch = () => { fetchCount++; return Promise.reject(new Error("No fetch expected")); };
     assert.equal(fetchCount, 0);
+  });
+});
+
+describe("lazy homepage weather tabs", () => {
+  it("lets a reselected tab finish loading without another tab overwriting it", async () => {
+    const requests = createHomepageWeatherTabRequestTracker();
+    const northRequest = requests.begin("N"); // A starts loading.
+    const centralRequest = requests.begin("C"); // B starts loading.
+    let selectedKey = "N"; // The user reselects A before either response resolves.
+    let visibleContent = "loading";
+    let ariaBusy = true;
+    let resolveNorth!: () => void;
+    let resolveCentral!: () => void;
+    const northResponse = new Promise<void>((resolve) => { resolveNorth = resolve; });
+    const centralResponse = new Promise<void>((resolve) => { resolveCentral = resolve; });
+
+    const applyResponse = (key: string, token: number, content: string) => {
+      if (!requests.canPaint(selectedKey, key, token)) return;
+      visibleContent = content;
+      ariaBusy = false;
+    };
+    const northLoad = northResponse.then(() => applyResponse("N", northRequest, "North forecast"));
+    const centralLoad = centralResponse.then(() => applyResponse("C", centralRequest, "Central forecast"));
+
+    resolveNorth();
+    await northLoad;
+
+    assert.equal(visibleContent, "North forecast");
+    assert.equal(ariaBusy, false);
+
+    // B may finish and cache independently, but it cannot replace selected A.
+    resolveCentral();
+    await centralLoad;
+    assert.equal(visibleContent, "North forecast");
+  });
+
+  it("loads only the selected North region on initial hydration", async () => {
+    const requestedTowns: string[] = [];
+    const mockFetch: typeof fetch = async (input) => {
+      const town = new URL(String(input)).searchParams.get("town") || "";
+      requestedTowns.push(town);
+      return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+    };
+
+    const result = await loadHomepageWeatherRegion("N", { fetchFn: mockFetch, date: "2026-09-01" });
+    assert.equal(result.regions.length, 1);
+    assert.deepEqual(requestedTowns, ["cwa-63000020"]);
+  });
+
+  it("caches successful tabs and fetches each newly selected town once", async () => {
+    const requestedTowns: string[] = [];
+    const loader = createHomepageWeatherTabLoader({
+      date: "2026-09-01",
+      fetchFn: async (input) => {
+        const town = new URL(String(input)).searchParams.get("town") || "";
+        requestedTowns.push(town);
+        return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+      },
+    });
+
+    await loader.load("N");
+    await loader.load("C");
+    await loader.load("N");
+    assert.deepEqual(requestedTowns, ["cwa-63000020", "cwa-66000060"]);
+    assert.equal(loader.getState("N"), "ready");
+    assert.equal(loader.getState("C"), "ready");
+  });
+
+  it("keeps ready-tab cache when a failed lazy tab is retried", async () => {
+    const calls = new Map<string, number>();
+    const loader = createHomepageWeatherTabLoader({
+      date: "2026-09-01",
+      retryDelayMs: 0,
+      fetchFn: async (input) => {
+        const town = new URL(String(input)).searchParams.get("town") || "";
+        calls.set(town, (calls.get(town) || 0) + 1);
+        if (town === "cwa-66000060" && (calls.get(town) || 0) <= 2) {
+          return new Response(JSON.stringify({ success: false, error: { message: "Central unavailable" } }), { status: 500 });
+        }
+        return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+      },
+    });
+
+    await loader.load("N");
+    await assert.rejects(loader.load("C"));
+    assert.equal(loader.getState("C"), "error");
+    await loader.retry("C");
+    await loader.load("N");
+    assert.equal(calls.get("cwa-63000020"), 1);
+    assert.equal(calls.get("cwa-66000060"), 3);
+    assert.equal(loader.getState("C"), "ready");
+  });
+
+  it("bounds lazy-tab recovery to that tab", async () => {
+    let calls = 0;
+    const result = await loadHomepageWeatherRegionWithRecovery("E", {
+      retryDelayMs: 0,
+      fetchFn: async (input) => {
+        calls++;
+        const town = new URL(String(input)).searchParams.get("town") || "";
+        if (calls === 1) return new Response(JSON.stringify({ success: false, error: { message: "Cold start" } }), { status: 504 });
+        return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+      },
+    });
+    assert.equal(result.attempts, 2);
+    assert.equal(result.regions[0].key, "E");
+    assert.equal(calls, 2);
   });
 });
