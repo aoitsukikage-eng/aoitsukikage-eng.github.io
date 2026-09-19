@@ -655,6 +655,52 @@ describe("lazy homepage weather tabs", () => {
     assert.equal(loader.getState("C"), "ready");
   });
 
+  it("replaces a failed selected tab with its own unavailable content before retry succeeds", async () => {
+    const weatherCard = readFileSync(
+      new URL("../components/WeatherCard.astro", import.meta.url),
+      "utf8"
+    );
+    const calls = new Map<string, number>();
+    const loader = createHomepageWeatherTabLoader({
+      date: "2026-09-01",
+      retryDelayMs: 0,
+      fetchFn: async (input) => {
+        const town = new URL(String(input)).searchParams.get("town") || "";
+        calls.set(town, (calls.get(town) || 0) + 1);
+        if (town === "cwa-66000060" && (calls.get(town) || 0) <= 2) {
+          return new Response(JSON.stringify({ success: false, error: { message: "Central unavailable" } }), { status: 500 });
+        }
+        return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+      },
+    });
+
+    const north = await loader.load("N");
+    await assert.rejects(loader.load("C"));
+    assert.equal(loader.getState("C"), "error");
+    assert.equal(calls.get("cwa-63000020"), 1);
+    assert.equal(calls.get("cwa-66000060"), 2);
+
+    // The component must clear every stale forecast field before showing C's
+    // unavailable placeholder; source assertions bind this regression to the DOM paint path.
+    assert.match(weatherCard, /const paintUnavailable = \(key: string\): void => \{/);
+    for (const selector of [
+      "[data-wc-place]", "[data-wc-hi]", "[data-wc-lo]", "[data-wc-cond]",
+      "[data-wc-advice]", "[data-wc-pop]", "[data-wc-uv]", "[data-wc-aqi]",
+      "[data-wc-moon-value]", "[data-wc-moon-label]",
+    ]) {
+      assert.ok(weatherCard.includes(`setText(\"${selector}\"`), `unavailable paint clears ${selector}`);
+    }
+    assert.match(weatherCard, /catch \{\s+tabPhase\.set\(key, "error"\);\s+if \(selectedKey === key\) \{\s+paintUnavailable\(key\);/);
+    assert.match(weatherCard, /setText\("\[data-wc-place\]", `\$\{tabLabel\(key\)\} · \$\{copy\.unavailable\}`\)/);
+
+    const central = await loader.retry("C");
+    assert.equal(calls.get("cwa-63000020"), 1, "retry does not request the ready North tab");
+    assert.equal(calls.get("cwa-66000060"), 3);
+    assert.equal(central.key, "C");
+    assert.equal(loader.getState("C"), "ready");
+    assert.notEqual(central.townCode, north.townCode);
+  });
+
   it("bounds lazy-tab recovery to that tab", async () => {
     let calls = 0;
     const result = await loadHomepageWeatherRegionWithRecovery("E", {
