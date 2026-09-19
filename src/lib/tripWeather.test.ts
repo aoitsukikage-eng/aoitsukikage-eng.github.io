@@ -701,6 +701,16 @@ describe("lazy homepage weather tabs", () => {
     assert.notEqual(central.townCode, north.townCode);
   });
 
+  it("does not let a retried tab overwrite a newly selected ready tab", () => {
+    const requests = createHomepageWeatherTabRequestTracker();
+    const centralRetry = requests.begin("C");
+    const selectedKey = "N"; // The user returns to the already cached North tab.
+    const visibleContent = "North forecast";
+
+    assert.equal(requests.canPaint(selectedKey, "C", centralRetry), false);
+    assert.equal(visibleContent, "North forecast");
+  });
+
   it("bounds lazy-tab recovery to that tab", async () => {
     let calls = 0;
     const result = await loadHomepageWeatherRegionWithRecovery("E", {
