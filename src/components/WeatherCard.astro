@@ -292,9 +292,9 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 	if (card) {
 		const locale: WeatherLocale = card.dataset.wcLocale === "en" || card.dataset.wcLocale === "ja" ? card.dataset.wcLocale : "zh";
 		const copy = {
-			zh: { live: "即時更新", partial: "部分即時更新", offline: "離線示範資料，無法更新", unavailable: "暫無資料", demo: "示範", active: "則生效中", waking: "服務喚醒中…" },
-			en: { live: "Live", partial: "Partial live update", offline: "Offline demo data — unable to update", unavailable: "Unavailable", demo: "Demo", active: "active", waking: "Waking service…" },
-			ja: { live: "ライブ更新", partial: "一部ライブ更新", offline: "オフラインのデモデータ — 更新できません", unavailable: "利用不可", demo: "デモ", active: "件有効", waking: "サービス起動中…" },
+			zh: { live: "即時更新", partial: "部分即時更新", offline: "離線示範資料，無法更新", unavailable: "暫無資料", demo: "示範", active: "則生效中", loading: "正在載入天氣…", waking: "服務喚醒中…" },
+			en: { live: "Live", partial: "Partial live update", offline: "Offline demo data — unable to update", unavailable: "Unavailable", demo: "Demo", active: "active", loading: "Loading weather…", waking: "Waking service…" },
+			ja: { live: "ライブ更新", partial: "一部ライブ更新", offline: "オフラインのデモデータ — 更新できません", unavailable: "利用不可", demo: "デモ", active: "件有効", loading: "天気を読み込み中…", waking: "サービス起動中…" },
 		}[locale];
 		const q = <T extends Element>(selector: string): T | null => card.querySelector<T>(selector);
 		const setText = (selector: string, value: string): void => {
