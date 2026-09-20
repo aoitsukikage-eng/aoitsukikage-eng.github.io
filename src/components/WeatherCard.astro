@@ -441,6 +441,15 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 			card.querySelectorAll<HTMLElement>("[data-wc-icon]").forEach((node) => node.toggleAttribute("data-hidden", node.dataset.wcIcon !== region.icon));
 			updateSelectedTab();
 		};
+		const presentReady = (key: string): void => {
+			const region = byKey.get(key);
+			if (!region) return;
+			paint(key);
+			hideRequestState();
+			card.dataset.wcPhase = "live";
+			card.setAttribute("aria-busy", "false");
+			setText("[data-wc-status]", `${copy.live} · ${formatTime(region.fetchedAt)}`);
+		};
 
 		const loadTab = async (key: string): Promise<void> => {
 			if (tabPhase.get(key) === "loading" || tabPhase.get(key) === "ready") return;
@@ -465,11 +474,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 				byKey.set(key, region);
 				tabPhase.set(key, "ready");
 				if (requestTracker.canPaint(selectedKey, key, requestToken)) {
-					paint(key);
-					hideRequestState();
-					card.dataset.wcPhase = "live";
-					card.setAttribute("aria-busy", "false");
-					setText("[data-wc-status]", `${copy.live} · ${formatTime(region.fetchedAt)}`);
+					presentReady(key);
 				}
 			} catch {
 				tabPhase.set(key, "error");
@@ -487,9 +492,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 			updateSelectedTab();
 			const phase = tabPhase.get(key) ?? "idle";
 			if (phase === "ready") {
-				paint(key);
-				hideRequestState();
-				card.setAttribute("aria-busy", "false");
+				presentReady(key);
 				return;
 			}
 			if (phase === "loading") {

@@ -560,6 +560,34 @@ describe("lazy homepage weather tabs", () => {
 		assert.match(weatherCard, /const hideRequestState = \(\): void => \{\s*if \(requestState\) requestState\.hidden = true;/);
 	});
 
+	it("restores each ready tab through one live presentation path", () => {
+		const weatherCard = readFileSync(
+			new URL("../components/WeatherCard.astro", import.meta.url),
+			"utf8"
+		);
+
+		assert.match(
+			weatherCard,
+			/const presentReady = \(key: string\): void => \{[\s\S]*?paint\(key\);[\s\S]*?hideRequestState\(\);[\s\S]*?card\.dataset\.wcPhase = "live";[\s\S]*?card\.setAttribute\("aria-busy", "false"\);[\s\S]*?formatTime\(region\.fetchedAt\)/
+		);
+		assert.match(weatherCard, /requestTracker\.canPaint\(selectedKey, key, requestToken\)\) \{\s*presentReady\(key\);/);
+		assert.match(weatherCard, /if \(phase === "ready"\) \{\s*presentReady\(key\);\s*return;/);
+
+		const cached = new Map([
+			["N", { content: "North forecast", fetchedAt: "09:10" }],
+			["C", { content: "Central forecast", fetchedAt: "09:20" }],
+		]);
+		const present = (key: string) => ({ ...cached.get(key)!, phase: "live", busy: false, requestStateHidden: true });
+		let visible = present("N");
+		visible = { content: "Loading Central", fetchedAt: "", phase: "loading", busy: true, requestStateHidden: false };
+		visible = present("N");
+		assert.deepEqual(visible, { content: "North forecast", fetchedAt: "09:10", phase: "live", busy: false, requestStateHidden: true });
+
+		visible = { content: "Central unavailable", fetchedAt: "", phase: "error", busy: false, requestStateHidden: false };
+		visible = present("N");
+		assert.deepEqual(visible, { content: "North forecast", fetchedAt: "09:10", phase: "live", busy: false, requestStateHidden: true });
+	});
+
 	it("renders localized loading copy with the selected tab label", () => {
 		const weatherCard = readFileSync(
 			new URL("../components/WeatherCard.astro", import.meta.url),
