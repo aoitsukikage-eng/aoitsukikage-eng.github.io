@@ -367,6 +367,39 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 			if (retryButton) retryButton.hidden = true;
 		};
 		const tabLabel = (key: string): string => tabs.find((tab) => tab.dataset.wcTab === key)?.textContent?.trim() || key;
+		const paintUnavailable = (key: string): void => {
+			card.dataset.state = "offline";
+			setText("[data-wc-place]", `${tabLabel(key)} · ${copy.unavailable}`);
+			setText("[data-wc-hi]", "—");
+			setText("[data-wc-lo]", "");
+			setText("[data-wc-cond]", copy.unavailable);
+			setText("[data-wc-advice]", copy.unavailable);
+			setText("[data-wc-pop]", "—");
+			const popBar = q<HTMLElement>("[data-wc-pop-bar]");
+			if (popBar) popBar.style.width = "0%";
+			setText("[data-wc-uv]", "—");
+			setText("[data-wc-uv-label]", copy.unavailable);
+			const uvFill = q<HTMLElement>("[data-wc-uv-fill]");
+			const uvMark = q<HTMLElement>("[data-wc-uv-mark]");
+			const uvLabel = q<HTMLElement>("[data-wc-uv-label]");
+			if (uvFill) uvFill.style.width = "0%";
+			if (uvMark) uvMark.style.left = "0%";
+			if (uvLabel) { uvLabel.style.color = "#8fa6ba"; uvLabel.title = ""; }
+			setText("[data-wc-aqi]", "—");
+			setText("[data-wc-aqi-label]", copy.unavailable);
+			const aqiLabel = q<HTMLElement>("[data-wc-aqi-label]");
+			const aqiMark = q<HTMLElement>("[data-wc-aqi-mark]");
+			if (aqiLabel) { aqiLabel.style.color = "#8fa6ba"; aqiLabel.title = ""; }
+			if (aqiMark) aqiMark.style.left = "0%";
+			const alert = q<HTMLElement>("[data-wc-alert]");
+			if (alert) alert.hidden = true;
+			setText("[data-wc-alert-title]", "");
+			setText("[data-wc-alert-note]", "");
+			setText("[data-wc-moon-value]", "—");
+			setText("[data-wc-moon-label]", "—");
+			card.querySelectorAll<HTMLElement>("[data-wc-icon]").forEach((node) => node.toggleAttribute("data-hidden", true));
+			updateSelectedTab();
+		};
 		const paint = (key: string): void => {
 			const region = byKey.get(key);
 			if (!region) return;
@@ -408,6 +441,15 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 			card.querySelectorAll<HTMLElement>("[data-wc-icon]").forEach((node) => node.toggleAttribute("data-hidden", node.dataset.wcIcon !== region.icon));
 			updateSelectedTab();
 		};
+		const presentReady = (key: string): void => {
+			const region = byKey.get(key);
+			if (!region) return;
+			paint(key);
+			hideRequestState();
+			card.dataset.wcPhase = "live";
+			card.setAttribute("aria-busy", "false");
+			setText("[data-wc-status]", `${copy.live} · ${formatTime(region.fetchedAt)}`);
+		};
 
 		const loadTab = async (key: string): Promise<void> => {
 			if (tabPhase.get(key) === "loading" || tabPhase.get(key) === "ready") return;
@@ -432,15 +474,12 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 				byKey.set(key, region);
 				tabPhase.set(key, "ready");
 				if (requestTracker.canPaint(selectedKey, key, requestToken)) {
-					paint(key);
-					hideRequestState();
-					card.dataset.wcPhase = "live";
-					card.setAttribute("aria-busy", "false");
-					setText("[data-wc-status]", `${copy.live} · ${formatTime(region.fetchedAt)}`);
+					presentReady(key);
 				}
 			} catch {
 				tabPhase.set(key, "error");
 				if (selectedKey === key) {
+					paintUnavailable(key);
 					card.dataset.wcPhase = "error";
 					card.setAttribute("aria-busy", "false");
 					setText("[data-wc-status]", copy.unavailable);
@@ -453,9 +492,7 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 			updateSelectedTab();
 			const phase = tabPhase.get(key) ?? "idle";
 			if (phase === "ready") {
-				paint(key);
-				hideRequestState();
-				card.setAttribute("aria-busy", "false");
+				presentReady(key);
 				return;
 			}
 			if (phase === "loading") {
@@ -464,7 +501,13 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 				showRequestState(`${copy.loading} ${tabLabel(key)}`);
 				return;
 			}
-			if (phase === "error") showRequestState(`${tabLabel(key)} · ${copy.unavailable}`, true);
+			if (phase === "error") {
+				paintUnavailable(key);
+				card.dataset.wcPhase = "error";
+				card.setAttribute("aria-busy", "false");
+				setText("[data-wc-status]", copy.unavailable);
+				showRequestState(`${tabLabel(key)} · ${copy.unavailable}`, true);
+			}
 			void loadTab(key);
 		};
 		tabs.forEach((tab) => tab.addEventListener("click", () => {
@@ -686,6 +729,12 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 		gap: 0.7rem;
 		justify-content: space-between;
 		padding: 0.55rem 0.7rem;
+	}
+
+	/* The request-state uses flex when visible; preserve the HTML hidden contract
+	 * so a completed request neither appears nor reserves card space. */
+	.weather-card__request-state[hidden] {
+		display: none;
 	}
 
 	.weather-card__retry {

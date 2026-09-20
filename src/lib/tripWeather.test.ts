@@ -546,6 +546,48 @@ describe("loadHomepageWeatherWithRecovery", () => {
 });
 
 describe("lazy homepage weather tabs", () => {
+	it("keeps a completed request-state out of the layout with the hidden CSS contract", () => {
+		const weatherCard = readFileSync(
+			new URL("../components/WeatherCard.astro", import.meta.url),
+			"utf8"
+		);
+
+		assert.match(weatherCard, /data-wc-request-state hidden role="status"/);
+		assert.match(
+			weatherCard,
+			/\.weather-card__request-state\[hidden\]\s*\{\s*display:\s*none;/
+		);
+		assert.match(weatherCard, /const hideRequestState = \(\): void => \{\s*if \(requestState\) requestState\.hidden = true;/);
+	});
+
+	it("restores each ready tab through one live presentation path", () => {
+		const weatherCard = readFileSync(
+			new URL("../components/WeatherCard.astro", import.meta.url),
+			"utf8"
+		);
+
+		assert.match(
+			weatherCard,
+			/const presentReady = \(key: string\): void => \{[\s\S]*?paint\(key\);[\s\S]*?hideRequestState\(\);[\s\S]*?card\.dataset\.wcPhase = "live";[\s\S]*?card\.setAttribute\("aria-busy", "false"\);[\s\S]*?formatTime\(region\.fetchedAt\)/
+		);
+		assert.match(weatherCard, /requestTracker\.canPaint\(selectedKey, key, requestToken\)\) \{\s*presentReady\(key\);/);
+		assert.match(weatherCard, /if \(phase === "ready"\) \{\s*presentReady\(key\);\s*return;/);
+
+		const cached = new Map([
+			["N", { content: "North forecast", fetchedAt: "09:10" }],
+			["C", { content: "Central forecast", fetchedAt: "09:20" }],
+		]);
+		const present = (key: string) => ({ ...cached.get(key)!, phase: "live", busy: false, requestStateHidden: true });
+		let visible = present("N");
+		visible = { content: "Loading Central", fetchedAt: "", phase: "loading", busy: true, requestStateHidden: false };
+		visible = present("N");
+		assert.deepEqual(visible, { content: "North forecast", fetchedAt: "09:10", phase: "live", busy: false, requestStateHidden: true });
+
+		visible = { content: "Central unavailable", fetchedAt: "", phase: "error", busy: false, requestStateHidden: false };
+		visible = present("N");
+		assert.deepEqual(visible, { content: "North forecast", fetchedAt: "09:10", phase: "live", busy: false, requestStateHidden: true });
+	});
+
 	it("renders localized loading copy with the selected tab label", () => {
 		const weatherCard = readFileSync(
 			new URL("../components/WeatherCard.astro", import.meta.url),
@@ -655,7 +697,97 @@ describe("lazy homepage weather tabs", () => {
     assert.equal(loader.getState("C"), "ready");
   });
 
-  it("bounds lazy-tab recovery to that tab", async () => {
+  it("replaces a failed selected tab with its own unavailable content before retry succeeds", async () => {
+    const weatherCard = readFileSync(
+      new URL("../components/WeatherCard.astro", import.meta.url),
+      "utf8"
+    );
+    const calls = new Map<string, number>();
+    const loader = createHomepageWeatherTabLoader({
+      date: "2026-09-01",
+      retryDelayMs: 0,
+      fetchFn: async (input) => {
+        const town = new URL(String(input)).searchParams.get("town") || "";
+        calls.set(town, (calls.get(town) || 0) + 1);
+        if (town === "cwa-66000060" && (calls.get(town) || 0) <= 2) {
+          return new Response(JSON.stringify({ success: false, error: { message: "Central unavailable" } }), { status: 500 });
+        }
+        return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+      },
+    });
+
+    const north = await loader.load("N");
+    await assert.rejects(loader.load("C"));
+    assert.equal(loader.getState("C"), "error");
+    assert.equal(calls.get("cwa-63000020"), 1);
+    assert.equal(calls.get("cwa-66000060"), 2);
+
+    // The component must clear every stale forecast field before showing C's
+    // unavailable placeholder; source assertions bind this regression to the DOM paint path.
+    assert.match(weatherCard, /const paintUnavailable = \(key: string\): void => \{/);
+    for (const selector of [
+      "[data-wc-place]", "[data-wc-hi]", "[data-wc-lo]", "[data-wc-cond]",
+      "[data-wc-advice]", "[data-wc-pop]", "[data-wc-uv]", "[data-wc-aqi]",
+      "[data-wc-moon-value]", "[data-wc-moon-label]",
+    ]) {
+      assert.ok(weatherCard.includes(`setText(\"${selector}\"`), `unavailable paint clears ${selector}`);
+    }
+    assert.match(weatherCard, /catch \{\s+tabPhase\.set\(key, "error"\);\s+if \(selectedKey === key\) \{\s+paintUnavailable\(key\);/);
+    assert.match(weatherCard, /setText\("\[data-wc-place\]", `\$\{tabLabel\(key\)\} · \$\{copy\.unavailable\}`\)/);
+
+    const central = await loader.retry("C");
+    assert.equal(calls.get("cwa-63000020"), 1, "retry does not request the ready North tab");
+    assert.equal(calls.get("cwa-66000060"), 3);
+    assert.equal(central.key, "C");
+    assert.equal(loader.getState("C"), "ready");
+    assert.notEqual(central.townCode, north.townCode);
+  });
+
+	it("does not let a retried tab overwrite a newly selected ready tab", () => {
+		const requests = createHomepageWeatherTabRequestTracker();
+		const centralRetry = requests.begin("C");
+    const selectedKey = "N"; // The user returns to the already cached North tab.
+    const visibleContent = "North forecast";
+
+    assert.equal(requests.canPaint(selectedKey, "C", centralRetry), false);
+		assert.equal(visibleContent, "North forecast");
+	});
+
+	it("keeps a ready tab cached while another tab retry is pending", async () => {
+		const calls: string[] = [];
+		let resolveCentralRetry!: (response: Response) => void;
+		const loader = createHomepageWeatherTabLoader({
+			date: "2026-09-01",
+			retryDelayMs: 0,
+			fetchFn: async (input) => {
+				const town = new URL(String(input)).searchParams.get("town") || "";
+				calls.push(town);
+				if (town === "cwa-66000060" && calls.filter((call) => call === town).length <= 2) {
+					return new Response(JSON.stringify({ success: false, error: { message: "Central unavailable" } }), { status: 500 });
+				}
+				if (town === "cwa-66000060") {
+					return new Promise<Response>((resolve) => { resolveCentralRetry = resolve; });
+				}
+				return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+			},
+		});
+
+		const north = await loader.load("N");
+		await assert.rejects(loader.load("C"));
+		const centralRetry = loader.retry("C");
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		assert.equal(loader.getState("C"), "loading");
+		assert.equal((await loader.load("N")).townCode, north.townCode, "returning to A uses A's cache");
+		assert.equal(calls.filter((town) => town === "cwa-63000020").length, 1, "B retry never requests A");
+
+		const requests = createHomepageWeatherTabRequestTracker();
+		const centralToken = requests.begin("C");
+		assert.equal(requests.canPaint("N", "C", centralToken), false, "pending B cannot paint after A is reselected");
+		resolveCentralRetry(new Response(JSON.stringify(createMockForecastEnvelope("cwa-66000060", "2026-09-01")), { status: 200 }));
+		await centralRetry;
+	});
+
+	it("bounds lazy-tab recovery to that tab", async () => {
     let calls = 0;
     const result = await loadHomepageWeatherRegionWithRecovery("E", {
       retryDelayMs: 0,
