@@ -743,17 +743,51 @@ describe("lazy homepage weather tabs", () => {
     assert.notEqual(central.townCode, north.townCode);
   });
 
-  it("does not let a retried tab overwrite a newly selected ready tab", () => {
-    const requests = createHomepageWeatherTabRequestTracker();
-    const centralRetry = requests.begin("C");
+	it("does not let a retried tab overwrite a newly selected ready tab", () => {
+		const requests = createHomepageWeatherTabRequestTracker();
+		const centralRetry = requests.begin("C");
     const selectedKey = "N"; // The user returns to the already cached North tab.
     const visibleContent = "North forecast";
 
     assert.equal(requests.canPaint(selectedKey, "C", centralRetry), false);
-    assert.equal(visibleContent, "North forecast");
-  });
+		assert.equal(visibleContent, "North forecast");
+	});
 
-  it("bounds lazy-tab recovery to that tab", async () => {
+	it("keeps a ready tab cached while another tab retry is pending", async () => {
+		const calls: string[] = [];
+		let resolveCentralRetry!: (response: Response) => void;
+		const loader = createHomepageWeatherTabLoader({
+			date: "2026-09-01",
+			retryDelayMs: 0,
+			fetchFn: async (input) => {
+				const town = new URL(String(input)).searchParams.get("town") || "";
+				calls.push(town);
+				if (town === "cwa-66000060" && calls.filter((call) => call === town).length <= 2) {
+					return new Response(JSON.stringify({ success: false, error: { message: "Central unavailable" } }), { status: 500 });
+				}
+				if (town === "cwa-66000060") {
+					return new Promise<Response>((resolve) => { resolveCentralRetry = resolve; });
+				}
+				return new Response(JSON.stringify(createMockForecastEnvelope(town, "2026-09-01")), { status: 200 });
+			},
+		});
+
+		const north = await loader.load("N");
+		await assert.rejects(loader.load("C"));
+		const centralRetry = loader.retry("C");
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		assert.equal(loader.getState("C"), "loading");
+		assert.equal((await loader.load("N")).townCode, north.townCode, "returning to A uses A's cache");
+		assert.equal(calls.filter((town) => town === "cwa-63000020").length, 1, "B retry never requests A");
+
+		const requests = createHomepageWeatherTabRequestTracker();
+		const centralToken = requests.begin("C");
+		assert.equal(requests.canPaint("N", "C", centralToken), false, "pending B cannot paint after A is reselected");
+		resolveCentralRetry(new Response(JSON.stringify(createMockForecastEnvelope("cwa-66000060", "2026-09-01")), { status: 200 }));
+		await centralRetry;
+	});
+
+	it("bounds lazy-tab recovery to that tab", async () => {
     let calls = 0;
     const result = await loadHomepageWeatherRegionWithRecovery("E", {
       retryDelayMs: 0,
