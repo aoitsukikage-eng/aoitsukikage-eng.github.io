@@ -546,6 +546,20 @@ describe("loadHomepageWeatherWithRecovery", () => {
 });
 
 describe("lazy homepage weather tabs", () => {
+	it("keeps a completed request-state out of the layout with the hidden CSS contract", () => {
+		const weatherCard = readFileSync(
+			new URL("../components/WeatherCard.astro", import.meta.url),
+			"utf8"
+		);
+
+		assert.match(weatherCard, /data-wc-request-state hidden role="status"/);
+		assert.match(
+			weatherCard,
+			/\.weather-card__request-state\[hidden\]\s*\{\s*display:\s*none;/
+		);
+		assert.match(weatherCard, /const hideRequestState = \(\): void => \{\s*if \(requestState\) requestState\.hidden = true;/);
+	});
+
 	it("renders localized loading copy with the selected tab label", () => {
 		const weatherCard = readFileSync(
 			new URL("../components/WeatherCard.astro", import.meta.url),

@@ -728,6 +728,12 @@ const aqiPct = Math.min(100, (active.aqi / 200) * 100);
 		padding: 0.55rem 0.7rem;
 	}
 
+	/* The request-state uses flex when visible; preserve the HTML hidden contract
+	 * so a completed request neither appears nor reserves card space. */
+	.weather-card__request-state[hidden] {
+		display: none;
+	}
+
 	.weather-card__retry {
 		background: transparent;
 		border: 1px solid var(--wc-accent);
