@@ -4,6 +4,31 @@
 
 - [About and Contact](./about_contact_developer_log.md) — Design and verified implementation status for the combined About and Contact experience.
 
+## 2026-09-14 — Homepage weather card: direct Round 7 banner replacement
+
+`src/components/WeatherCard.astro` was swapped for the approved Round 7 banner
+markup and styling in a single direct replacement, rather than an incremental
+patch onto the prior card. The live API wiring (`/api/forecast`, the four-town
+tab set, the CWA payload contract) and the cold-start recovery script recorded
+on 2026-09-11 were carried over unchanged; this round only replaced the
+presentational shell around them.
+
+Coverage carried into the new banner and re-verified: responsive layout across
+day and night states, the alert/offline status rendering, and the offline
+fallback path when the forecast endpoint is unavailable.
+
+Verification followed a build-first Method B pass: `npm run build` was run in
+this worktree first, `dist/index.html` was confirmed to postdate the build
+start, and only then was an isolated one-line-diff copy of the recorded-payload
+Method B script (`ac5_method_b.py`, SHOTS path redirected to a fresh evidence
+directory) run against the freshly built preview on port 4346. All eight
+checks passed: live status text, live/partial phase, all four town tabs
+enabled, high temperature/condition/UV matching the recorded 臺北 payload, the
+臺中 tab switch changing both place and high temperature. Prior R2 evidence
+under the same acceptance criteria had run Method B before the worktree was
+rebuilt and was invalid for candidate attribution; this pass fixes that
+ordering and reproduces 8/8 against the same recorded payloads.
+
 ## 2026-09-13 — Executive compensation / ESG research page: move to a dedicated component
 
 The chart-led rewrite recorded on 2026-09-12 left the page on the shared
