@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" role="img" aria-labelledby="toTitle toDesc">
+  <title id="toTitle">跨產業公司 ESG 薪酬權重表鏡像對照</title>
+  <desc id="toDesc">對照中興保全科技（其他電子業）與強盛新（紡織纖維）之 ESG 薪酬權重表，顯示兩家不同產業公司交出幾乎一字不差的權重結構與數字。</desc>
+  <defs>
+    <style>
+      .f { font-family: "IBM Plex Sans","Huninn","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif; }
+      .mono { font-family: "IBM Plex Mono",monospace,"IBM Plex Sans",sans-serif; }
+      .h { font-size: 21px; fill: #5be7ff; font-weight: bold; letter-spacing: .02em; }
+      .sub { font-size: 13px; fill: #8fa3bf; }
+      .th { font-size: 14px; fill: #5be7ff; font-weight: bold; text-anchor: middle; }
+      .tsub { font-size: 12px; fill: #8fa3bf; text-anchor: middle; }
+      .td-item { font-size: 13px; fill: #c8d6ea; font-weight: bold; text-anchor: middle; }
+      .td-val { font-size: 13.5px; fill: #c8d6ea; text-anchor: middle; }
+      .badge-same { font-size: 12px; fill: #5fd694; font-weight: bold; text-anchor: middle; }
+      .badge-warn { font-size: 12px; fill: #ffb157; font-weight: bold; text-anchor: middle; }
+      .note-title { font-size: 13px; fill: #ffb157; font-weight: bold; }
+      .note-txt { font-size: 12px; fill: #c8d6ea; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="700" fill="#081226"/>
+
+  <!-- Title block -->
+  <text class="f h" x="40" y="40">跨產業雙公司權重表鏡像對照：共用範本疑慮</text>
+  <text class="f sub" x="40" y="62">其他電子業（中保科）vs 紡織纖維業（強盛新）．七項比對僅次層末項名稱一字之差</text>
+  <line x1="40" y1="75" x2="960" y2="75" stroke="#5be7ff" stroke-opacity=".25"/>
+
+  <!-- Table Headers -->
+  <g transform="translate(40, 90)">
+    <rect width="360" height="45" rx="6" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="180" y="22">中興保全科技 (9917)</text>
+    <text class="f tsub" x="180" y="38">TSE 其他電子業</text>
+
+    <rect x="375" y="0" width="170" height="45" rx="6" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="460" y="28">指標項目比對</text>
+
+    <rect x="560" y="0" width="360" height="45" rx="6" fill="#0c1730" stroke="#5be7ff" stroke-opacity=".3"/>
+    <text class="f th" x="740" y="22">強盛新 (1463)</text>
+    <text class="f tsub" x="740" y="38">TSE 紡織纖維</text>
+  </g>
+
+  <!-- Table Body Rows -->
+  <g transform="translate(40, 145)">
+
+    <!-- Row 1: 綠色產品創新 4% -->
+    <g transform="translate(0, 0)">
+      <rect width="920" height="42" rx="4" fill="#0c1730" stroke="#5fd694" stroke-opacity=".3"/>
+      <rect width="920" height="42" rx="4" fill="#5fd694" opacity="0.06"/>
+      <text class="f mono td-val" x="180" y="26">4%</text>
+      <text class="f mono td-val" x="740" y="26">4%</text>
+      <rect x="365" y="10" width="190" height="22" rx="3" fill="#5fd694" opacity="0.15"/>
+      <text class="f badge-same" x="460" y="26">綠色產品創新（4% 相同）</text>
+    </g>
+
+    <!-- Row 2: 低碳製造轉型 4% -->
+    <g transform="translate(0, 48)">
+      <rect width="920" height="42" rx="4" fill="#0c1730" stroke="#5fd694" stroke-opacity=".3"/>
+      <rect width="920" height="42" rx="4" fill="#5fd694" opacity="0.06"/>
+      <text class="f mono td-val" x="180" y="26">4%</text>
+      <text class="f mono td-val" x="740" y="26">4%</text>
+      <rect x="365" y="10" width="190" height="22" rx="3" fill="#5fd694" opacity="0.15"/>
+      <text class="f badge-same" x="460" y="26">低碳製造轉型（4% 相同）</text>
+    </g>
+
+    <!-- Row 3: 職業安全衛生 2% -->
+    <g transform="translate(0, 96)">
+      <rect width="920" height="42" rx="4" fill="#0c1730" stroke="#5fd694" stroke-opacity=".3"/>
+      <rect width="920" height="42" rx="4" fill="#5fd694" opacity="0.06"/>
+      <text class="f mono td-val" x="180" y="26">2%</text>
+      <text class="f mono td-val" x="740" y="26">2%</text>
+      <rect x="365" y="10" width="190" height="22" rx="3" fill="#5fd694" opacity="0.15"/>
+      <text class="f badge-same" x="460" y="26">職業安全衛生（2% 相同）</text>
+    </g>
+
+    <!-- Row 4: 其他 5% -->
+    <g transform="translate(0, 144)">
+      <rect width="920" height="42" rx="4" fill="#0c1730" stroke="#5fd694" stroke-opacity=".3"/>
+      <rect width="920" height="42" rx="4" fill="#5fd694" opacity="0.06"/>
+      <text class="f mono td-val" x="180" y="26">5%</text>
+      <text class="f mono td-val" x="740" y="26">5%</text>
+      <rect x="330" y="10" width="260" height="22" rx="3" fill="#5fd694" opacity="0.15"/>
+      <text class="f badge-same" x="460" y="26">其他（未說明範圍）（5% 相同）</text>
+    </g>
+
+    <!-- Row 5: 最高經營層合計 15% -->
+    <g transform="translate(0, 192)">
+      <rect width="920" height="46" rx="4" fill="#0c1730" stroke="#5fd694" stroke-width="2"/>
+      <rect width="920" height="46" rx="4" fill="#5fd694" opacity="0.15"/>
+      <text class="f mono" x="180" y="29" fill="#5fd694" font-size="16" font-weight="bold" text-anchor="middle">15%</text>
+      <text class="f mono" x="740" y="29" fill="#5fd694" font-size="16" font-weight="bold" text-anchor="middle">15%</text>
+
+      <rect x="310" y="10" width="300" height="26" rx="4" fill="#5fd694"/>
+      <text class="f" x="460" y="27" fill="#081226" font-size="13" font-weight="bold" text-anchor="middle">最高經營層合計 15%（完全相同）</text>
+    </g>
+
+    <!-- Row 6: 永續責任採購（次層） 6% -->
+    <g transform="translate(0, 246)">
+      <rect width="920" height="44" rx="4" fill="#0c1730" stroke="#ffb157" stroke-opacity=".5"/>
+      <rect width="920" height="44" rx="4" fill="#ffb157" opacity="0.08"/>
+      <text class="f mono td-val" x="180" y="27">6%</text>
+      <text class="f mono td-val" x="740" y="27">6%</text>
+
+      <rect x="300" y="9" width="320" height="26" rx="4" fill="#ffb157" opacity="0.2"/>
+      <text class="f badge-warn" x="460" y="27">永續責任採購（次層高階經理人・6% 相同）</text>
+    </g>
+
+    <!-- Row 7: 環境/循環再生經濟（次層） 5% -->
+    <g transform="translate(0, 298)">
+      <rect width="920" height="48" rx="4" fill="#0c1730" stroke="#ffb157" stroke-opacity=".5"/>
+      <rect width="920" height="48" rx="4" fill="#ffb157" opacity="0.08"/>
+
+      <text class="f td-val" x="180" y="20">環境再生經濟 <tspan class="mono" font-weight="bold">5%</tspan></text>
+      <text class="f td-val" x="740" y="20">循環再生經濟 <tspan class="mono" font-weight="bold">5%</tspan></text>
+      <text class="f tsub" x="180" y="38">（中興保全科技）</text>
+      <text class="f tsub" x="740" y="38">（強盛新）</text>
+
+      <rect x="310" y="11" width="300" height="26" rx="4" fill="#ffb157" opacity="0.2"/>
+      <text class="f badge-warn" x="460" y="28">次層主管末項：5% 權重相同・名稱一字之差</text>
+    </g>
+  </g>
+
+  <!-- Proviso / Caveat Footer -->
+  <g transform="translate(40, 565)">
+    <rect width="920" height="105" rx="8" fill="#1a1206" stroke="#ffb157" stroke-opacity=".6"/>
+    <text class="f note-title" x="20" y="28">📌 必須說明的兩處重要差異與但書：</text>
+    <text class="f note-txt" x="20" y="52">兩處差異：(1) 次層末項名稱不同——中保科為「環境再生經濟」，強盛新為「循環再生經濟」；</text>
+    <text class="f note-txt" x="20" y="74">(2)「永續責任採購」之 E／S／G 歸類在兩家文件中標示不一致。權重數字本身完全相同。</text>
+    <text class="f note-txt" x="20" y="94" fill="#8fa3bf">此高度一致性指向兩家公司可能參考了相同的揭露範本，而非依自身產業特性客製。</text>
+  </g>
+</svg>

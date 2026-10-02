@@ -15,6 +15,7 @@ tags:
   - CAPM
   - SML
 type: quantitative
+cardSummary: 買很多支股票分散風險，真的能把風險消掉嗎？以五檔美股一年日報酬合成投組，延伸檢驗 CAPM 與 SML。
 highlights:
   - label: 分散化能不能消除風險？
     value: 能降低一部分，但不能完全消除

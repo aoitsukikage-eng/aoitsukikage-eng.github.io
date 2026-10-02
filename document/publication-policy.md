@@ -27,6 +27,13 @@ notice that no wrongdoing is implied, and states which named individuals are not
 defendants. Where criminal proceedings are unresolved, the page carries a
 non-final notice at the top and in the publication-boundary section.
 
+For the Sugamo Shinkin feature article, photographs are sourced from Wikimedia
+Commons under free licenses (CC BY 4.0 and CC BY-SA 4.0), photographed by Suikotei,
+with explicit attribution, license terms, and direct links to the original Commons
+file pages on each image. The policy regarding third-party proprietary images
+remains strictly unchanged: images from the bank's official website, architectural
+firm websites, or internal course report files are not extracted, reused, or redistributed.
+
 ## PDF-to-HTML review
 
 | Public edition reviewed | Public section or evidence | HTML heading that preserves it |
@@ -39,6 +46,9 @@ non-final notice at the top and in the publication-boundary section.
 | SinoPac / Sambo overloan governance | Research question, the regulation-completeness-versus-enforcement-gap argument, and the four-stage fund flow with amounts and dates | `這份研究在問什麼`; `錢是怎麼流的` |
 | SinoPac / Sambo overloan governance | Three same-day 2017 orders, the five findings of fault, the two related-party derivation paths, and the three-instance criminal record with the Supreme Court's legal issues | `行政責任：三份同日處分`; `利害關係人為什麼這麼難認定`; `刑事責任：三個審級與三個爭點` |
 | SinoPac / Sambo overloan governance | Four-statute overlap matrix, three-lines-of-defence failure, role conflict, whistleblower protection, substantive control, dual-track comparison, and publication boundary | `四法為什麼會交疊`; `治理為什麼失靈`; `行政軌與司法軌`; `附錄與來源` |
+| Sugamo Shinkin community finance | Context, demographic indicators, deposit structure, and five-year financial metrics | `老奶奶的原宿`; `年輪的算盤` |
+| Sugamo Shinkin community finance | Architectural shikiri concept, hospitality philosophy, community engagement, and Taiwan implications | `不設招牌的銀行`; `逢四之日，門是開的`; `台灣可以學什麼` |
+| Sugamo Shinkin community finance | Policy boundary explaining CC-licensed photography attribution and exclusion of third-party proprietary imagery | `關於這篇` |
 
 The review confirms that every public-edition research question, method, core
 data, chart explanation, limitation, and source statement is readable in the

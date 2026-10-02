@@ -16,6 +16,7 @@ tags:
   - efficient-frontier
   - capital-allocation-line
 type: quantitative
+cardSummary: 40 年後要存到 1500 萬退休金，每年報酬率要多少？以三檔風險互補的基金求效率前緣與資本配置線。
 highlights:
   - label: 研究起點
     value: 想在 40 年後存到 1500 萬退休金，需要多少報酬率？

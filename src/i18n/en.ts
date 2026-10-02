@@ -16,6 +16,12 @@ export const en: Dictionary = {
 		notice: "This entry is currently only available in {lang}.",
 		viewLink: "View {lang} version →",
 	},
+	researchIndex: {
+		kicker: "[RESEARCH HUB]",
+		heading: "Five research briefs, organised by the question each method can answer.",
+		lede: "These public pages preserve the research question, method, findings, and limits while keeping source files, student information, and unauthorised third-party material private.",
+		briefsUnit: "BRIEFS",
+	},
 };
 
 export default en;
