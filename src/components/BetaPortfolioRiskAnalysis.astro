@@ -26,6 +26,14 @@ const capmRows = [
 	["UA", "32.369%", "−6.958%", "−39.327%", "Below SML", true],
 ];
 
+const terms = [
+	{ title: "Beta（系統性風險係數）", definition: "衡量一檔股票（或投組）的報酬跟著大盤（S&P 500）一起波動的程度。Beta 大於 1 代表比大盤更敏感，小於 1 代表比大盤更穩定。", extension: false },
+	{ title: "系統性風險 vs. 非系統性風險", definition: "系統性風險是整個市場一起承擔、無法靠分散持股消除的風險（例如景氣循環）；非系統性風險是單一公司或產業特有的風險，可以靠持有多檔不同股票來降低。", extension: false },
+	{ title: "CAPM（資本資產定價模型）", definition: "用一檔股票的 Beta，推算出「承擔這個風險程度，合理應該拿到多少報酬」的公式。", extension: true },
+	{ title: "SML（證券市場線）", definition: "把 CAPM 算出來的「Beta 對合理報酬」畫成一條線；一檔股票的實際報酬若落在線的上方，代表表現優於這個風險水準該有的合理報酬，落在線下方則代表落後。", extension: true },
+	{ title: "Alpha（超額報酬）", definition: "一檔股票的實際報酬，減去 CAPM 算出來的合理報酬，正值代表贏過合理水準，負值代表輸給合理水準。", extension: true },
+];
+
 const indexItems = [
 	["01", "研究概要", "sec-summary"],
 	["02", "研究方法與主要發現", "sec-method"],
@@ -76,12 +84,12 @@ const indexItems = [
 	<section id="sec-summary" data-reveal style="--reveal-order: 4;">
 		<div class="section-heading"><span>01</span><h2>研究概要</h2><b>ASSIGNMENT</b></div>
 		<div class="highlight-grid">
-			{entry.data.highlights.map((highlight) => <article><span>{highlight.label}</span><strong>{highlight.value}</strong><p>{highlight.detail}</p></article>)}
+			{entry.data.highlights.map((highlight) => <article class:list={{ "extension-highlight": highlight.label === "為什麼會有 SML/CAPM 這段？" }}><span>{highlight.label}</span><strong>{highlight.value}</strong><p>{highlight.detail}</p></article>)}
 		</div>
 	</section>
 
 	<section id="sec-method" data-reveal style="--reveal-order: 5;">
-		<div class="section-heading"><span>02</span><h2>研究方法與主要發現</h2><b>ASSIGNMENT</b></div>
+		<div class="section-heading"><span>02</span><h2>研究方法與主要發現</h2></div>
 		<div class="two-column">
 			<div><h3>研究方法</h3><ol>{entry.data.methods.map((method) => <li>{method}</li>)}</ol></div>
 			<div><h3>主要發現</h3><ul>{entry.data.findings.map((finding) => <li>{finding}</li>)}</ul></div>
@@ -92,10 +100,7 @@ const indexItems = [
 		<div class="section-heading"><span>03</span><h2>研究定位與名詞速查</h2></div>
 		<p>本研究以五檔美股（CITI、GRMN、LOGI、TM、UA）在 2023-07-12 至 2024-07-11 的日報酬資料為基礎，回答「分散持股能不能降低風險、能降低多少」這個問題。</p>
 		<dl class="terms-grid">
-			<div><dt>Beta（系統性風險係數）</dt><dd>衡量一檔股票（或投組）的報酬跟著大盤（S&P 500）一起波動的程度。Beta 大於 1 代表比大盤更敏感，小於 1 代表比大盤更穩定。</dd></div>
-			<div><dt>系統性風險 vs. 非系統性風險</dt><dd>系統性風險無法靠分散持股消除；單一公司或產業特有的非系統性風險，則可藉持有多檔不同股票降低。</dd></div>
-			<div><dt>CAPM（資本資產定價模型）</dt><dd>用一檔股票的 Beta，推算承擔該風險程度時合理應有的報酬。</dd></div>
-			<div><dt>SML 與 Alpha</dt><dd>SML 對照 Beta 與合理報酬；實際報酬減去合理報酬為 Alpha，正值代表超過合理水準。</dd></div>
+			{terms.map((term) => <div class:list={{ "extension-term": term.extension }}><dt>{term.title}</dt><dd>{term.definition}</dd></div>)}
 		</dl>
 	</section>
 
@@ -113,7 +118,7 @@ const indexItems = [
 		<div class="section-heading"><span>05</span><h2>CAPM 與證券市場線</h2><b>EXTENSION</b></div>
 		<p>交完作業後，我想親自實踐一次課堂上學到的 CAPM 與 SML 理論，所以自己加了一段延伸分析：用 2024 年 7 月的一年期美國國庫券利率 4.781%、S&P 500 價格報酬 24.8734% 與平均股利殖利率 1.46% 建構 CAPM/SML，再列出每一檔股票的實際報酬與 Alpha。這段不是老師原始作業要求，也不改寫前面的 Beta 與分散化結論。</p>
 		<div class="table-label">TABLE 02 <span>CAPM 合理報酬、實際報酬與 Alpha</span></div>
-		<div class="table-scroll"><table><thead><tr><th>股票</th><th>CAPM 預期報酬</th><th>實際報酬</th><th>Alpha</th><th>SML 結果</th></tr></thead><tbody>{capmRows.map((row) => <tr class:list={{ warning: row[5] }}>{row.slice(0, 5).map((cell, index) => <td class:list={{ numeric: index > 0 && index < 4 }}>{cell}</td>)}</tr>)}</tbody></table></div>
+		<div class="table-scroll"><table><thead><tr><th>股票</th><th>CAPM 預期報酬</th><th>實際報酬</th><th>Alpha</th><th>SML 結果</th></tr></thead><tbody>{capmRows.map((row) => <tr class:list={{ warning: row[5] }}>{row.slice(0, 5).map((cell, index) => <td class:list={{ numeric: index > 0 && index < 4, positive: !row[5] && (index === 3 || index === 4) }}>{cell}</td>)}</tr>)}</tbody></table></div>
 		<figure><div class="figure-label">FIG 02 <span>證券市場線與各股 Alpha</span></div><img src="/research/beta-sml-analysis.svg" alt="證券市場線與 Alpha 分析圖：各股實際報酬對照 CAPM 合理報酬，並列出各股 Alpha。" loading="lazy" /><figcaption>無風險利率 4.781%、市場報酬 24.8734%、股利殖利率 1.46%，作者自製。</figcaption></figure>
 		<aside class="reading-note"><span>白話讀法</span><p>CITI、GRMN、LOGI、TM 的實際報酬都超過 CAPM 算出的合理水準，其中 GRMN 的 Alpha 為 38.761%。唯一落後的是 UA：它的 Beta 最高（1.28），合理報酬為 32.369%，實際卻是 −6.958%，Alpha 為 −39.327%。</p></aside>
 	</section>
@@ -178,6 +183,8 @@ const indexItems = [
 	.highlight-grid article > span { color: var(--accent); font-size: .82rem; }
 	.highlight-grid article > strong { color: var(--text-bright); font-weight: 500; line-height: 1.62; }
 	.highlight-grid article p { color: var(--text-muted); font-size: .9rem; }
+	.highlight-grid article.extension-highlight { border-color: rgba(255, 177, 87, .4); }
+	.highlight-grid article.extension-highlight > span, .highlight-grid article.extension-highlight > strong { color: #ffb157; }
 	.two-column { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	.two-column > div { background: rgba(8, 18, 38, .3); border-left: 2px solid rgba(91, 231, 255, .5); padding: .3rem 1rem .3rem 1.15rem; }
 	.two-column h3 { font-size: 1.08rem; }
@@ -185,6 +192,8 @@ const indexItems = [
 	.terms-grid { display: grid; gap: .85rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); margin: 0; }
 	.terms-grid dt { color: var(--accent); font-size: .9rem; }
 	.terms-grid dd { color: var(--text-muted); font-size: .9rem; margin: .45rem 0 0; }
+	.terms-grid > .extension-term { border-left: 3px solid rgba(255, 177, 87, .55); }
+	.terms-grid .extension-term dt { color: #ffb157; }
 	.table-label, .figure-label { align-items: center; color: var(--accent); display: flex; flex-wrap: wrap; font-family: var(--font-display); font-size: .62rem; gap: .6rem; letter-spacing: .14em; }
 	.table-label span, .figure-label span { color: rgba(211, 230, 242, .78); font-family: var(--font-body); font-size: .9rem; font-weight: 400; letter-spacing: 0; }
 	.table-scroll { max-width: 100%; overflow-x: auto; }
@@ -206,6 +215,7 @@ const indexItems = [
 	.extension-section .section-heading b { background: rgba(255, 177, 87, .12); border-color: rgba(255, 177, 87, .4); }
 	.extension-section th { background: rgba(255, 177, 87, .1); border-color: rgba(255, 177, 87, .22); }
 	.extension-section td { border-color: rgba(255, 177, 87, .22); }
+	.extension-section td.positive { color: #c9ffe0; }
 	.extension-section figure img { border-color: rgba(255, 177, 87, .16); }
 	.extension-section .reading-note { border-color: rgba(255, 177, 87, .2); border-left-color: rgba(255, 177, 87, .55); }
 	.cross-grid { max-width: 46rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
